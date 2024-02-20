@@ -1,0 +1,16 @@
+{
+  "name": "ease-sim",
+  "version": "1.0.0",
+  "repository": "https://github.com/andymiha/EaseSim",
+  "author": "Jonathan Pasquin",
+  "private": true,
+  "scripts": {
+    "docker": "./docker/scripts/start_docker.sh",
+    "ssh": "./docker/scripts/ssh.sh",
+    "setup-backend": "./docker/scripts/setup_backend.sh",
+    "setup-frontend": "./docker/scripts/setup_frontend.sh",
+    "dev": "code workspace.code-workspace &&  ./docker/scripts/start_docker.sh && ./docker/scripts/ssh.sh node_backend",
+    "node_backend": "./docker/scripts/ssh.sh node_backend",
+    "node": "./docker/scripts/ssh.sh node"
+  }
+}

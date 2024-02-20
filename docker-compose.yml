@@ -1,0 +1,59 @@
+version: '3.8'
+services:
+  backend:
+    build:
+      context: ./docker/backend
+    container_name: ease_sim_backend
+    ports: 
+      - "4024:4024"
+    environment:
+      UID: ${UID}
+      GID: ${GID}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DB: ${MYSQL_DB}
+      MYSQL_HOST: ${MYSQL_HOST}
+      TERM: "xterm"
+    volumes:
+      - ./backend:/var/www/html/
+    depends_on:
+      - db
+  frontend:
+    build:
+      context: ./docker/frontend
+    environment:
+      TERM: "xterm"
+    container_name: ease_sim_frontend
+    ports:
+      - "4123:4123"
+    volumes:
+      - ./frontend:/app
+  redis:
+    image: redis
+    container_name: ease_sim_redis
+    ports:
+      - "4623:4379"
+    volumes:
+      - redis:/data
+  db:
+    image: mariadb
+    container_name: ease_sim_db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DB}
+    volumes:
+      - db:/var/lib/mysql
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "4306:4306"
+  adminer:
+    image: adminer
+    container_name: ease_sim_adminer
+    ports:
+      - 4523:4080
+volumes:
+  db:
+  redis:
