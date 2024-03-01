@@ -1,6 +1,12 @@
 # EaseSim
 
 ## Authors
+40184667  -  Sarah Abellard
+40101308  -  Mehdi Fouzail
+40175868  -  Sarah Malik
+40139389  -  Andrei Mihaescu
+40083837  -  Jonathan Pasquin
+40258189  -  Noura Tabbara
 
 ## Pre-requisites
 - Docker Desktop
