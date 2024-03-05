@@ -1,5 +1,5 @@
 #!/bin/bash
 cd /app
 
-runuser -u node -- npm install --save --legacy-peer-deps
+runuser -u yarn
 touch /app/.setup_completed

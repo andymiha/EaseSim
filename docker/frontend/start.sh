@@ -3,7 +3,7 @@
 while true; do
   clear
   if [ -f "/app/.setup_completed" ]; then
-    cd /app && npm run start
+    cd /app && yarn dev
   fi
   echo "frontend not setup"
   sleep 10
