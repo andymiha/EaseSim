@@ -1,4 +1,4 @@
-FROM node:18-buster
+FROM node:20-buster
 RUN echo "America/Toronto" > /etc/timezone
 # RUN npm install --save --legacy-peer-deps
 
