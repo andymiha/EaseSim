@@ -1,3 +1,5 @@
-#!/bin/bash
+#!/bin/sh
 
-docker exec ease_sim_frontend /bin/bash -c "cd /app && ./scripts/setup.sh"
+docker exec ease_sim_frontend sh -c "ls -la /app/scripts && cd /app/scripts && setup.sh"
+
+$SHELL
