@@ -1,14 +1,14 @@
-package com.ljj.springaccounting;
+package com.ljj.easesim;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class })
-public class SpringaccountingApplication {
+public class EaseSimApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SpringaccountingApplication.class, args);
+		SpringApplication.run(EaseSimApplication.class, args);
 	}
 
 }
