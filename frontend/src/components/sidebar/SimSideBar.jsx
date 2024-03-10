@@ -27,10 +27,6 @@ const SimSideBar = ({ openDrawer, handleDrawerToggle, handleDrawerClose }) => {
     setOpenModal(false); // Close the modal
   };
 
-  console.log('openDrawer:', openDrawer);
-  console.log('handleDrawerToggle:', handleDrawerToggle);
-  console.log('handleDrawerClose:', handleDrawerClose);
-
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />

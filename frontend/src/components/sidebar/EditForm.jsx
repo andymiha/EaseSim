@@ -13,14 +13,14 @@ const EditForm = ({ onClose }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-    
+
         const formData = {
             selectedRoom: selectedRoom,
             selectedInhabitant: selectedInhabitant,
             selectedWindow: selectedWindow,
             isWindowBlocked: isWindowBlocked
         };
-    
+
         fetch('http://localhost:8080/submitForm', { // Replace localhost with your backend server address
             method: 'POST',
             headers: {
@@ -28,32 +28,32 @@ const EditForm = ({ onClose }) => {
             },
             body: JSON.stringify(formData)
         })
-        .then(response => {
-            if (response.ok) {
-                console.log('Form submitted successfully!');
-                onClose(); // Close the form after successful submission
-            } else {
-                console.error('Error submitting form:', response.statusText);
-                // Handle error response here
-            }
-        })
-        .catch(error => {
-            console.error('Error submitting form:', error);
-            // Handle network errors here
-        });
+            .then(response => {
+                if (response.ok) {
+                    console.log('Form submitted successfully!');
+                    onClose(); // Close the form after successful submission
+                } else {
+                    console.error('Error submitting form:', response.statusText);
+                    // Handle error response here
+                }
+            })
+            .catch(error => {
+                console.error('Error submitting form:', error);
+                // Handle network errors here
+            });
     };
-    
 
     return (
         <Dialog open={true} onClose={onClose}>
-            <DialogTitle>Edit Context</DialogTitle>
-            <DialogContent>
+            <DialogTitle sx={{ zIndex: 0 }}>Edit Context</DialogTitle>
+            <DialogContent sx={{ zIndex: 1500 }}>
                 <form onSubmit={handleSubmit}>
-                    <FormControl fullWidth>
+                    <FormControl fullWidth sx={{ marginBottom: '1rem' }}>
                         <InputLabel>Select Room</InputLabel>
                         <Select
                             value={selectedRoom}
                             onChange={(e) => setSelectedRoom(e.target.value)}
+                            label="Select Room" // Add label to prevent floating
                         >
                             <MenuItem value="">
                                 <em>Select Room</em>
@@ -64,11 +64,12 @@ const EditForm = ({ onClose }) => {
                         </Select>
                     </FormControl>
 
-                    <FormControl fullWidth>
+                    <FormControl fullWidth sx={{ marginBottom: '1rem' }}>
                         <InputLabel>Select Inhabitant</InputLabel>
                         <Select
                             value={selectedInhabitant}
                             onChange={(e) => setSelectedInhabitant(e.target.value)}
+                            label="Select Inhabitant" // Add label to prevent floating
                         >
                             <MenuItem value="">
                                 <em>Select Inhabitant</em>
@@ -79,11 +80,12 @@ const EditForm = ({ onClose }) => {
                         </Select>
                     </FormControl>
 
-                    <FormControl fullWidth>
+                    <FormControl fullWidth sx={{ marginBottom: '1rem' }}>
                         <InputLabel>Select Window</InputLabel>
                         <Select
                             value={selectedWindow}
                             onChange={(e) => setSelectedWindow(e.target.value)}
+                            label="Select Window" // Add label to prevent floating
                         >
                             <MenuItem value="">
                                 <em>Select Window</em>
