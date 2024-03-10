@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import SimSideBar from '../components/sidebar/SimSideBar';
 import { Grid, Paper, Tab, Tabs, Typography } from '@mui/material';
-import Toolbar from '@mui/material/Toolbar';
 
 const Dashboard = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -99,7 +98,7 @@ const Dashboard = () => {
             
           }}
         >
-          {/* Add content for the right Paper here */}
+          {/* Add skeleton when not on */}
           <Typography paragraph>
           Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
           Lorem Ipsum has been the industry standard dummy text ever since the 1500s, 
