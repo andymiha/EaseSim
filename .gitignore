@@ -2,6 +2,5 @@
 frontend/node_modules
 frontend/package-lock.json
 backend/.gradle/
-backend/.idea/
 backend/app.jar
 backend/build/
