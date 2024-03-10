@@ -40,7 +40,8 @@ const Dashboard = () => {
           elevation={3}
           sx={{
             position: 'absolute',
-            maxWidth:'50%',
+            maxWidth:'59%',
+            height: '70%',
             top: '10%',
             left: openDrawer ? '240px' : '0',
             right: openDrawer ? '50%' : '0',
@@ -85,6 +86,7 @@ const Dashboard = () => {
           component="div"
           sx={{
             position: 'absolute',
+            height: '70%',
             top: '10%',
             left: openDrawer ? '50%' : '60%',
             right: 0,
@@ -99,12 +101,45 @@ const Dashboard = () => {
         >
           {/* Add content for the right Paper here */}
           <Typography paragraph>
-          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+          Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+          Lorem Ipsum has been the industry standard dummy text ever since the 1500s, 
+          when an unknown printer took a galley of type and scrambled it to make a type 
+          specimen book. It has survived not only five centuries, but also the leap into
+           electronic typesetting, remaining essentially unchanged. It was popularised in 
+           the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and 
+           more recently with desktop publishing software like Aldus PageMaker including versions 
+           of Lorem Ipsum.
           </Typography>
         </Paper>
       </Grid>
+
+      <Grid item lg={10} md={12} sm={openDrawer ? 5 : 6} sx={{ position: 'absolute', width: '100%', height:'20%', bottom:'0', left: openDrawer ? '240px' : '0' }}>
+  <Paper  
+    elevation={3}
+    component="div"
+    sx={{
+      overflow: 'auto',
+      padding: '16px',
+      Height:'100%',
+      maxWidth:'90%',
+      height: '100%', 
+      margin:'1%',
+      transition: 'left 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, right 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms',
+    }}
+  >
+    {/* Add content for the bottom Paper here */}
+    <Typography paragraph>
+      Your content for the bottom Paper.
+    </Typography>
+  </Paper>
+</Grid>
+
+
       
     </Grid>
+
+
+
   );
 };
 
