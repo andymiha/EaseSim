@@ -3,6 +3,7 @@ package com.ljj.easesim;
 import com.ljj.easesim.FormData;
 import com.ljj.easesim.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,5 +20,12 @@ public class FormController {
         roomService.processFormData(formData);
         return "Form submitted successfully!";
     }
+
+    @GetMapping("/")
+    public String test() {
+        // Process form data and perform required action
+        return "BIG DATA";
+    }
+
 }
 
