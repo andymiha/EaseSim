@@ -7,6 +7,11 @@ plugins {
 group = 'com.ljj'
 version = '0.0.1-SNAPSHOT'
 
+bootJar {
+	archiveFileName = 'app.jar'
+	destinationDirectory = file("${projectDir}/") // Output to an 'output' directory in your project root
+}
+
 java {
 	sourceCompatibility = '17'
 }
