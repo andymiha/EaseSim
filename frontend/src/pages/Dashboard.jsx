@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import SimSideBar from '../components/sidebar/SimSideBar';
 import { Grid, Paper, Tab, Tabs, Typography } from '@mui/material';
+import HouseLayout from '../components/houselayout/HouseLayout'; 
+import SHS from '../components/shs/shs'; 
+import SHC from '../components/shc/shc'; 
+import SHP from '../components/shp/shp';
+import SHH from '../components/shh/shh';
 
 const Dashboard = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -16,6 +21,13 @@ const Dashboard = () => {
 
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);
+  };
+
+  const tabComponents = {
+    0: <SHS />,
+    1: <SHC />,
+    2: <SHP/>,
+    3: <SHH/>,
   };
 
   return (
@@ -69,17 +81,14 @@ const Dashboard = () => {
             <Tab label="SHH" />
           </Tabs>
 
-          <Typography paragraph>
-            {selectedTab === 0 && 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.'}
-            {selectedTab === 1 && 'SHC Content'}
-            {selectedTab === 2 && 'SHP Content'}
-            {selectedTab === 3 && 'SHH Content'}
-          </Typography>
+          {tabComponents[selectedTab]}
+
         </Paper>
       </Grid>
 
       <Grid item xs={12} sm={openDrawer ? 5 : 6}>
 
+{/* Box 2*/}
         <Paper
             elevation={3}
           component="div"
@@ -99,16 +108,8 @@ const Dashboard = () => {
           }}
         >
           {/* Add skeleton when not on */}
-          <Typography paragraph>
-          Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-          Lorem Ipsum has been the industry standard dummy text ever since the 1500s, 
-          when an unknown printer took a galley of type and scrambled it to make a type 
-          specimen book. It has survived not only five centuries, but also the leap into
-           electronic typesetting, remaining essentially unchanged. It was popularised in 
-           the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and 
-           more recently with desktop publishing software like Aldus PageMaker including versions 
-           of Lorem Ipsum.
-          </Typography>
+          <HouseLayout />
+    
         </Paper>
       </Grid>
 
