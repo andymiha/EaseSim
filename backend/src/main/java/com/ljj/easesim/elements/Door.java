@@ -1,14 +1,15 @@
 package com.ljj.easesim.elements;
 
 import com.ljj.easesim.interfaces.HouseElement;
+import java.util.AbstractMap;
 
-public class Light implements HouseElement {
+public class Door implements HouseElement {
     private int id;
-    private boolean switchedOn;
-
+    private boolean isOpen;
+    private AbstractMap.SimpleEntry<String, String> roomConnection;
     @Override
     public void toggle() {
-        switchedOn = !switchedOn;
+        isOpen = !isOpen;
     }
 
     @Override

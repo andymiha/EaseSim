@@ -2,13 +2,13 @@ package com.ljj.easesim.elements;
 
 import com.ljj.easesim.interfaces.HouseElement;
 
-public class Light implements HouseElement {
+public class Window implements HouseElement {
     private int id;
-    private boolean switchedOn;
+    private boolean isOpen;
 
     @Override
     public void toggle() {
-        switchedOn = !switchedOn;
+        isOpen = !isOpen;
     }
 
     @Override

@@ -1,0 +1,81 @@
+[
+   {
+      "name": "Bedroom1",
+      "windows": 1,
+      "lights": 1,
+      "heating": true,
+      "doorsTo": [
+        "LivingRoom"
+      ]
+    },
+    {
+       "name": "Bedroom2",
+       "windows": 1,
+       "lights": 1,
+       "heating": true,
+       "doorsTo": [
+         "Kitchen"
+       ]
+    },
+    {
+       "name": "Kitchen",
+       "windows": 2,
+       "lights": 1,
+       "heating": true,
+       "doorsTo": [
+         "LivingRoom",
+         "Bedroom2",
+         "Bathroom",
+         "Backyard"
+       ]
+    },
+    {
+       "name": "LivingRoom",
+       "windows": 1,
+       "lights": 1,
+       "heating": true,
+       "doorsTo": [
+         "Kitchen",
+         "FrontYard",
+         "Bedroom1",
+         "Garage"
+       ]
+    },
+    {
+       "name": "Bathroom",
+       "windows": 1,
+       "lights": 1,
+       "heating": true,
+       "doorsTo": [
+         "Kitchen"
+       ]
+    },
+    {
+       "name": "Garage",
+       "windows": 1,
+       "lights": 1,
+       "heating": true,
+       "doorsTo": [
+         "LivingRoom",
+         "FrontYard"
+       ]
+    },
+    {
+       "name": "FrontYard",
+       "windows": 0,
+       "lights": 0,
+       "heating": false,
+       "doorsTo": [
+         "LivingRoom"
+       ]
+    },
+    {
+       "name": "BackYard",
+       "windows": 0,
+       "lights": 0,
+       "heating": false,
+       "doorsTo": [
+         "Kitchen"
+       ]
+    }
+]

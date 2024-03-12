@@ -11,6 +11,6 @@ public class ToggleLightCommand implements Command {
     }
     @Override
     public void execute() {
-        light.toggleLight();
+        light.toggle();
     }
 }

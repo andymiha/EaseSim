@@ -3,5 +3,6 @@ public interface HouseElement {
 
     int getId();
     void setId(int id);
+    void toggle();
 }
 
