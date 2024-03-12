@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, Checkbox, FormControlLabel } from '@mui/material';
 
 const EditForm = ({ onClose }) => {
@@ -7,10 +7,25 @@ const EditForm = ({ onClose }) => {
     const [selectedWindow, setSelectedWindow] = useState('');
     const [isWindowBlocked, setIsWindowBlocked] = useState(false);
 
-    const inhabitants = ['Andy', 'Mehdi'];
-    const rooms = ['Living Room', 'Kitchen', 'Bedroom', 'Bathroom', 'Study'];
-    const windows = ['Window 1', 'Window 2', 'Window 3']; // List of available windows
+    const [inhabitants, setInhabitants] = useState([]);
+    const [rooms, setRooms] = useState([]);
+    const [windows, setWindows] = useState([]);
 
+    // Fetch data from backend on mount
+    useEffect(() => {  
+        fetch('http://localhost:8080/getData') // Replace with your backend endpoint for fetching data
+            .then(response => response.json())
+            .then(data => {
+                setInhabitants(data.inhabitants);
+                setRooms(data.rooms);
+                setWindows(data.windows);
+            })
+            .then(console.log('Edit Form Data fetched successfully!'))
+            .catch(error => console.error('Error fetching data:', error));
+    }, []);
+
+
+    // Post data on submission
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -31,22 +46,20 @@ const EditForm = ({ onClose }) => {
             .then(response => {
                 if (response.ok) {
                     console.log('Form submitted successfully!');
-                    onClose(); // Close the form after successful submission
+                    onClose();
                 } else {
                     console.error('Error submitting form:', response.statusText);
-                    // Handle error response here
                 }
             })
             .catch(error => {
                 console.error('Error submitting form:', error);
-                // Handle network errors here
             });
     };
 
     return (
         <Dialog open={true} onClose={onClose}>
-            <DialogTitle sx={{ zIndex: 0 }}>Edit Context</DialogTitle>
-            <DialogContent sx={{ zIndex: 1500 }}>
+            <DialogTitle >Edit Context</DialogTitle>
+            <DialogContent >
                 <form onSubmit={handleSubmit}>
                     <FormControl fullWidth sx={{ marginBottom: '1rem' }}>
                         <InputLabel>Select Room</InputLabel>

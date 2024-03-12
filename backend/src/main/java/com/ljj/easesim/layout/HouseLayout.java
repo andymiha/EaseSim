@@ -83,4 +83,8 @@ public class HouseLayout {
         }
         return null;
     }
+
+    public List<Room> getRooms() {
+        return rooms;
+    }
 }

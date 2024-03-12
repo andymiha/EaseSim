@@ -4,6 +4,7 @@ import com.ljj.easesim.elements.Door;
 import com.ljj.easesim.interfaces.HouseElement;
 import com.ljj.easesim.interfaces.User;
 import com.ljj.easesim.interfaces.Command;
+
 import java.util.ArrayList;
 
 public class Room {
@@ -20,6 +21,7 @@ public class Room {
         this.users = users;
     }
 
+    //getters
     public int getId() {
         return this.id;
     }
@@ -27,16 +29,37 @@ public class Room {
     public String getName() {
         return this.name;
     }
-    public void setCommand(Command command) {
-        this.command = command;
+
+    public Command getCommand() {
+        return this.command;
     }
 
-    public void executeCommand() {
-        command.execute();
+    public ArrayList<User> getUsers() {
+        return this.users;
     }
 
     public ArrayList<HouseElement> getElements() {
         return this.elements;
+    }
+
+    public ArrayList<Door> getDoors() {
+        ArrayList<Door> doors = new ArrayList<>();
+        for (HouseElement element : elements) {
+            if (element instanceof Door) {
+                doors.add((Door) element);
+            }
+        }
+        return doors;
+    }
+
+    //setters
+    public void setCommand(Command command) {
+        this.command = command;
+    }
+
+    //Other methods
+    public void executeCommand() {
+        command.execute();
     }
 
     public void addElement(HouseElement element) {
@@ -55,13 +78,5 @@ public class Room {
         users.remove(user);
     }
 
-    public ArrayList<Door> getDoors() {
-        ArrayList<Door> doors = new ArrayList<>();
-        for (HouseElement element : elements) {
-            if (element instanceof Door) {
-                doors.add((Door) element);
-            }
-        }
-        return doors;
-    }
+
 }
