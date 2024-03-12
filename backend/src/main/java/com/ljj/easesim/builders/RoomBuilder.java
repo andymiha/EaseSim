@@ -1,6 +1,5 @@
 package com.ljj.easesim.builders;
 
-import com.ljj.easesim.enums.RoomType;
 import com.ljj.easesim.layout.Room;
 import com.ljj.easesim.interfaces.HouseElement;
 import com.ljj.easesim.interfaces.User;
@@ -9,7 +8,7 @@ import java.util.ArrayList;
 
 public class RoomBuilder {
     private int id;
-    private RoomType roomType;
+    private String name;
     private ArrayList<HouseElement> elements;
     private ArrayList<User> users;
 
@@ -18,8 +17,8 @@ public class RoomBuilder {
         return this;
     }
 
-    public RoomBuilder roomType(RoomType roomType) {
-        this.roomType = roomType;
+    public RoomBuilder name(String name) {
+        this.name = name;
         return this;
     }
 
@@ -34,6 +33,6 @@ public class RoomBuilder {
     }
 
     public Room build() {
-        return new Room(id, roomType, elements, users);
+        return new Room(id, name, elements, users);
     }
 }
