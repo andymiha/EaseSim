@@ -9,45 +9,48 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import { useState } from "react";
+import Switch from "@mui/material/Switch";
+import { useState, useEffect } from "react";
+
+//onMount fetch 
+//method get in backend in controller 
+//this method is quiered in fronend
+
+//const [lights, setLights] = useState([])
+//const [doors, setDoors] = useState([])
+//const [windows, setWindows] = useState([])
 
 const lights = [
-  { room: "Living", isOn: "on", isAuto: "on", dummy: "hi" },
-  { room: "Kitchen", isOn: "off", isAuto: "off", dummy: "hi" },
-  { room: "Bathroom", isOn: "off", isAuto: "on", dummy: "hi" },
-  { room: "BedroomOne", isOn: "on", isAuto: "on", dummy: "hi" },
-  { room: "BedroomTwo", isOn: "on", isAuto: "off", dummy: "hi" },
-  { room: "Entrance", isOn: "on", isAuto: "on", dummy: "hi" },
-  { room: "Backyard", isOn: "off", isAuto: "off", dummy: "hi" },
-  { room: "Garage", isOn: "off", isAuto: "on", dummy: "hi" },
-  { room: "Living", isOn: "on", isAuto: "on", dummy: "hi" },
-  { room: "Kitchen", isOn: "off", isAuto: "off", dummy: "hi" },
-  { room: "Bathroom", isOn: "off", isAuto: "on", dummy: "hi" },
-  { room: "BedroomOne", isOn: "on", isAuto: "on", dummy: "hi" },
-  { room: "BedroomTwo", isOn: "on", isAuto: "off", dummy: "hi" },
-  { room: "Entrance", isOn: "on", isAuto: "on", dummy: "hi" },
-  { room: "Backyard", isOn: "off", isAuto: "off", dummy: "hi" },
-  { room: "Garage", isOn: "off", isAuto: "on", dummy: "hi" },
+  { room: "Living", isOn: true, isAuto: true, dummy: "hi" },
+  { room: "Kitchen", isOn: false, isAuto: false, dummy: "hi" },
+  { room: "Bathroom", isOn: true, isAuto: false, dummy: "hi" },
+  { room: "BedroomOne", isOn: false, isAuto: false, dummy: "hi" },
+  { room: "BedroomTwo", isOn: true, isAuto: false, dummy: "hi" },
+  { room: "Entrance", isOn: false, isAuto: false, dummy: "hi" },
+  { room: "Backyard", isOn: false, isAuto: false, dummy: "hi" },
+  { room: "Garage", isOn: true, isAuto: false, dummy: "hi" },
+  { room: "Living", isOn: true, isAuto: false, dummy: "hi" },
+  { room: "Kitchen", isOn: false, isAuto: true, dummy: "hi" },
+  { room: "Bathroom", isOn: false, isAuto: false, dummy: "hi" },
+  { room: "BedroomOne", isOn: true, isAuto: false, dummy: "hi" },
+  { room: "BedroomTwo", isOn:true, isAuto: true, dummy: "hi" },
+  { room: "Entrance", isOn: true, isAuto: false, dummy: "hi" },
+  { room: "Backyard", isOn: false, isAuto: false, dummy: "hi" },
+  { room: "Garage", isOn: false, isAuto: false, dummy: "hi" },
 ];
 
 const doors = [
-  { room: "BedroomTwo", isOn: "on", isAuto: "off", dummy: "hi" },
-  { room: "Entrance", isOn: "on", isAuto: "on", dummy: "hi" },
-  { room: "Backyard", isOn: "off", isAuto: "off", dummy: "hi" },
-  { room: "Garage", isOn: "off", isAuto: "on", dummy: "hi" },
+  { room: "BedroomTwo", isOn: false, isAuto: true, dummy: "hi" },
+  { room: "Entrance", isOn: true, isAuto: false, dummy: "hi" },
+  { room: "Backyard", isOn: false, isAuto: false, dummy: "hi" },
+  { room: "Garage", isOn: false, isAuto: false, dummy: "hi" },
 ];
 
 const windows = [
-  { room: "Living", isOn: "on", isAuto: "on", dummy: "hi" },
-  { room: "Kitchen", isOn: "off", isAuto: "off", dummy: "hi" },
-  { room: "Bathroom", isOn: "off", isAuto: "on", dummy: "hi" },
-  { room: "BedroomOne", isOn: "on", isAuto: "on", dummy: "hi" },
-];
-
-const columns = [
-  { field: "room", headerName: "Room", width: 250 },
-  { field: "isOn", headerName: "On/Off", width: 100 },
-  { field: "isAuto", headerName: "Auto-Mode", width: 100 },
+  { room: "Living", isOn: false, isBlocked: false, dummy: "hi" },
+  { room: "Kitchen", isOn: true,  isBlocked: true, dummy: "hi" },
+  { room: "Bathroom", isOn: true,  isBlocked: false, dummy: "hi" },
+  { room: "BedroomOne", isOn: true,  isBlocked: false, dummy: "hi" },
 ];
 
 const ItemList = () => {
@@ -69,6 +72,19 @@ const ItemList = () => {
   const handleAlignment = (event, newAlignment) => {
     setAlignment(newAlignment);
   };
+
+  const handleSwitchChange = (index) => { 
+    setRows ((prevRows) => 
+      prevRows.map((row, i) =>
+        i === index ? {...row, isOn: !row.isOn} : row
+      )
+    );
+  };
+
+  useEffect(() => {
+    console.log("Rows updated:", rows);
+  }, [rows]);
+
 
   return (
     <Box>
@@ -96,7 +112,7 @@ const ItemList = () => {
         </ToggleButtonGroup>
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
         <TableContainer component={Paper}>
-          <Table stickyHeader sx={{ minWidth: 650 , maxHeight: 440}} >
+          <Table sx={{ minWidth: 650 , maxHeight: 440}} >
             <TableHead>
               <TableRow>
                 <TableCell>Room</TableCell>
@@ -105,14 +121,21 @@ const ItemList = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {rows.map((row, index) => (
                 <TableRow
-                  key={row.name}
+                  key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
                   <TableCell>{row.room}</TableCell>
-                  <TableCell>{row.isOn}</TableCell>
-                  <TableCell>{row.isAuto}</TableCell>
+                  <TableCell>
+                  <Switch
+                    checked={row.isOn}
+                    onChange = {() => handleSwitchChange (index)}
+                    />
+                    {row.isOn}</TableCell>
+                  <TableCell>
+          
+                    {row.isAuto}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -125,3 +148,4 @@ const ItemList = () => {
 }
 
 export default ItemList;
+
