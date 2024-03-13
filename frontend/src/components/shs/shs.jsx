@@ -8,6 +8,8 @@ const SHS = () => {
     const [addUserName, setAddUserName] = useState('');
     // State to hold the ID of the user to add
     const [addUserId, setAddUserId] = useState('');
+    // State to hold the house location
+    const [houseLocation, setHouseLocation] = useState('');
     // State to control the visibility of the dialog for adding a user
     const [openAddUserDialog, setOpenAddUserDialog] = useState(false);
     // State to control the visibility of the dialog for login
@@ -59,17 +61,17 @@ const SHS = () => {
         console.log('Logging in with name:', loginName, 'and ID:', loginId);
     };
 
-    // Logic for setting date and time
+    // Function to handle setting date and time
     const handleSetDateTime = () => {
-        const currentDate = new Date();
+        const currentTime = new Date().toLocaleTimeString();
         // Logic for setting date and time goes here
-        console.log('Setting date and time:', currentDate);
+        console.log('Setting current time:', currentTime);
     };
 
-    // Logic for setting house location
+    // Function to handle setting house location
     const handleSetLocation = () => {
         // Logic for setting house location goes here
-        console.log('Setting house location...');
+        console.log('Setting house location:', houseLocation);
     };
 
     return (
@@ -164,7 +166,14 @@ const SHS = () => {
                 <Button onClick={handleSetDateTime} variant="contained" style={{ width: '350px', marginBottom: '10px' }}>Set Date and time</Button>
             </div>
             <div style={{ marginTop: '20px' }}>
-                <Button onClick={handleSetLocation} variant="contained" style={{ width: '350px', marginBottom: '10px' }}>Set house location</Button>
+                <TextField
+                    label="Type and Set House Location"
+                    variant="outlined"
+                    value={houseLocation}
+                    onChange={(e) => setHouseLocation(e.target.value)}
+                    style={{ width: '350px', marginBottom: '10px' }}
+                />
+            
             </div>
         </div>
     );
