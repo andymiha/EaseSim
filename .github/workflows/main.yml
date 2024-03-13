@@ -39,10 +39,9 @@ jobs:
           overwrite-settings: true
           job-status: 'success'
 
-      - name: Install Gradle
+      - name: Clean Gradle
         run: |
-          sudo apt-get update
-          sudo apt-get install -y gradle
+          ./gradlew clean
 
       - name: Build with Gradle
         run: gradle build
