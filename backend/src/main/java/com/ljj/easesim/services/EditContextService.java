@@ -1,11 +1,10 @@
 package com.ljj.easesim.services;
 
-import com.ljj.easesim.FormData;
+import com.ljj.easesim.requestBodies.EditContextFormData;
 import org.springframework.stereotype.Service;
 
 import com.ljj.easesim.interfaces.HouseElement;
 import com.ljj.easesim.interfaces.Command;
-import com.ljj.easesim.interfaces.User;
 import com.ljj.easesim.layout.HouseLayout;
 import com.ljj.easesim.layout.Room;
 import com.ljj.easesim.elements.Window;
@@ -18,11 +17,11 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class RoomService {
+public class EditContextService {
 
     private HouseLayout houseLayout;
 
-    public RoomService() {
+    public EditContextService() {
         this.houseLayout = houseLayout.getInstance();
     }
 
@@ -87,25 +86,25 @@ public class RoomService {
 
 
 //POST Processing
-    public void processFormData(FormData formData) {
+    public void processFormData(EditContextFormData editContextFormData) {
         // Perform necessary actions with the form data
         System.out.println("Received form data:");
 
-        System.out.println("Selected Room: " + formData.getSelectedRoom());
-        Room selectedRoom = houseLayout.getRoom(formData.getSelectedRoom());
+        System.out.println("Selected Room: " + editContextFormData.getSelectedRoom());
+        Room selectedRoom = houseLayout.getRoom(editContextFormData.getSelectedRoom());
 
         if (selectedRoom != null) {
             System.out.println("Found corresponding Room object for selected room.");
             // Proceed with processing the selected inhabitant and window
-            if (!formData.getSelectedInhabitant().isEmpty()) {
-                processSelectedInhabitant(selectedRoom, formData.getSelectedInhabitant());
+            if (!editContextFormData.getSelectedInhabitant().isEmpty()) {
+                processSelectedInhabitant(selectedRoom, editContextFormData.getSelectedInhabitant());
             } else {
                 System.out.println("No inhabitant selected.");
             }
 
-            if (!formData.getSelectedWindow().isEmpty()) {
-                int windowNumber = extractWindowNumber(formData.getSelectedWindow());
-                boolean isWindowBlocked = formData.isWindowBlocked();
+            if (!editContextFormData.getSelectedWindow().isEmpty()) {
+                int windowNumber = extractWindowNumber(editContextFormData.getSelectedWindow());
+                boolean isWindowBlocked = editContextFormData.isWindowBlocked();
                 processSelectedWindow(selectedRoom, windowNumber, isWindowBlocked);
             } else {
                 System.out.println("No window selected.");

@@ -6,10 +6,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class TestController {
-//    @GetMapping("/")
-//    public String hello() {
-//        return "hello";
-//    }
+    @GetMapping("/")
+    public String test() {
+        // Process form data and perform required action
+        return "BIG DATA - I am in TestController";
+    }
 //
 //    @PostMapping("/getTest")
 //    public String getTest() {

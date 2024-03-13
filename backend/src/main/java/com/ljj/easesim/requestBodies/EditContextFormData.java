@@ -1,14 +1,14 @@
-package com.ljj.easesim;
+package com.ljj.easesim.requestBodies;
 
 
-public class FormData {
+public class EditContextFormData {
     private String selectedRoom;
     private String selectedInhabitant;
     private String selectedWindow;
     private boolean isWindowBlocked;
 
     // Default constructor
-    public FormData() {
+    public EditContextFormData() {
     }
 
     // Getters and setters
