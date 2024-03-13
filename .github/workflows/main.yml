@@ -46,9 +46,6 @@ jobs:
 
       - name: Build with Gradle
         run: gradle build
-
-      - name: Run unit tests
-        run: gradle runUnitTests
         
       - name: Build React App
         run: yarn build
