@@ -28,7 +28,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v2
         with:
-          java-version: '17'
+          java-version: '11'
           distribution: 'adopt'
           java-package: 'jdk'
           architecture: 'x64'
@@ -43,8 +43,19 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y gradle
+
+      - name: Clean Gradle
+        run: |
+          ./gradlew clean
+
       - name: Build with Gradle
         run: gradle build
+
+      - name: Run unit tests
+        run: gradle test
+        
+      - name: Build React App
+        run: yarn build
 
       - name: Run unit tests
         run: gradle test
