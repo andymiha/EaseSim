@@ -36,7 +36,13 @@ sourceSets {
 	}
 }
 
-task test(type: Test) {
-	useJUnitPlatform()
+task customTest(type: Test) {
+	description = 'Runs unit tests'
+	group = 'verification'
+	testClassesDirs = sourceSets.test.output.classesDirs
+	classpath = sourceSets.test.runtimeClasspath
+	scanForTestClasses = false
 }
+
+check.dependsOn customTest
 
