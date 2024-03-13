@@ -10,6 +10,7 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Switch from "@mui/material/Switch";
+import Checkbox from "@mui/material/Checkbox";
 import { useState, useEffect } from "react";
 //working
 
@@ -82,6 +83,15 @@ const ItemList = () => {
     );
   };
 
+  const handleCheckboxChange = (index) => { 
+    setRows ((prevRows) => 
+      prevRows.map((row, i) =>
+        i === index ? {...row, isAuto: !row.isAuto} : row
+      )
+    );
+  };
+
+
   useEffect(() => {
     console.log("Rows updated:", rows);
   }, [rows]);
@@ -132,10 +142,14 @@ const ItemList = () => {
                   <Switch
                     checked={row.isOn}
                     onChange = {() => handleSwitchChange (index)}
+                    disabled = {row.isAuto}
                     />
                     {row.isOn}</TableCell>
                   <TableCell>
-          
+                  <Checkbox
+                        checked={row.isAuto}
+                        onChange = {() => handleCheckboxChange (index)}
+                      />
                     {row.isAuto}</TableCell>
                 </TableRow>
               ))}
