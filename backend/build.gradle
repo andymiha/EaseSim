@@ -30,7 +30,7 @@ dependencies {
 sourceSets {
 	test {
 		java {
-			srcDirs 'backend/src/test/java'
+			srcDirs 'backend/src/test/java' // Adjusted source directory
 			include '**/*.java'
 		}
 	}
