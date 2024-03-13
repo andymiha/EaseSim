@@ -1,23 +1,48 @@
-import React, { useState } from 'react';
-import { Typography, Button, Select, MenuItem } from '@mui/material';
+import { useState } from 'react';
+import { Typography, Button,  Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@mui/material';
 
-const SHS = ({
-                 handleAddEditProfiles,
-                 handleSetDateTime,
-                 handleSetLocation,
-                 handleLogin
-             }) => {
-    // State to hold the selected user type
-    const [selectedUserType, setSelectedUserType] = useState('');
+const SHS = () => {
+    // State to hold the selected user type for adding a user
+    const [ setSelectedUserToAdd] = useState('');
+    // State to control the visibility of the dialog for adding a user
+    const [openAddUserDialog, setOpenAddUserDialog] = useState(false);
+    // State to hold the login name
+    const [loginName, setLoginName] = useState('');
+    // State to hold the login ID
+    const [loginId, setLoginId] = useState('');
+    // State to control the visibility of the dialog for login
+    const [openLoginDialog, setOpenLoginDialog] = useState(false);
 
-    // Logic for deleting a user profile
-    const handleDeleteProfile = () => {
-        // Show confirmation dialog before deleting profile
-        if (window.confirm('Are you sure you want to delete this user profile?')) {
-            // Call function to delete profile
-            // Example: deleteUserProfile(profileId);
-            console.log('Deleting user profile...');
-        }
+    // Function to handle opening the dialog for adding a user
+    const handleOpenAddUserDialog = () => {
+        setOpenAddUserDialog(true);
+    };
+
+    // Function to handle closing the dialog for adding a user
+    const handleCloseAddUserDialog = () => {
+        setOpenAddUserDialog(false);
+    };
+
+    // Function to handle selecting a user type from the dialog for adding a user
+    const handleSelectUserToAdd = (userType) => {
+        setSelectedUserToAdd(userType);
+        setOpenAddUserDialog(false);
+    };
+
+    // Function to handle opening the dialog for login
+    const handleOpenLoginDialog = () => {
+        setOpenLoginDialog(true);
+    };
+
+    // Function to handle closing the dialog for login
+    const handleCloseLoginDialog = () => {
+        setOpenLoginDialog(false);
+    };
+
+    // Function to handle login
+    const handleLogin = () => {
+        // Additional logic for handling login
+        console.log('Logging in with name:', loginName, 'and ID:', loginId);
     };
 
     // Logic for setting date and time
@@ -33,73 +58,71 @@ const SHS = ({
         console.log('Setting house location...');
     };
 
-    // Logic for adding/removing/editing user profiles
-    const handleAddEditProfiles = (event) => {
-        // Handle the selected action based on the event value
-        const action = event.target.value;
-        switch (action) {
-            case 'add':
-                // Logic for adding a user profile
-                console.log('Adding a new user profile...');
-                break;
-            case 'remove':
-                // Call the handleDeleteProfile function
-                handleDeleteProfile();
-                break;
-            case 'edit':
-                // Logic for editing a user profile
-                console.log('Editing user profile...');
-                break;
-            default:
-                break;
-        }
-    };
-
-    // Logic for handling login
-    const handleLogin = (event) => {
-        // Set the selected user type to the value of the event
-        setSelectedUserType(event.target.value);
-        // Additional logic for handling login
-        console.log('Logging in with user type:', event.target.value);
-    };
-
     return (
         <div style={{ textAlign: 'center', marginTop: '20px' }}>
             <Typography variant="h3">SHS</Typography>
-            {/* Dropdown for Login and User Types */}
+            {/* Login button to open login dialog */}
             <div style={{ marginTop: '20px' }}>
-                <Select
-                    onChange={handleLogin}
-                    value={selectedUserType}
-                    style={{ width: '400px' }}
-                >
-                    {/* Placeholder option */}
-                    <MenuItem value="" disabled hidden>Select User Type</MenuItem>
-                    {/* Actual options */}
-                    <MenuItem value="Stranger">Stranger</MenuItem>
-                    <MenuItem value="Guest">Guest</MenuItem>
-                    <MenuItem value="Parent">Parent</MenuItem>
-                    <MenuItem value="Child">Child</MenuItem>
-                </Select>
+                <Button onClick={handleOpenLoginDialog} variant="contained" style={{ width: '350px' }}>Login</Button>
+            </div>
+            {/* Add User button to open add user dialog */}
+            <div style={{ marginTop: '20px' }}>
+                <Button onClick={handleOpenAddUserDialog} variant="contained" style={{ width: '350px' }}>Add User Profile</Button>
+            </div>
+            {/* Buttons for Delete and Edit User */}
+            <div style={{ marginTop: '20px' }}>
+                <Button variant="contained" style={{ width: '350px' }}>Delete User</Button>
+            </div>
+            <div style={{ marginTop: '20px' }}>
+                <Button variant="contained" style={{ width: '350px' }}>Edit User</Button>
             </div>
             {/* Buttons for other actions */}
             <div style={{ marginTop: '20px' }}>
-                <Button onClick={handleSetDateTime} variant="contained" style={{ width: '400px' }}>Set Date and time</Button>
+                <Button onClick={handleSetDateTime} variant="contained" style={{ width: '350px' }}>Set Date and time</Button>
             </div>
             <div style={{ marginTop: '20px' }}>
-                <Button onClick={handleSetLocation} variant="contained" style={{ width: '400px' }}>Set house location</Button>
+                <Button onClick={handleSetLocation} variant="contained" style={{ width: '350px' }}>Set house location</Button>
             </div>
-            {/* Dropdown for Add/remove/edit user profiles */}
-            <div style={{ marginTop: '20px' }}>
-                <Select onChange={handleAddEditProfiles} value="" style={{ width: '400px' }}>
-                    {/* Placeholder option */}
-                    <MenuItem value="" disabled hidden>Select a User Action</MenuItem>
-                    {/* Actual options */}
-                    <MenuItem value="add">Add user profile</MenuItem>
-                    <MenuItem value="remove">Remove user profile</MenuItem>
-                    <MenuItem value="edit">Edit user profile</MenuItem>
-                </Select>
-            </div>
+            {/* Dialog for selecting user type to add */}
+            <Dialog open={openAddUserDialog} onClose={handleCloseAddUserDialog}>
+                <DialogTitle>Select User Type to Add</DialogTitle>
+                <DialogContent>
+                    <Button onClick={() => handleSelectUserToAdd('Child')} variant="contained" style={{ marginBottom: '10px', width: '350px' }}>Child</Button>
+                    <Button onClick={() => handleSelectUserToAdd('Parent')} variant="contained" style={{ marginBottom: '10px', width: '350px' }}>Parent</Button>
+                    <Button onClick={() => handleSelectUserToAdd('Guest')} variant="contained" style={{ marginBottom: '10px', width: '350px' }}>Guest</Button>
+                    <Button onClick={() => handleSelectUserToAdd('Stranger')} variant="contained" style={{ marginBottom: '10px', width: '350px' }}>Stranger</Button>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseAddUserDialog} color="primary">Cancel</Button>
+                </DialogActions>
+            </Dialog>
+            {/* Dialog for login */}
+            <Dialog open={openLoginDialog} onClose={handleCloseLoginDialog}>
+                <DialogTitle>Login</DialogTitle>
+                <DialogContent>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        label="Name"
+                        fullWidth
+                        value={loginName}
+                        onChange={(e) => setLoginName(e.target.value)}
+                    />
+                    <TextField
+                        margin="dense"
+                        id="id"
+                        label="ID"
+                        fullWidth
+                        value={loginId}
+                        onChange={(e) => setLoginId(e.target.value)}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleLogin} color="primary">Login</Button>
+                    <Button onClick={handleCloseLoginDialog} color="primary">Cancel</Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 };
