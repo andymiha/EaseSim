@@ -67,37 +67,6 @@ const ItemList = () => {
     })));
   };
 
-
-  // const generateLightRows = (data) => {
-  //   setRows(
-  //     data.map((item) => ({
-  //       room: item.room,
-  //       isOn: item.switchedOn,
-  //       isAuto: item.isAuto,
-  //     }))
-  //   );
-  // };
-
-  // const generateDoorRows = (data) => {
-  //   setRows(
-  //     data.map((item) => ({
-  //       room: item.room,
-  //       isOn: item.isOpen,
-  //       isAuto: item.isAuto,
-  //     }))
-  //   );
-  // };
-
-  // const generateWindowRows = (data) => {
-  //   setRows(
-  //     data.map((item) => ({
-  //       room: item.room,
-  //       isOn: item.isOpen,
-  //       isBlocked: item.isBlocked,
-  //     }))
-  //   );
-  // };
-
   const [alignment, setAlignment] = useState("");
 
   const handleAlignment = (event, newAlignment) => {
