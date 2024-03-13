@@ -61,7 +61,7 @@ const SHC = () => {
   const generateRows = (data) => {
     setRows(data.map((item) => ({
       room: item.room,
-      isOn: item.switchedOn || item.isOpen, // Combined isOpen and switchedOn depending on the data source
+      isOn: item.switchedOn || item.isOpen,
       isBlocked: item.isBlocked || false,
       isAuto: item.isAuto || false,
     })));
@@ -162,5 +162,45 @@ const SHC = () => {
   );
 }
 
+
 export default SHC;
+
+// export const Layout = () => {
+
+//   return (
+//     <Box>
+//       <Stack
+//          direction="column"
+//          justifyContent="center"
+//          alignItems="center"
+//          spacing={5}
+//       >
+//       <Typography variant="h5" >House Layout</Typography>
+//       <img
+//         src="src/assets/HouseLayout.png"
+//         alt="House Layout"
+//         style={{ 
+//         position: 'relative',
+//         maxWidth: '100%', 
+//         height: 'auto', 
+//         }}
+//       />
+//         {isOn && (
+//           <div
+//             style={{
+//               position: "absolute",
+//               top: "50px", // Adjust position as needed
+//               left: "100px", // Adjust position as needed
+//               width: "50px", // Adjust size as needed
+//               height: "50px", // Adjust size as needed
+//               backgroundColor: "rgba(255, 0, 0, 0.5)", // Semi-transparent red color
+//             }}
+//           >
+         
+//            </div>
+//           )}  
+//       </Stack>
+//     </Box>
+//   ); 
+// };
 
