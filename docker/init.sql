@@ -1,2 +1,0 @@
-CREATE DATABASE IF NOT EXISTS ease_sim;
-USE ease_sim;
