@@ -48,13 +48,8 @@ jobs:
         run: gradle build
 
       - name: Run unit tests
-        run: gradle test
+        run: gradle runUnitTests
         
       - name: Build React App
         run: yarn build
 
-      - name: Run unit tests
-        run: gradle runUnitTests
-
-      - name: Build React App
-        run: yarn build
