@@ -1,5 +1,6 @@
-package com.ljj.easesim;
+package com.ljj.easesim.services;
 
+import com.ljj.easesim.FormData;
 import org.springframework.stereotype.Service;
 
 import com.ljj.easesim.interfaces.HouseElement;
