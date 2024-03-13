@@ -44,9 +44,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y gradle
 
-      - name: Clean Gradle
+      - name: Clean Gradle Wrapper
         run: |
-          ./gradlew clean
+          rm gradlew*
+          rm -rf .gradle/
 
       - name: Build with Gradle
         run: gradle build
