@@ -14,6 +14,6 @@ public class ToggleBlockWindowCommand implements Command {
 
     @Override
     public void execute() {
-        window.setBlocked(!isBlocked);
+        window.toggleBlocked();
     }
 }

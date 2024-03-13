@@ -37,7 +37,7 @@ public class Window implements HouseElement {
         this.id = id;
     }
 
-    public void setBlocked(boolean blockStatus) {
-        this.isBlocked = blockStatus;
+    public void toggleBlocked() {
+        isBlocked = !isBlocked;
     }
 }

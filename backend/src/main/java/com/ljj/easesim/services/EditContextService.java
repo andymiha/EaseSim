@@ -129,9 +129,6 @@ public class EditContextService {
             if (element instanceof Window && element.getId() == selectedWindow) {
                 Window window = (Window) element;
 
-                // Update the window block state
-                window.setBlocked(isWindowBlocked);
-
                 // Create command to toggle block state of the window
                 Command toggleBlockCommand = new ToggleBlockWindowCommand(window);
 

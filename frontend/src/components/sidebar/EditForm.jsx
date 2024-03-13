@@ -24,15 +24,12 @@ const EditForm = ({ onClose }) => {
 
                 // Update isWindowBlocked state based on window block state
                 if (selectedWindow && data.windowStates[selectedWindow]) {
-                    setIsWindowBlocked(data.windowStates[selectedWindow].includes("isBlocked: true"));
+                    setIsWindowBlocked(data.windowStates[selectedWindow]?.isBlocked === 'true');
                 }
             })
             .then(console.log('Edit Form Data fetched successfully!'))
             .catch(error => console.error('Error fetching data:', error));
     }, [selectedWindow]);
-
-    const isSubmitDisabled = !selectedRoom || !(selectedInhabitant || selectedWindow);
-    const isWindowBlockedCheck = !selectedRoom || !selectedWindow;
 
     // Post data on submission
     const handleSubmit = (e) => {
@@ -52,17 +49,28 @@ const EditForm = ({ onClose }) => {
             },
             body: JSON.stringify(formData)
         })
-            .then(response => {
-                if (response.ok) {
-                    console.log('Form submitted successfully!');
-                    onClose();
-                } else {
-                    console.error('Error submitting form:', response.statusText);
-                }
-            })
-            .catch(error => {
-                console.error('Error submitting form:', error);
-            });
+        .then(response => {
+            if (response.ok) {
+                console.log('Form submitted successfully!');
+                onClose();
+
+                // Fetch updated window states after form submission
+                fetch('http://localhost:8080/getData') 
+                    .then(response => response.json())
+                    .then(data => {
+                        // Update isWindowBlocked state based on window block state
+                        if (selectedWindow && data.windowStates[selectedWindow]) {
+                            setIsWindowBlocked(data.windowStates[selectedWindow].includes("isBlocked: true"));
+                        }
+                    })
+                    .catch(error => console.error('Error fetching updated window states:', error));
+            } else {
+                console.error('Error submitting form:', response.statusText);
+            }
+        })
+        .catch(error => {
+            console.error('Error submitting form:', error);
+        });
     };
 
     return (
@@ -122,20 +130,19 @@ const EditForm = ({ onClose }) => {
 
                     <FormControlLabel
                         control={
-                            <Switch //toggle switch instead of checkbox, still needs to get data from backend
+                            <Switch 
                                 checked={isWindowBlocked}
                                 onChange={(e) => setIsWindowBlocked(e.target.checked)}
                             />
                         }
                         label="Block Window"
-                        disabled={isWindowBlockedCheck} // Disable if no room and window is selected
                     />
 
                     <DialogActions>
                         <Button onClick={onClose} color="primary">
                             Cancel
                         </Button>
-                        <Button type="submit" color="primary" disabled={isSubmitDisabled}>
+                        <Button type="submit" color="primary" disabled={!selectedRoom || !(selectedInhabitant || selectedWindow)}>
                             Submit
                         </Button>
                     </DialogActions>
