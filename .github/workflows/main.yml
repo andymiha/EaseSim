@@ -38,23 +38,16 @@ jobs:
           overwrite-settings: true
           job-status: 'success'
 
-      - name: Install Maven
+      - name: Install Gradle
         run: |
           sudo apt-get update
-          sudo apt-get install -y maven
-          
-      - name: Build with Maven
-        run: mvn -B clean package
+          sudo apt-get install -y gradle
 
-      - name: Run tests
-        run: mvn -B test
+      - name: Build with Gradle
+        run: gradle build
 
-      - name: Build Spring Boot app
-        run: ./mvnw clean package
+      - name: Run unit tests
+        run: gradle test
         
       - name: Build React App
         run: yarn build
-
-
-      - name: Run Spring Boot tests
-        run: ./mvnw test
