@@ -9,12 +9,11 @@ public class ToggleBlockWindowCommand implements Command {
 
     public ToggleBlockWindowCommand(Window window) {
         this.window = window;
-        this.isBlocked = false;
+        this.isBlocked = window.getBlockedState(); // Retrieve the current block state
     }
 
     @Override
     public void execute() {
-        isBlocked = !isBlocked;
-        window.setToggleable(!isBlocked);
+        window.setBlocked(!isBlocked);
     }
 }

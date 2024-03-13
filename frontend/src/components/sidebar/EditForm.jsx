@@ -10,6 +10,7 @@ const EditForm = ({ onClose }) => {
     const [inhabitants, setInhabitants] = useState([]);
     const [rooms, setRooms] = useState([]);
     const [windows, setWindows] = useState([]);
+    const [windowStates, setWindowStates] = useState({});
 
     // Fetch data from backend on mount
     useEffect(() => {  
@@ -19,13 +20,18 @@ const EditForm = ({ onClose }) => {
                 setInhabitants(data.inhabitants);
                 setRooms(data.rooms);
                 setWindows(data.windows);
+                setWindowStates(data.windowStates);
+
+                // Update isWindowBlocked state based on window block state
+                if (selectedWindow && data.windowStates[selectedWindow]) {
+                    setIsWindowBlocked(data.windowStates[selectedWindow].includes("isBlocked: true"));
+                }
             })
             .then(console.log('Edit Form Data fetched successfully!'))
             .catch(error => console.error('Error fetching data:', error));
-    }, []);
-    //checks for submit button
+    }, [selectedWindow]);
+
     const isSubmitDisabled = !selectedRoom || !(selectedInhabitant || selectedWindow);
-    //checks for window toggle
     const isWindowBlockedCheck = !selectedRoom || !selectedWindow;
 
     // Post data on submission
