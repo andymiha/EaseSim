@@ -55,7 +55,7 @@ const windows = [
   { room: "BedroomOne", isOpen: true,  isBlocked: false},
 ];
 
-const ItemList = () => {
+const SHC = () => {
   const [rows, setRows] = useState([]);
 
   const generateRows = (data) => {
@@ -162,5 +162,5 @@ const ItemList = () => {
   );
 }
 
-export default ItemList;
+export default SHC;
 

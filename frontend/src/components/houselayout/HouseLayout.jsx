@@ -1,6 +1,6 @@
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
+import Stack from "@mui/material/Stack"
 
 const HouseLayout = () => {
 
@@ -22,6 +22,20 @@ const HouseLayout = () => {
         height: 'auto', 
         }}
       />
+       {/* {isOn && (
+          <div
+            style={{
+              position: "absolute",
+              top: "50px", // Adjust position as needed
+              left: "100px", // Adjust position as needed
+              width: "50px", // Adjust size as needed
+              height: "50px", // Adjust size as needed
+              backgroundColor: "rgba(255, 0, 0, 0.5)", // Semi-transparent red color
+            }}
+          >
+            {/* Add content for the overlay */}
+          {/* </div>
+          )} */} 
       </Stack>
     </Box>
   ); 
