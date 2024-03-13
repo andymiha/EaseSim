@@ -33,6 +33,15 @@ public class RoomBuilder {
     }
 
     public Room build() {
-        return new Room(id, name, elements, users);
-    }
+
+        // added so that it can return an empty list instead of null if there are no elements
+        if (elements == null) {
+            elements = new ArrayList<>();
+        }
+        if (users == null) {
+            users = new ArrayList<>();
+        }
+            return new Room(id, name, elements, users);
+        }
+
 }

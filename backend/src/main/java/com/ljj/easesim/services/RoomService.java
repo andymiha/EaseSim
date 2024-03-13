@@ -17,7 +17,7 @@ import java.util.Map;
 @Service
 public class RoomService {
 
-    private HouseLayout houseLayout;
+    public HouseLayout houseLayout;
 
     public RoomService() {
         this.houseLayout = new HouseLayout();
@@ -77,13 +77,14 @@ public class RoomService {
         if (selectedRoom != null) {
             System.out.println("Found corresponding Room object for selected room.");
             // Proceed with processing the selected inhabitant and window
-            if (!formData.getSelectedInhabitant().isEmpty()) {
+            String selectedInhabitant = formData.getSelectedInhabitant();
+            if (selectedInhabitant != null && !selectedInhabitant.isEmpty()) {
                 processSelectedInhabitant(selectedRoom, formData.getSelectedInhabitant());
             } else {
                 System.out.println("No inhabitant selected.");
             }
 
-            if (!formData.getSelectedWindow().isEmpty()) {
+            if (formData.getSelectedWindow() != null && !formData.getSelectedWindow().isEmpty()) {
                 int windowNumber = extractWindowNumber(formData.getSelectedWindow());
                 processSelectedWindow(selectedRoom, windowNumber);
             } else {
@@ -117,7 +118,7 @@ public class RoomService {
     }
 
 
-    private int extractWindowNumber(String selectedWindow) {
+    public int extractWindowNumber(String selectedWindow) {
         // Use regular expression to extract the integer part
         String windowNumberStr = selectedWindow.replaceAll("\\D+", "");
         // Parse the window number string to an integer

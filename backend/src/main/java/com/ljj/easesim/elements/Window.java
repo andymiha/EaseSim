@@ -4,7 +4,7 @@ import com.ljj.easesim.interfaces.HouseElement;
 
 public class Window implements HouseElement {
     private int id;
-    private boolean isOpen;
+    public boolean isOpen;
 
     @Override
     public void toggle() {
