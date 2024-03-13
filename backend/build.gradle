@@ -27,14 +27,28 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
-tasks.register() { Test test ->
-	description = 'Runs unit tests'
-	group = 'verification'
-	test.testClassesDirs = sourceSets.test.output.classesDirs
-	test.classpath = sourceSets.test.runtimeClasspath
-	test.scanForTestClasses = false
+tasks.named('test', Test) {
+	useJUnitPlatform()
 }
 
+tasks.register('runUnitTests', Test) {
+	description = 'Runs unit tests'
+	group = 'verification'
 
+	// Convert the File object to a FileCollection
+	testClassesDirs = files('src/test/java')
+	classpath = files(sourceSets.main.runtimeClasspath, sourceSets.test.runtimeClasspath)
+	shouldRunAfter testClasses
 
+	useJUnitPlatform()
 
+	// Optionally, configure test logging
+	testLogging {
+		events "passed"
+	}
+}
+
+// Make the 'runUnitTests' task depend on 'testClasses'
+tasks.named('runUnitTests').configure {
+	dependsOn(tasks.testClasses)
+}
