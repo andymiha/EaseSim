@@ -27,22 +27,14 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
-sourceSets {
-	test {
-		java {
-			srcDirs 'backend/src/test/java', 'backend/src/test/java/com/ljj/easesim' // Include additional test source directory
-			include '**/*.java'
-		}
-	}
-}
-
-task customTest(type: Test) {
+tasks.register() { Test test ->
 	description = 'Runs unit tests'
 	group = 'verification'
-	testClassesDirs = sourceSets.test.output.classesDirs
-	classpath = sourceSets.test.runtimeClasspath
-	scanForTestClasses = false
+	test.testClassesDirs = sourceSets.test.output.classesDirs
+	test.classpath = sourceSets.test.runtimeClasspath
+	test.scanForTestClasses = false
 }
 
-check.dependsOn customTest
+
+
 
