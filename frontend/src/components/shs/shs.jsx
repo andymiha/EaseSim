@@ -1,17 +1,21 @@
 import { useState } from 'react';
-import { Typography, Button,  Dialog, DialogTitle, DialogContent, DialogActions, TextField } from '@mui/material';
+import { Typography, Button,  Dialog, DialogTitle, DialogContent, DialogActions, TextField, Select, MenuItem } from '@mui/material';
 
 const SHS = () => {
     // State to hold the selected user type for adding a user
-    const [ setSelectedUserToAdd] = useState('');
+    const [selectedUserType, setSelectedUserType] = useState('');
+    // State to hold the name of the user to add
+    const [addUserName, setAddUserName] = useState('');
+    // State to hold the ID of the user to add
+    const [addUserId, setAddUserId] = useState('');
     // State to control the visibility of the dialog for adding a user
     const [openAddUserDialog, setOpenAddUserDialog] = useState(false);
+    // State to control the visibility of the dialog for login
+    const [openLoginDialog, setOpenLoginDialog] = useState(false);
     // State to hold the login name
     const [loginName, setLoginName] = useState('');
     // State to hold the login ID
     const [loginId, setLoginId] = useState('');
-    // State to control the visibility of the dialog for login
-    const [openLoginDialog, setOpenLoginDialog] = useState(false);
 
     // Function to handle opening the dialog for adding a user
     const handleOpenAddUserDialog = () => {
@@ -23,9 +27,19 @@ const SHS = () => {
         setOpenAddUserDialog(false);
     };
 
-    // Function to handle selecting a user type from the dialog for adding a user
-    const handleSelectUserToAdd = (userType) => {
-        setSelectedUserToAdd(userType);
+    // Function to handle selecting a user type from the dropdown for adding a user
+    const handleSelectUserType = (event) => {
+        setSelectedUserType(event.target.value);
+    };
+
+    // Function to handle adding a user
+    const handleAddUser = () => {
+        // Logic to add the user using the selectedUserType, addUserName, and addUserId
+        console.log('Adding user of type:', selectedUserType, 'with name:', addUserName, 'and ID:', addUserId);
+        // Clear the input fields after adding the user
+        setSelectedUserType('');
+        setAddUserName('');
+        setAddUserId('');
         setOpenAddUserDialog(false);
     };
 
@@ -61,38 +75,59 @@ const SHS = () => {
     return (
         <div style={{ textAlign: 'center', marginTop: '20px' }}>
             <Typography variant="h3">SHS</Typography>
-            {/* Login button to open login dialog */}
+            {/* Login button to open the dialog for login */}
             <div style={{ marginTop: '20px' }}>
-                <Button onClick={handleOpenLoginDialog} variant="contained" style={{ width: '350px' }}>Login</Button>
+                <Button onClick={handleOpenLoginDialog} variant="contained" style={{ width: '350px', marginBottom: '10px' }}>Login</Button>
             </div>
-            {/* Add User button to open add user dialog */}
+            {/* Add User button to open the dialog for adding a user */}
             <div style={{ marginTop: '20px' }}>
-                <Button onClick={handleOpenAddUserDialog} variant="contained" style={{ width: '350px' }}>Add User Profile</Button>
+                <Button onClick={handleOpenAddUserDialog} variant="contained" style={{ width: '350px', marginBottom: '10px' }}>Add User Profile</Button>
             </div>
             {/* Buttons for Delete and Edit User */}
             <div style={{ marginTop: '20px' }}>
-                <Button variant="contained" style={{ width: '350px' }}>Delete User</Button>
+                <Button variant="contained" style={{ width: '350px', marginBottom: '10px' }}>Delete User</Button>
             </div>
             <div style={{ marginTop: '20px' }}>
-                <Button variant="contained" style={{ width: '350px' }}>Edit User</Button>
+                <Button variant="contained" style={{ width: '350px', marginBottom: '10px' }}>Edit User</Button>
             </div>
-            {/* Buttons for other actions */}
-            <div style={{ marginTop: '20px' }}>
-                <Button onClick={handleSetDateTime} variant="contained" style={{ width: '350px' }}>Set Date and time</Button>
-            </div>
-            <div style={{ marginTop: '20px' }}>
-                <Button onClick={handleSetLocation} variant="contained" style={{ width: '350px' }}>Set house location</Button>
-            </div>
-            {/* Dialog for selecting user type to add */}
+            {/* Dialog for adding a user */}
             <Dialog open={openAddUserDialog} onClose={handleCloseAddUserDialog}>
-                <DialogTitle>Select User Type to Add</DialogTitle>
+                <DialogTitle>Add User</DialogTitle>
                 <DialogContent>
-                    <Button onClick={() => handleSelectUserToAdd('Child')} variant="contained" style={{ marginBottom: '10px', width: '350px' }}>Child</Button>
-                    <Button onClick={() => handleSelectUserToAdd('Parent')} variant="contained" style={{ marginBottom: '10px', width: '350px' }}>Parent</Button>
-                    <Button onClick={() => handleSelectUserToAdd('Guest')} variant="contained" style={{ marginBottom: '10px', width: '350px' }}>Guest</Button>
-                    <Button onClick={() => handleSelectUserToAdd('Stranger')} variant="contained" style={{ marginBottom: '10px', width: '350px' }}>Stranger</Button>
+                    <Select
+                        value={selectedUserType}
+                        onChange={handleSelectUserType}
+                        fullWidth
+                        variant="outlined"
+                        style={{ marginBottom: '20px' }}
+                    >
+                        <MenuItem value="">Select User Type</MenuItem>
+                        <MenuItem value="Child">Child</MenuItem>
+                        <MenuItem value="Parent">Parent</MenuItem>
+                        <MenuItem value="Guest">Guest</MenuItem>
+                        <MenuItem value="Stranger">Stranger</MenuItem>
+                    </Select>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="addUserName"
+                        label="Name"
+                        fullWidth
+                        value={addUserName}
+                        onChange={(e) => setAddUserName(e.target.value)}
+                        style={{ marginBottom: '20px' }}
+                    />
+                    <TextField
+                        margin="dense"
+                        id="addUserId"
+                        label="ID"
+                        fullWidth
+                        value={addUserId}
+                        onChange={(e) => setAddUserId(e.target.value)}
+                    />
                 </DialogContent>
                 <DialogActions>
+                    <Button onClick={handleAddUser} color="primary" disabled={!selectedUserType || !addUserName || !addUserId}>Add</Button>
                     <Button onClick={handleCloseAddUserDialog} color="primary">Cancel</Button>
                 </DialogActions>
             </Dialog>
@@ -103,15 +138,16 @@ const SHS = () => {
                     <TextField
                         autoFocus
                         margin="dense"
-                        id="name"
+                        id="loginName"
                         label="Name"
                         fullWidth
                         value={loginName}
                         onChange={(e) => setLoginName(e.target.value)}
+                        style={{ marginBottom: '20px' }}
                     />
                     <TextField
                         margin="dense"
-                        id="id"
+                        id="loginId"
                         label="ID"
                         fullWidth
                         value={loginId}
@@ -123,6 +159,13 @@ const SHS = () => {
                     <Button onClick={handleCloseLoginDialog} color="primary">Cancel</Button>
                 </DialogActions>
             </Dialog>
+            {/* Buttons for other actions */}
+            <div style={{ marginTop: '20px' }}>
+                <Button onClick={handleSetDateTime} variant="contained" style={{ width: '350px', marginBottom: '10px' }}>Set Date and time</Button>
+            </div>
+            <div style={{ marginTop: '20px' }}>
+                <Button onClick={handleSetLocation} variant="contained" style={{ width: '350px', marginBottom: '10px' }}>Set house location</Button>
+            </div>
         </div>
     );
 };
