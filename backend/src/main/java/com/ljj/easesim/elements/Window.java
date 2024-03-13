@@ -13,7 +13,7 @@ public class Window implements HouseElement {
 
     @Override
     public void toggle() {
-        if (isBlocked) {
+        if (!isBlocked) {
             isOpen = !isOpen;
         }
     }
