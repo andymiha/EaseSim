@@ -47,6 +47,11 @@ jobs:
       - name: Build with Gradle
         run: gradle build
         
-      - name: Build React App
-        run: yarn build
+      - name: Install Yarn
+        run: sudo npm install -g yarn
 
+      - name: Install React Dependencies and Build
+        working-directory: frontend  # Change directory to frontend
+        run: |
+          yarn install
+          yarn build
