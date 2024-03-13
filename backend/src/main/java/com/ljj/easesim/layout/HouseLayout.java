@@ -40,12 +40,16 @@ public class HouseLayout {
 
                 // Add Lights
                 for(int i = 0; i <= lights; i++) {
-                    elements.add(new Light());
+                    Light light = new Light();
+                    light.setId(++idCounter);
+                    elements.add(light);
                 }
 
                 // Add Windows
                 for(int i = 0; i <= windows; i++) {
-                    elements.add(new Window());
+                    Window window = new Window();
+                    window.setId(++idCounter);
+                    elements.add(window);
                 }
 
                 Room room = new RoomBuilder()
