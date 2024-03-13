@@ -84,7 +84,7 @@ const ItemList = () => {
       data.map((item) => ({
         room: item.room,
         isOn: item.isOpen,
-        isAuto: item.isAuto,
+        isBlocked: item.isBlocked,
       }))
     );
   };
@@ -148,7 +148,7 @@ const ItemList = () => {
               <TableRow>
                 <TableCell>Room</TableCell>
                 <TableCell>On/Off</TableCell>
-                <TableCell>Auto-mode</TableCell>
+                {alignment !== "right" && <TableCell>Auto-mode</TableCell>}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -165,12 +165,14 @@ const ItemList = () => {
                     disabled = {row.isBlocked || row.isAuto}
                     />
                     {row.isOn}</TableCell>
+                    {alignment !== "right" && (
                   <TableCell>
                   <Checkbox
                         checked={row.isAuto}
                         onChange = {() => handleCheckboxChange (index)}
                       />
                     {row.isAuto}</TableCell>
+                      )}
                 </TableRow>
               ))}
             </TableBody>
