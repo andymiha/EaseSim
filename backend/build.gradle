@@ -30,13 +30,13 @@ dependencies {
 sourceSets {
 	test {
 		java {
-			srcDirs 'backend/src/test/java' // Adjusted source directory
+			srcDirs 'backend/src/test/java', 'backend/src/test/java/com/ljj/easesim' // Include additional test source directory
 			include '**/*.java'
 		}
 	}
 }
 
-tasks.named('test') {
+task test(type: Test) {
 	useJUnitPlatform()
 }
 
