@@ -55,6 +55,8 @@ const windows = [
   { room: "BedroomOne", isOpen: true,  isBlocked: false},
 ];
 
+
+
 const SHC = () => {
   const [rows, setRows] = useState([]);
 
