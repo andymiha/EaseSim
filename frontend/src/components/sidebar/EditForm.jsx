@@ -11,6 +11,10 @@ const EditForm = ({ onClose }) => {
     const [rooms, setRooms] = useState([]);
     const [windows, setWindows] = useState([]);
     const [windowStates, setWindowStates] = useState({});
+    //Checks for submit button
+    const isSubmitDisabled = !selectedRoom ||
+        ((!selectedInhabitant && !selectedWindow) || (selectedWindow && isWindowBlocked === windowStates[selectedWindow]?.isBlocked));
+    
 
     // Fetch data from backend on mount
     useEffect(() => {  
@@ -100,7 +104,7 @@ const EditForm = ({ onClose }) => {
                             value={selectedInhabitant}
                             onChange={(e) => setSelectedInhabitant(e.target.value)}
                             label="Select Inhabitant" // Add label to prevent floating
-                            disabled={!selectedRoom} // Disable if no room is selected
+                            disabled={!selectedRoom || selectedRoom && selectedWindow} // Disable if no room is selected or if a window and room are selected
                         >
                             <MenuItem value="">
                                 <em>Select Inhabitant</em>
@@ -117,7 +121,7 @@ const EditForm = ({ onClose }) => {
                             value={selectedWindow}
                             onChange={(e) => setSelectedWindow(e.target.value)}
                             label="Select Window" // Add label to prevent floating
-                            disabled={!selectedRoom} // Disable if no room is selected
+                            disabled={!selectedRoom || selectedRoom && selectedInhabitant} // Disable if no room is selected or if an inhabitant and room are selected
                         >
                             <MenuItem value="">
                                 <em>Select Window</em>
@@ -133,6 +137,7 @@ const EditForm = ({ onClose }) => {
                             <Switch 
                                 checked={isWindowBlocked}
                                 onChange={(e) => setIsWindowBlocked(e.target.checked)}
+                                disabled={!selectedWindow}
                             />
                         }
                         label="Block Window"
@@ -142,7 +147,7 @@ const EditForm = ({ onClose }) => {
                         <Button onClick={onClose} color="primary">
                             Cancel
                         </Button>
-                        <Button type="submit" color="primary" disabled={!selectedRoom || !(selectedInhabitant || selectedWindow)}>
+                        <Button type="submit" color="primary" disabled={isSubmitDisabled}>
                             Submit
                         </Button>
                     </DialogActions>
