@@ -58,36 +58,45 @@ const windows = [
 const ItemList = () => {
   const [rows, setRows] = useState([]);
 
-
-  const generateLightRows = (data) => {
-    setRows(
-      data.map((item) => ({
-        room: item.room,
-        isOn: item.switchedOn,
-        isAuto: item.isAuto,
-      }))
-    );
+  const generateRows = (data) => {
+    setRows(data.map((item) => ({
+      room: item.room,
+      isOn: item.switchedOn || item.isOpen, // Combined isOpen and switchedOn depending on the data source
+      isBlocked: item.isBlocked || false,
+      isAuto: item.isAuto || false,
+    })));
   };
 
-  const generateDoorRows = (data) => {
-    setRows(
-      data.map((item) => ({
-        room: item.room,
-        isOn: item.isOpen,
-        isAuto: item.isAuto,
-      }))
-    );
-  };
 
-  const generateWindowRows = (data) => {
-    setRows(
-      data.map((item) => ({
-        room: item.room,
-        isOn: item.isOpen,
-        isBlocked: item.isBlocked,
-      }))
-    );
-  };
+  // const generateLightRows = (data) => {
+  //   setRows(
+  //     data.map((item) => ({
+  //       room: item.room,
+  //       isOn: item.switchedOn,
+  //       isAuto: item.isAuto,
+  //     }))
+  //   );
+  // };
+
+  // const generateDoorRows = (data) => {
+  //   setRows(
+  //     data.map((item) => ({
+  //       room: item.room,
+  //       isOn: item.isOpen,
+  //       isAuto: item.isAuto,
+  //     }))
+  //   );
+  // };
+
+  // const generateWindowRows = (data) => {
+  //   setRows(
+  //     data.map((item) => ({
+  //       room: item.room,
+  //       isOn: item.isOpen,
+  //       isBlocked: item.isBlocked,
+  //     }))
+  //   );
+  // };
 
   const [alignment, setAlignment] = useState("");
 
@@ -131,13 +140,13 @@ const ItemList = () => {
           onChange={handleAlignment}
           aria-label="text alignment"
         >
-          <ToggleButton value="left" onClick={() => generateLightRows(lights)}>
+          <ToggleButton value="left" onClick={() => generateRows(lights)}>
             Lights
           </ToggleButton>
-          <ToggleButton value="center" onClick={() => generateDoorRows(doors)}>
+          <ToggleButton value="center" onClick={() => generateRows(doors)}>
             Doors
           </ToggleButton>
-          <ToggleButton value="right" onClick={() => generateWindowRows(windows)}>
+          <ToggleButton value="right" onClick={() => generateRows(windows)}>
             Windows
           </ToggleButton>
         </ToggleButtonGroup>
