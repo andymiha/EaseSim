@@ -17,6 +17,11 @@ public class Window implements HouseElement {
     }
 
     @Override
+    public boolean getState() {
+        return isOpen;
+    }
+
+    @Override
     public void setId(int id) {
         this.id = id;
     }

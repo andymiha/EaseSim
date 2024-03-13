@@ -13,7 +13,7 @@ const EditForm = ({ onClose }) => {
 
     // Fetch data from backend on mount
     useEffect(() => {  
-        fetch('http://localhost:8080/getData') // Replace with your backend endpoint for fetching data
+        fetch('http://localhost:8080/getData') 
             .then(response => response.json())
             .then(data => {
                 setInhabitants(data.inhabitants);
@@ -36,7 +36,7 @@ const EditForm = ({ onClose }) => {
             isWindowBlocked: isWindowBlocked
         };
 
-        fetch('http://localhost:8080/submitForm', { // Replace localhost with your backend server address
+        fetch('http://localhost:8080/submitForm', { 
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
