@@ -20,7 +20,7 @@ public class RoomService {
     private HouseLayout houseLayout;
 
     public RoomService() {
-        this.houseLayout = new HouseLayout();
+        this.houseLayout = houseLayout.getInstance();
     }
 
     public Map<String, List<String>> processGetData() {
