@@ -17,6 +17,11 @@ public class Light implements HouseElement {
     }
 
     @Override
+    public boolean getState() {
+        return switchedOn;
+    }
+
+    @Override
     public void setId(int id) {
         this.id = id;
     }
