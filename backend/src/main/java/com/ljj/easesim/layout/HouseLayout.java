@@ -16,6 +16,7 @@ public class HouseLayout {
     // ID Counter necessary for incrementing room id's when creating rooms.
     private int idCounter = 0;
     private ArrayList<Room> rooms;
+    private static final HouseLayout INSTANCE = new HouseLayout();
 
     public HouseLayout() {
         // Example House Layout Constructor
@@ -77,6 +78,10 @@ public class HouseLayout {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static HouseLayout getInstance() {
+        return INSTANCE;
     }
 
     public Room getRoom(String name) {
