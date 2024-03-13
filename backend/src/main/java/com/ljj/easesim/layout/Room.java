@@ -1,3 +1,4 @@
+
 package com.ljj.easesim.layout;
 
 import com.ljj.easesim.elements.Door;
@@ -51,17 +52,14 @@ public class Room {
         }
         return doors;
     }
-
     //setters
     public void setCommand(Command command) {
         this.command = command;
     }
-
     //Other methods
     public void executeCommand() {
         command.execute();
     }
-
     public void addElement(HouseElement element) {
         elements.add(element);
     }
@@ -69,7 +67,6 @@ public class Room {
     public void removeElement(HouseElement element) {
         elements.remove(element);
     }
-
     public void addUser(User user) {
         users.add(user);
     }
@@ -77,6 +74,4 @@ public class Room {
     public void removeUser(User user) {
         users.remove(user);
     }
-
-
 }
