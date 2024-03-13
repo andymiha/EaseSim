@@ -23,47 +23,67 @@ import { useState, useEffect } from "react";
 //const [windows, setWindows] = useState([])
 
 const lights = [
-  { room: "Living", isOn: true, isAuto: true, dummy: "hi" },
-  { room: "Kitchen", isOn: false, isAuto: false, dummy: "hi" },
-  { room: "Bathroom", isOn: true, isAuto: false, dummy: "hi" },
-  { room: "BedroomOne", isOn: false, isAuto: false, dummy: "hi" },
-  { room: "BedroomTwo", isOn: true, isAuto: false, dummy: "hi" },
-  { room: "Entrance", isOn: false, isAuto: false, dummy: "hi" },
-  { room: "Backyard", isOn: false, isAuto: false, dummy: "hi" },
-  { room: "Garage", isOn: true, isAuto: false, dummy: "hi" },
-  { room: "Living", isOn: true, isAuto: false, dummy: "hi" },
-  { room: "Kitchen", isOn: false, isAuto: true, dummy: "hi" },
-  { room: "Bathroom", isOn: false, isAuto: false, dummy: "hi" },
-  { room: "BedroomOne", isOn: true, isAuto: false, dummy: "hi" },
-  { room: "BedroomTwo", isOn:true, isAuto: true, dummy: "hi" },
-  { room: "Entrance", isOn: true, isAuto: false, dummy: "hi" },
-  { room: "Backyard", isOn: false, isAuto: false, dummy: "hi" },
-  { room: "Garage", isOn: false, isAuto: false, dummy: "hi" },
+  { room: "Living", switchedOn: true, isAuto: true, dummy: "hi" },
+  { room: "Kitchen", switchedOn: false, isAuto: false, dummy: "hi" },
+  { room: "Bathroom", switchedOn: true, isAuto: false, dummy: "hi" },
+  { room: "BedroomOne", switchedOn: false, isAuto: false, dummy: "hi" },
+  { room: "BedroomTwo", switchedOn: true, isAuto: false, dummy: "hi" },
+  { room: "Entrance", switchedOn: false, isAuto: false, dummy: "hi" },
+  { room: "Backyard", switchedOn: false, isAuto: false, dummy: "hi" },
+  { room: "Garage", switchedOn: true, isAuto: false, dummy: "hi" },
+  { room: "Living", switchedOn: true, isAuto: false, dummy: "hi" },
+  { room: "Kitchen", switchedOn: false, isAuto: true, dummy: "hi" },
+  { room: "Bathroom", switchedOn: false, isAuto: false, dummy: "hi" },
+  { room: "BedroomOne", switchedOn: true, isAuto: false, dummy: "hi" },
+  { room: "BedroomTwo", switchedOn:true, isAuto: true, dummy: "hi" },
+  { room: "Entrance", switchedOn: true, isAuto: false, dummy: "hi" },
+  { room: "Backyard", switchedOn: false, isAuto: false, dummy: "hi" },
+  { room: "Garage", switchedOn: false, isAuto: false, dummy: "hi" },
 ];
 
 const doors = [
-  { room: "BedroomTwo", isOn: false, isAuto: true, dummy: "hi" },
-  { room: "Entrance", isOn: true, isAuto: false, dummy: "hi" },
-  { room: "Backyard", isOn: false, isAuto: false, dummy: "hi" },
-  { room: "Garage", isOn: false, isAuto: false, dummy: "hi" },
+  { room: "BedroomTwo", isOpen: false, isAuto: true, dummy: "hi" },
+  { room: "Entrance", isOpen: true, isAuto: false, dummy: "hi" },
+  { room: "Backyard", isOpen: false, isAuto: false, dummy: "hi" },
+  { room: "Garage", isOpen: false, isAuto: false, dummy: "hi" },
 ];
 
 const windows = [
-  { room: "Living", isOn: false, isBlocked: false, dummy: "hi" },
-  { room: "Kitchen", isOn: true,  isBlocked: true, dummy: "hi" },
-  { room: "Bathroom", isOn: true,  isBlocked: false, dummy: "hi" },
-  { room: "BedroomOne", isOn: true,  isBlocked: false, dummy: "hi" },
+  { room: "Living", isOpen: false, isBlocked: false},
+  { room: "Kitchen", isOpen: true,  isBlocked: true },
+  { room: "Bathroom", isOpen: true,  isBlocked: false},
+  { room: "BedroomOne", isOpen: true,  isBlocked: false},
 ];
 
 const ItemList = () => {
   const [rows, setRows] = useState([]);
 
-  // Function to generate rows
-  const generateRows = (data) => {
+
+  const generateLightRows = (data) => {
     setRows(
       data.map((item) => ({
         room: item.room,
-        isOn: item.isOn,
+        isOn: item.switchedOn,
+        isAuto: item.isAuto,
+      }))
+    );
+  };
+
+  const generateDoorRows = (data) => {
+    setRows(
+      data.map((item) => ({
+        room: item.room,
+        isOn: item.isOpen,
+        isAuto: item.isAuto,
+      }))
+    );
+  };
+
+  const generateWindowRows = (data) => {
+    setRows(
+      data.map((item) => ({
+        room: item.room,
+        isOn: item.isOpen,
         isAuto: item.isAuto,
       }))
     );
@@ -111,13 +131,13 @@ const ItemList = () => {
           onChange={handleAlignment}
           aria-label="text alignment"
         >
-          <ToggleButton value="left" onClick={() => generateRows(lights)}>
+          <ToggleButton value="left" onClick={() => generateLightRows(lights)}>
             Lights
           </ToggleButton>
-          <ToggleButton value="center" onClick={() => generateRows(doors)}>
+          <ToggleButton value="center" onClick={() => generateDoorRows(doors)}>
             Doors
           </ToggleButton>
-          <ToggleButton value="right" onClick={() => generateRows(windows)}>
+          <ToggleButton value="right" onClick={() => generateWindowRows(windows)}>
             Windows
           </ToggleButton>
         </ToggleButtonGroup>
@@ -142,7 +162,7 @@ const ItemList = () => {
                   <Switch
                     checked={row.isOn}
                     onChange = {() => handleSwitchChange (index)}
-                    disabled = {row.isAuto}
+                    disabled = {row.isBlocked || row.isAuto}
                     />
                     {row.isOn}</TableCell>
                   <TableCell>
