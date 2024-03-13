@@ -5,15 +5,15 @@ import com.ljj.easesim.interfaces.HouseElement;
 public class Window implements HouseElement {
     private int id;
     private boolean isOpen;
-    private boolean isToggleable;
+    private boolean isBlocked;
 
     public Window() {
-        this.isToggleable = true; // By default, window is toggleable
+        this.isBlocked = false; // By default, window is unblocked
     }
 
     @Override
     public void toggle() {
-        if (isToggleable) {
+        if (!isBlocked) {
             isOpen = !isOpen;
         }
     }
@@ -28,12 +28,16 @@ public class Window implements HouseElement {
         return isOpen;
     }
 
+    public boolean getBlockedState() {
+        return isBlocked;
+    }
+
     @Override
     public void setId(int id) {
         this.id = id;
     }
 
-    public void setToggleable(boolean toggleable) {
-        this.isToggleable = toggleable;
+    public void toggleBlocked() {
+        isBlocked = !isBlocked;
     }
 }

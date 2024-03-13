@@ -84,6 +84,52 @@ public class HouseLayout {
         return INSTANCE;
     }
 
+    public Map<String, HouseElement> getHouseElements() {
+        Map<String, HouseElement> elementsMap = new HashMap<>();
+        for (Room room : this.rooms) {
+            for (HouseElement element : room.getElements()) {
+                elementsMap.put(room.getName(), element);
+            }
+        }
+        return elementsMap;
+    }
+
+    public Map<String, HouseElement> getHouseDoors() {
+        Map<String, HouseElement> doorsMap = new HashMap<>();
+        for (Room room : this.rooms) {
+            for (HouseElement element : room.getElements()) {
+                if (element instanceof Door) {
+                    doorsMap.put(room.getName(), element);
+                }
+            }
+        }
+        return doorsMap;
+    }
+
+    public Map<String, HouseElement> getHouseLights() {
+        Map<String, HouseElement> lightsMap = new HashMap<>();
+        for (Room room : this.rooms) {
+            for (HouseElement element : room.getElements()) {
+                if (element instanceof Light) {
+                    lightsMap.put(room.getName(), element);
+                }
+            }
+        }
+        return lightsMap;
+    }
+
+    public Map<String, HouseElement> getHouseWindows() {
+        Map<String, HouseElement> windowsMap = new HashMap<>();
+        for (Room room : this.rooms) {
+            for (HouseElement element : room.getElements()) {
+                if (element instanceof Window) {
+                    windowsMap.put(room.getName(), element);
+                }
+            }
+        }
+        return windowsMap;
+    }
+
     public Room getRoom(String name) {
         for (Room room : this.rooms) {
             if (room.getName().equals(name)) {

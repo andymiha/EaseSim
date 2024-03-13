@@ -1,13 +1,15 @@
 package com.ljj.easesim.services;
 
-import com.ljj.easesim.FormData;
+import com.ljj.easesim.requestBodies.EditContextFormData;
 import org.springframework.stereotype.Service;
 
 import com.ljj.easesim.interfaces.HouseElement;
-import com.ljj.easesim.interfaces.User;
+import com.ljj.easesim.interfaces.Command;
 import com.ljj.easesim.layout.HouseLayout;
 import com.ljj.easesim.layout.Room;
 import com.ljj.easesim.elements.Window;
+import com.ljj.easesim.commands.ToggleBlockWindowCommand;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,20 +17,30 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class RoomService {
+public class EditContextService {
 
     private HouseLayout houseLayout;
 
-    public RoomService() {
+    public EditContextService() {
         this.houseLayout = houseLayout.getInstance();
     }
 
+//GET process
     public Map<String, List<String>> processGetData() {
         Map<String, List<String>> data = new HashMap<>();
         data.put("inhabitants", getInhabitants());
         data.put("rooms", getRooms());
         data.put("windows", getWindows());
+        data.put("windowStates", getWindowStates()); // Add window block states to the response
         return data;
+    }
+
+    public List<String> getRooms() {
+        List<String> rooms = new ArrayList<>();
+        for (Room room : houseLayout.getRooms()) {
+            rooms.add(room.getName());
+        }
+        return rooms;
     }
 
     //HardCoded for Now, need to complete Users and create and assign various users to rooms
@@ -46,14 +58,6 @@ public class RoomService {
         return inhabitants;
     }
 
-    public List<String> getRooms() {
-        List<String> rooms = new ArrayList<>();
-        for (Room room : houseLayout.getRooms()) {
-            rooms.add(room.getName());
-        }
-        return rooms;
-    }
-
     public List<String> getWindows() {
         List<String> windows = new ArrayList<>();
         for (Room room : houseLayout.getRooms()) {
@@ -67,33 +71,47 @@ public class RoomService {
         return windows;
     }
 
-    public void processFormData(FormData formData) {
+    private List<String> getWindowStates() {
+        List<String> windowStates = new ArrayList<>();
+        for (Room room : houseLayout.getRooms()) {
+            List<HouseElement> elements = room.getElements();
+            for (HouseElement element : elements) {
+                if (element instanceof Window) {
+                    windowStates.add("Window " + element.getId() + " isBlocked: " + ((Window) element).getBlockedState());
+                }
+            }
+        }
+        return windowStates;
+    }
+
+
+//POST Processing
+    public void processFormData(EditContextFormData editContextFormData) {
         // Perform necessary actions with the form data
         System.out.println("Received form data:");
 
-        System.out.println("Selected Room: " + formData.getSelectedRoom());
-        Room selectedRoom = houseLayout.getRoom(formData.getSelectedRoom());
+        System.out.println("Selected Room: " + editContextFormData.getSelectedRoom());
+        Room selectedRoom = houseLayout.getRoom(editContextFormData.getSelectedRoom());
 
         if (selectedRoom != null) {
             System.out.println("Found corresponding Room object for selected room.");
             // Proceed with processing the selected inhabitant and window
-            if (!formData.getSelectedInhabitant().isEmpty()) {
-                processSelectedInhabitant(selectedRoom, formData.getSelectedInhabitant());
+            if (!editContextFormData.getSelectedInhabitant().isEmpty()) {
+                processSelectedInhabitant(selectedRoom, editContextFormData.getSelectedInhabitant());
             } else {
                 System.out.println("No inhabitant selected.");
             }
 
-            if (!formData.getSelectedWindow().isEmpty()) {
-                int windowNumber = extractWindowNumber(formData.getSelectedWindow());
-                processSelectedWindow(selectedRoom, windowNumber);
+            if (!editContextFormData.getSelectedWindow().isEmpty()) {
+                int windowNumber = extractWindowNumber(editContextFormData.getSelectedWindow());
+                boolean isWindowBlocked = editContextFormData.isWindowBlocked();
+                processSelectedWindow(selectedRoom, windowNumber, isWindowBlocked);
             } else {
                 System.out.println("No window selected.");
             }
         } else {
             System.out.println("Corresponding Room object not found for selected room.");
         }
-
-        System.out.println("Is Window Blocked: " + formData.isWindowBlocked());
 
         // You can add your business logic here, such as storing the data in a database.
     }
@@ -104,18 +122,29 @@ public class RoomService {
         // do this later when the UserProfiles are done
     }
 
-    private void processSelectedWindow(Room selectedRoom, int selectedWindow) {
+    private void processSelectedWindow(Room selectedRoom, int selectedWindow, boolean isWindowBlocked) {
         System.out.println("Selected Window: " + selectedWindow);
-        List<HouseElement> elements = selectedRoom.getElements();
-        for (HouseElement element : elements) {
+
+        for (HouseElement element : selectedRoom.getElements()) {
             if (element instanceof Window && element.getId() == selectedWindow) {
-                ((Window) element).toggle();
-                System.out.println("Window state toggled.");
+                Window window = (Window) element;
+
+                // Create command to toggle block state of the window
+                Command toggleBlockCommand = new ToggleBlockWindowCommand(window);
+
+                // Set the command in the room
+                selectedRoom.setCommand(toggleBlockCommand);
+
+                // Execute the command in the room
+                selectedRoom.executeCommand();
+
+                System.out.println("Window block state toggled.");
+
+                System.out.println("Final Window Block State: " + window.getBlockedState());
                 break; // No need to continue searching for the window
             }
         }
     }
-
 
     private int extractWindowNumber(String selectedWindow) {
         // Use regular expression to extract the integer part
