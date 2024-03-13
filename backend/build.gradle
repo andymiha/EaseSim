@@ -22,6 +22,15 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
+sourceSets {
+    test {
+        java {
+            srcDirs 'backend/src/test/java'
+            include '**/*.java'
+        }
+    }
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
 }
