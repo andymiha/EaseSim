@@ -32,10 +32,5 @@ public class FormController {
         return "Form submitted successfully!";
     }
 
-    @GetMapping("/")
-    public String test() {
-        // Process form data and perform required action
-        return "BIG DATA";
-    }
 }
 
