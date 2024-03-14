@@ -1,9 +1,7 @@
 package com.ljj.easesim.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ljj.easesim.commands.ToggleDoorCommand;
-import com.ljj.easesim.commands.ToggleLightCommand;
-import com.ljj.easesim.commands.ToggleWindowCommand;
+import com.ljj.easesim.commands.*;
 import com.ljj.easesim.elements.Door;
 import com.ljj.easesim.elements.Light;
 import com.ljj.easesim.elements.Window;
@@ -174,6 +172,58 @@ public class SimHomeController {
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Success");
         response.put("state", door.get().getState());
+        // Return the response
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/toggleIsAutoLight")
+    public ResponseEntity<Map<String, Object>> toggleIsAutoLight(@RequestBody ToggleRequest request) {
+        HouseLayout house = HouseLayout.getInstance();
+        AtomicReference<Room> room = new AtomicReference<Room>();
+        AtomicReference<Light> light = new AtomicReference<Light>();
+
+        house.getHouseLights().forEach((key, value) -> {
+            if (key.getId() == request.getId()) {
+                room.set(house.getRoom(value));
+                light.set((Light) key);
+            }
+        });
+
+        // Toggle using Command Design Pattern
+        System.out.println(light.get().getState());
+        room.get().setCommand(new ToggleIsAutoLightCommand(light.get()));
+        room.get().executeCommand();
+        System.out.println(light.get().getState());
+        // Prepare the response
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Success");
+        response.put("state", light.get().getIsAutoState());
+        // Return the response
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/toggleIsAutoDoor")
+    public ResponseEntity<Map<String, Object>> toggleIsAutoDoor(@RequestBody ToggleRequest request) {
+        HouseLayout house = HouseLayout.getInstance();
+        AtomicReference<Room> room = new AtomicReference<Room>();
+        AtomicReference<Door> door = new AtomicReference<Door>();
+
+        house.getHouseDoors().forEach((key, value) -> {
+            if (key.getId() == request.getId()) {
+                room.set(house.getRoom(value));
+                door.set((Door) key);
+            }
+        });
+
+        // Toggle using Command Design Pattern
+        System.out.println(door.get().getState());
+        room.get().setCommand(new ToggleIsAutoDoorCommand(door.get()));
+        room.get().executeCommand();
+        System.out.println(door.get().getState());
+        // Prepare the response
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Success");
+        response.put("state", door.get().getIsAutoState());
         // Return the response
         return ResponseEntity.ok(response);
     }
