@@ -5,10 +5,17 @@ import com.ljj.easesim.interfaces.HouseElement;
 public class Window implements HouseElement {
     private int id;
     private boolean isOpen;
+    private boolean isBlocked;
+
+    public Window() {
+        this.isBlocked = false; // By default, window is unblocked
+    }
 
     @Override
     public void toggle() {
-        isOpen = !isOpen;
+        if (!isBlocked) {
+            isOpen = !isOpen;
+        }
     }
 
     @Override
@@ -19,5 +26,17 @@ public class Window implements HouseElement {
     @Override
     public void setId(int id) {
         this.id = id;
+    }
+    public boolean getState() {
+        return isOpen;
+    }
+
+    public boolean getBlockedState() {
+        return isBlocked;
+    }
+
+    public void toggleBlocked() {
+        isBlocked = !isBlocked;
+
     }
 }

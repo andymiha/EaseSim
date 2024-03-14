@@ -10,61 +10,63 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Switch from "@mui/material/Switch";
+import Checkbox from "@mui/material/Checkbox";
 import { useState, useEffect } from "react";
 
-//onMount fetch 
-//method get in backend in controller 
-//this method is quiered in fronend
 
-//const [lights, setLights] = useState([])
-//const [doors, setDoors] = useState([])
-//const [windows, setWindows] = useState([])
+const SHC = () => {
+  const [lights, setLights] = useState([])
+const [doors, setDoors] = useState([])
+const [windows, setWindows] = useState([])
 
-const lights = [
-  { room: "Living", isOn: true, isAuto: true, dummy: "hi" },
-  { room: "Kitchen", isOn: false, isAuto: false, dummy: "hi" },
-  { room: "Bathroom", isOn: true, isAuto: false, dummy: "hi" },
-  { room: "BedroomOne", isOn: false, isAuto: false, dummy: "hi" },
-  { room: "BedroomTwo", isOn: true, isAuto: false, dummy: "hi" },
-  { room: "Entrance", isOn: false, isAuto: false, dummy: "hi" },
-  { room: "Backyard", isOn: false, isAuto: false, dummy: "hi" },
-  { room: "Garage", isOn: true, isAuto: false, dummy: "hi" },
-  { room: "Living", isOn: true, isAuto: false, dummy: "hi" },
-  { room: "Kitchen", isOn: false, isAuto: true, dummy: "hi" },
-  { room: "Bathroom", isOn: false, isAuto: false, dummy: "hi" },
-  { room: "BedroomOne", isOn: true, isAuto: false, dummy: "hi" },
-  { room: "BedroomTwo", isOn:true, isAuto: true, dummy: "hi" },
-  { room: "Entrance", isOn: true, isAuto: false, dummy: "hi" },
-  { room: "Backyard", isOn: false, isAuto: false, dummy: "hi" },
-  { room: "Garage", isOn: false, isAuto: false, dummy: "hi" },
-];
+ // Fetch data from backend on mount
+ useEffect(() => {  
+  fetch('http://localhost:8080/getHouseLights') 
+      .then(response => response.json())
+      .then(data => {
+         setLights(data)
+      })
+      .then(console.log("bluetooth connect assucessfully"))
+      .catch(error => console.error('Error fetching data:', error));
+ },
+  []);
 
-const doors = [
-  { room: "BedroomTwo", isOn: false, isAuto: true, dummy: "hi" },
-  { room: "Entrance", isOn: true, isAuto: false, dummy: "hi" },
-  { room: "Backyard", isOn: false, isAuto: false, dummy: "hi" },
-  { room: "Garage", isOn: false, isAuto: false, dummy: "hi" },
-];
 
-const windows = [
-  { room: "Living", isOn: false, isBlocked: false, dummy: "hi" },
-  { room: "Kitchen", isOn: true,  isBlocked: true, dummy: "hi" },
-  { room: "Bathroom", isOn: true,  isBlocked: false, dummy: "hi" },
-  { room: "BedroomOne", isOn: true,  isBlocked: false, dummy: "hi" },
-];
+   // Fetch data from backend on mount
+ useEffect(() => {  
+  fetch('http://localhost:8080/getHouseWindows') 
+      .then(response => response.json())
+      .then(data => {
+         setWindows(data)
+      })
+      .then(console.log("bluetooth connect assucessfully"))
+      .catch(error => console.error('Error fetching data:', error));
+ },
+  []);
 
-const ItemList = () => {
+
+  useEffect(() => {  
+    fetch('http://localhost:8080/getHouseDoors') 
+        .then(response => response.json())
+        .then(data => {
+           setDoors(data)
+        })
+        .then(console.log("bluetooth connect assucessfully"))
+        .catch(error => console.error('Error fetching data:', error));
+   },
+    []);
+  
+
   const [rows, setRows] = useState([]);
 
-  // Function to generate rows
   const generateRows = (data) => {
-    setRows(
-      data.map((item) => ({
-        room: item.room,
-        isOn: item.isOn,
-        isAuto: item.isAuto,
-      }))
-    );
+    setRows(data.map((item) => ({
+      id: item.id,
+      room: item.roomName,
+      isOn: item.state,
+      isBlocked: item.isBlocked || false,
+      isAuto: item.isAuto || false,
+    })));
   };
 
   const [alignment, setAlignment] = useState("");
@@ -73,17 +75,149 @@ const ItemList = () => {
     setAlignment(newAlignment);
   };
 
-  const handleSwitchChange = (index) => { 
-    setRows ((prevRows) => 
+  const handleLightChange = (row, index) => { 
+    fetch('http://localhost:8080/toggleLight', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: row.id })
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Error toggling: ' + response.statusText);
+        }
+    })
+    .then(data => {
+        console.log(data);
+        setRows(prevRows => 
+            prevRows.map((row, i) =>
+                i === index ? {...row, isOn: data.state} : row
+            )
+        );
+    })
+    .catch(error => {
+        console.error('Error toggling:', error);
+    });
+};
+
+const handleDoorChange = (row, index) => { 
+  fetch('http://localhost:8080/toggleDoor', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ id: row.id })
+  })
+  .then(response => {
+      if (response.ok) {
+          return response.json();
+      } else {
+          throw new Error('Error toggling: ' + response.statusText);
+      }
+  })
+  .then(data => {
+      console.log(data);
+      setRows(prevRows => 
+          prevRows.map((row, i) =>
+              i === index ? {...row, isOn: data.state} : row
+          )
+      );
+  })
+  .catch(error => {
+      console.error('Error toggling:', error);
+  });
+};
+
+const handleWindowChange = (row, index) => { 
+  fetch('http://localhost:8080/toggleWindow', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ id: row.id })
+  })
+  .then(response => {
+      if (response.ok) {
+          return response.json();
+      } else {
+          throw new Error('Error toggling: ' + response.statusText);
+      }
+  })
+  .then(data => {
+      console.log(data);
+      setRows(prevRows => 
+          prevRows.map((row, i) =>
+              i === index ? {...row, isOn: data.state} : row
+          )
+      );
+  })
+  .catch(error => {
+      console.error('Error toggling:', error);
+  });
+};
+
+const handleLightAutoChange = (row, index) => {
+
+    fetch('http://localhost:8080/toggleWindow', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ id: row.id })
+  })
+  .then(response => {
+      if (response.ok) {
+          return response.json();
+      } else {
+          throw new Error('Error toggling: ' + response.statusText);
+      }
+  })
+  .then(data => {
+      console.log(data);
+      setRows ((prevRows) => 
       prevRows.map((row, i) =>
-        i === index ? {...row, isOn: !row.isOn} : row
+        i === index ? {...row, isAuto: !row.isAuto} : row
       )
-    );
+      );
+  })
+  .catch(error => {
+      console.error('Error toggling:', error);
+  });
+    
   };
 
-  useEffect(() => {
-    console.log("Rows updated:", rows);
-  }, [rows]);
+  const handleDoorAutoChange = (row, index) => {
+
+    fetch('http://localhost:8080/toggleWindow', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ id: row.id })
+  })
+  .then(response => {
+      if (response.ok) {
+          return response.json();
+      } else {
+          throw new Error('Error toggling: ' + response.statusText);
+      }
+  })
+  .then(data => {
+      console.log(data);
+      setRows ((prevRows) => 
+      prevRows.map((row, i) =>
+        i === index ? {...row, isAuto: !row.isAuto} : row
+      )
+      );
+  })
+  .catch(error => {
+      console.error('Error toggling:', error);
+  });
+    
+  };
 
 
   return (
@@ -115,9 +249,10 @@ const ItemList = () => {
           <Table sx={{ minWidth: 650 , maxHeight: 440}} >
             <TableHead>
               <TableRow>
-                <TableCell>Room</TableCell>
+           {/* isAlighnment == "center" */}
+                 <TableCell>Room</TableCell>
                 <TableCell>On/Off</TableCell>
-                <TableCell>Auto-mode</TableCell>
+                {alignment !== "right" && <TableCell>Auto-mode</TableCell>}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -128,16 +263,37 @@ const ItemList = () => {
                 >
                   <TableCell>{row.room}</TableCell>
                   <TableCell>
-                  <Switch
+                  {alignment === "left" && (<Switch
                     checked={row.isOn}
-                    onChange = {() => handleSwitchChange (index)}
-                    />
+                    onChange={() => handleLightChange(row, index)}
+                    disabled = {row.isBlocked || row.isAuto}
+                    />)}
+                   {alignment === "center" && (<Switch
+                    checked={row.isOn}
+                    onChange={() => handleDoorChange(row, index)}
+                    disabled = {row.isBlocked || row.isAuto}
+                    />)}
+                  {alignment === "right" && (<Switch
+                    checked={row.isOn}
+                    onChange={() => handleWindowChange(row, index)}
+                    disabled = {row.isBlocked || row.isAuto}
+                    />)}
                     {row.isOn}</TableCell>
+              
                   <TableCell>
-          
-                    {row.isAuto}</TableCell>
+                  {alignment === "left" && (<Checkbox
+                        checked={row.isAuto}
+                        onChange = {() => handleLightAutoChange (row,index)}
+                      />)}
+                
+                   {alignment === "center" && (<Checkbox
+                        checked={row.isAuto}
+                        onChange = {() => handleDoorAutoChange (row,index)}
+                      />)}
+                {row.isAuto}
+                </TableCell>
                 </TableRow>
-              ))}
+                ))}
             </TableBody>
           </Table>
         </TableContainer>
@@ -146,6 +302,5 @@ const ItemList = () => {
     </Box>
   );
 }
-
-export default ItemList;
+export default SHC;
 

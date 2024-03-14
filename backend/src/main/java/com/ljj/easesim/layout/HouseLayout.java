@@ -16,6 +16,7 @@ public class HouseLayout {
     // ID Counter necessary for incrementing room id's when creating rooms.
     private int idCounter = 0;
     private ArrayList<Room> rooms;
+    private static final HouseLayout INSTANCE = new HouseLayout();
 
     public HouseLayout() {
         // Example House Layout Constructor
@@ -30,22 +31,26 @@ public class HouseLayout {
             Map<String, Door> doorMap = new HashMap<>();
 
             for(Map<String, Object> roomData : layoutData) {
+                String name = (String) roomData.get("name");
                 int windows = (int) roomData.get("windows");
                 int lights = (int) roomData.get("lights");
 
-                String name = (String) roomData.get("name");
                 List<String> doorsTo = (List<String>) roomData.get("doorsTo");
 
                 ArrayList<HouseElement> elements = new ArrayList<>();
 
                 // Add Lights
-                for(int i = 0; i <= lights; i++) {
-                    elements.add(new Light());
+                for(int i = 0; i < lights; i++) {
+                    Light light = new Light();
+                    light.setId(++idCounter);
+                    elements.add(light);
                 }
 
                 // Add Windows
-                for(int i = 0; i <= windows; i++) {
-                    elements.add(new Window());
+                for(int i = 0; i < windows; i++) {
+                    Window window = new Window();
+                    window.setId(++idCounter);
+                    elements.add(window);
                 }
 
                 Room room = new RoomBuilder()
@@ -75,6 +80,47 @@ public class HouseLayout {
         }
     }
 
+    public static HouseLayout getInstance() {
+        return INSTANCE;
+    }
+
+    public Map<HouseElement, String> getHouseDoors() {
+        Map<HouseElement, String> doorsMap = new HashMap<>();
+        for (Room room : this.rooms) {
+            for (HouseElement element : room.getElements()) {
+                if (element instanceof Door) {
+                    doorsMap.put(element, room.getName());
+                }
+            }
+        }
+        return doorsMap;
+    }
+
+    public Map<HouseElement, String> getHouseLights() {
+        Map<HouseElement, String> lightsMap = new HashMap<>();
+        for (Room room : this.rooms) {
+            for (HouseElement element : room.getElements()) {
+                if (element instanceof Light) {
+                    lightsMap.put(element, room.getName());
+                }
+            }
+        }
+        return lightsMap;
+    }
+
+    public Map<HouseElement, String> getHouseWindows() {
+        Map<HouseElement, String> windowsMap = new HashMap<>();
+        for (Room room : this.rooms) {
+            for (HouseElement element : room.getElements()) {
+                if (element instanceof Window) {
+                    System.out.println(element.getId());
+                    windowsMap.put(element, room.getName());
+                }
+            }
+        }
+        return windowsMap;
+    }
+
     public Room getRoom(String name) {
         for (Room room : this.rooms) {
             if (room.getName().equals(name)) {
@@ -82,5 +128,9 @@ public class HouseLayout {
             }
         }
         return null;
+    }
+
+    public List<Room> getRooms() {
+        return rooms;
     }
 }

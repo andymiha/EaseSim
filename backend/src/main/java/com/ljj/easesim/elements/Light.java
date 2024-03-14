@@ -5,6 +5,7 @@ import com.ljj.easesim.interfaces.HouseElement;
 public class Light implements HouseElement {
     private int id;
     private boolean switchedOn;
+    private boolean isAuto;
 
     @Override
     public void toggle() {
@@ -17,7 +18,20 @@ public class Light implements HouseElement {
     }
 
     @Override
+    public boolean getState() {
+        return switchedOn;
+    }
+
+    @Override
     public void setId(int id) {
         this.id = id;
+    }
+
+    public boolean getIsAutoState() {
+        return isAuto;
+    }
+
+    public void setIsAutoState(boolean isAuto) {
+        this.isAuto = isAuto;
     }
 }

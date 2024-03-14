@@ -6,6 +6,7 @@ import java.util.AbstractMap;
 public class Door implements HouseElement {
     private int id;
     private boolean isOpen;
+    private boolean isAuto;
     private AbstractMap.SimpleEntry<String, String> roomConnection;
     @Override
     public void toggle() {
@@ -16,9 +17,20 @@ public class Door implements HouseElement {
     public int getId() {
         return id;
     }
-
     @Override
     public void setId(int id) {
         this.id = id;
+    }
+    @Override
+    public boolean getState() {
+        return isOpen;
+    }
+
+    public boolean getIsAutoState() {
+        return isAuto;
+    }
+
+    public void setIsAutoState(boolean isAuto) {
+        this.isAuto = isAuto;
     }
 }

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { AppBar, Box, CssBaseline, Drawer, IconButton, Toolbar, Typography, Button, FormControl, NativeSelect, Slider } from '@mui/material';
+import { AppBar, Box, CssBaseline, Drawer, IconButton, Toolbar, Typography, Button, FormControl, NativeSelect, Slider, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import SimOnSwitch from '../sidebar/SimOnSwitch'; 
 import EditIcon from '@mui/icons-material/Edit';
+import EditForm from './EditForm'; // Import the EditForm component
 
 const drawerWidth = 240;
 
@@ -14,20 +15,22 @@ const typographyStyle = {
 
 const temperature = 25; 
 
-const SimSideBar = ({ openDrawer, handleDrawerToggle, handleDrawerClose }) => {
+const SimSideBar = ({ openDrawer, handleDrawerToggle, handleDrawerClose, handleRoomChange }) => {
   const [showForm, setShowForm] = useState(false);
+  const [openModal, setOpenModal] = useState(false); // State to control modal visibility
+
+  const handleSelectRoom = (event) => {
+    const selectedRoomId = event.target.value;
+    handleRoomChange(selectedRoomId); // Call the handleRoomChange function with the selected room ID
+  };
 
   const handleEditClick = () => {
-    setShowForm(!showForm);
+    setOpenModal(true); // Open the modal when Edit button is clicked
   };
 
-  const handleFormClose = () => {
-    setShowForm(false);
+  const handleModalClose = () => {
+    setOpenModal(false); // Close the modal
   };
-
-  console.log('openDrawer:', openDrawer);
-  console.log('handleDrawerToggle:', handleDrawerToggle);
-  console.log('handleDrawerClose:', handleDrawerClose);
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -93,7 +96,6 @@ const SimSideBar = ({ openDrawer, handleDrawerToggle, handleDrawerClose }) => {
               <IconButton color="primary" aria-label="Edit simulation context" onClick={handleEditClick}>
                 <EditIcon />
               </IconButton>
-              {showForm && <EditForm onClose={handleFormClose} />} {/* Pass handleFormClose as onClose */}
             </div>
   
             <Typography paragraph sx={typographyStyle}>
@@ -124,12 +126,17 @@ const SimSideBar = ({ openDrawer, handleDrawerToggle, handleDrawerClose }) => {
                   name: 'Location',
                   id: 'uncontrolled-native',
                 }}
+                onChange={handleSelectRoom} // Call the handleSelectRoom function when room selection changes
               >
-                <option value={10}>Kitchen</option>
-                <option value={20}>Living Room</option>
-                <option value={30}>Bedroom 1</option>
-                <option value={30}>Bedroom 2</option>
-                <option value={30}>Bathroom</option>
+                <option value="">Select Room</option>
+                <option value={"kitchen"}>Kitchen</option>
+                <option value={"living-room"}>Living Room</option>
+                <option value={"bedroom-1"}>Bedroom 1</option>
+                <option value={"bedroom-2"}>Bedroom 2</option>
+                <option value={"bathroom"}>Bathroom</option>
+                <option value={"garage"}>Garage</option>
+                <option value={"backyard"}>Backyard</option>
+                <option value={"frontyard"}>Front yard</option>
               </NativeSelect>
             </FormControl>
   
@@ -176,6 +183,14 @@ const SimSideBar = ({ openDrawer, handleDrawerToggle, handleDrawerClose }) => {
           </div>
         </Box>
       </Drawer>
+      
+      {/* Modal for EditForm */}
+      <Dialog open={openModal} onClose={handleModalClose}>
+        <DialogTitle>Edit Context</DialogTitle>
+        <DialogContent>
+          <EditForm onClose={handleModalClose} />
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 };

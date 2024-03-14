@@ -1,9 +1,8 @@
 package com.ljj.easesim.layout;
 
-import com.ljj.easesim.elements.Door;
-import com.ljj.easesim.interfaces.HouseElement;
-import com.ljj.easesim.interfaces.User;
-import com.ljj.easesim.interfaces.Command;
+import com.ljj.easesim.elements.*;
+import com.ljj.easesim.interfaces.*;
+
 import java.util.ArrayList;
 
 public class Room {
@@ -20,12 +19,29 @@ public class Room {
         this.users = users;
     }
 
+    //getters
     public int getId() {
         return this.id;
     }
 
     public String getName() {
         return this.name;
+    }
+
+    public ArrayList<User> getUsers() {
+        return this.users;
+    }
+
+    public void addUser(User user) {
+        users.add(user);
+    }
+
+    public void removeUser(User user) {
+        users.remove(user);
+    }
+
+    public Command getCommand() {
+        return this.command;
     }
     public void setCommand(Command command) {
         this.command = command;
@@ -47,14 +63,6 @@ public class Room {
         elements.remove(element);
     }
 
-    public void addUser(User user) {
-        users.add(user);
-    }
-
-    public void removeUser(User user) {
-        users.remove(user);
-    }
-
     public ArrayList<Door> getDoors() {
         ArrayList<Door> doors = new ArrayList<>();
         for (HouseElement element : elements) {
@@ -64,4 +72,25 @@ public class Room {
         }
         return doors;
     }
+
+    public ArrayList<Window> getWindows() {
+        ArrayList<Window> windows = new ArrayList<>();
+        for (HouseElement element : elements) {
+            if (element instanceof Window) {
+                windows.add((Window) element);
+            }
+        }
+        return windows;
+    }
+
+    public ArrayList<Light> getLights() {
+        ArrayList<Light> lights = new ArrayList<>();
+        for (HouseElement element : elements) {
+            if (element instanceof Light) {
+                lights.add((Light) element);
+            }
+        }
+        return lights;
+    }
+
 }
