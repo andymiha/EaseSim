@@ -47,16 +47,16 @@ const [windows, setWindows] = useState([])
 
   console.log(windows);
 
-  // useEffect(() => {  
-  //   fetch('http://localhost:8080/getHouseWindows') 
-  //       .then(response => response.json())
-  //       .then(data => {
-  //          setDoors(data)
-  //       })
-  //       .then(console.log("bluetooth connect assucessfully"))
-  //       .catch(error => console.error('Error fetching data:', error));
-  //  },
-  //   []);
+  useEffect(() => {  
+    fetch('http://localhost:8080/getHouseDoors') 
+        .then(response => response.json())
+        .then(data => {
+           setDoors(data)
+        })
+        .then(console.log("bluetooth connect assucessfully"))
+        .catch(error => console.error('Error fetching data:', error));
+   },
+    []);
   
   //  console.log(doors);
 
@@ -80,15 +80,106 @@ const [windows, setWindows] = useState([])
 
   const handleSwitchChange = (index) => { 
 
-    setRows ((prevRows) => 
+const handleDoorChange = (row, index) => { 
+  fetch('http://localhost:8080/toggleDoor', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ id: row.id })
+  })
+  .then(response => {
+      if (response.ok) {
+          return response.json();
+      } else {
+          throw new Error('Error toggling: ' + response.statusText);
+      }
+  })
+  .then(data => {
+      console.log(data);
+      setRows(prevRows => 
+          prevRows.map((row, i) =>
+              i === index ? {...row, isOn: data.state} : row
+          )
+      );
+  })
+  .catch(error => {
+      console.error('Error toggling:', error);
+  });
+};
+
+const handleWindowChange = (row, index) => { 
+  fetch('http://localhost:8080/toggleWindow', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ id: row.id })
+  })
+  .then(response => {
+      if (response.ok) {
+          return response.json();
+      } else {
+          throw new Error('Error toggling: ' + response.statusText);
+      }
+  })
+  .then(data => {
+      console.log(data);
+      setRows(prevRows => 
+          prevRows.map((row, i) =>
+              i === index ? {...row, isOn: data.state} : row
+          )
+      );
+  })
+  .catch(error => {
+      console.error('Error toggling:', error);
+  });
+};
+
+const handleLightAutoChange = (row, index) => {
+
+    fetch('http://localhost:8080/toggleIsAutoLight', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ id: row.id })
+  })
+  .then(response => {
+      if (response.ok) {
+          return response.json();
+      } else {
+          throw new Error('Error toggling: ' + response.statusText);
+      }
+  })
+  .then(data => {
+      console.log(data);
+      setRows ((prevRows) => 
       prevRows.map((row, i) =>
         i === index ? {...row, isOn: !row.isOn} : row
       )
     );
   };
 
-  const handleCheckboxChange = (index) => { 
-    setRows ((prevRows) => 
+  const handleDoorAutoChange = (row, index) => {
+    console.log(row)
+    fetch('http://localhost:8080/toggleIsAutoDoor', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ id: row.id })
+  })
+  .then(response => {
+      if (response.ok) {
+          return response.json();
+      } else {
+          throw new Error('Error toggling: ' + response.statusText);
+      }
+  })
+  .then(data => {
+      console.log(data);
+      setRows ((prevRows) => 
       prevRows.map((row, i) =>
         i === index ? {...row, isAuto: !row.isAuto} : row
       )
