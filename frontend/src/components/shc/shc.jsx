@@ -62,8 +62,7 @@ const [windows, setWindows] = useState([])
   const generateRows = (data) => {
     setRows(data.map((item) => ({
       id: item.id,
-      room: item.roomName || item.roomFrom,
-      roomTo: item.roomTo, 
+      room: item.roomName,
       isOn: item.state,
       isBlocked: item.isBlocked || false,
       isAuto: item.isAuto || false,
@@ -251,8 +250,7 @@ const handleLightAutoChange = (row, index) => {
             <TableHead>
               <TableRow>
            {/* isAlighnment == "center" */}
-              {alignment !== "center" && <TableCell>Room</TableCell>}
-              {alignment === "center" && <TableCell>Rooms</TableCell>}
+                 <TableCell>Room</TableCell>
                 <TableCell>On/Off</TableCell>
                 {alignment !== "right" && <TableCell>Auto-mode</TableCell>}
               </TableRow>
@@ -263,11 +261,7 @@ const handleLightAutoChange = (row, index) => {
                   key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  {alignment === "center" && (
-                  <TableCell>{row.room} to {row.roomTo}</TableCell>
-                   )}
-                  {alignment !== "center" &&( <TableCell>{row.room}</TableCell>
-                  )}
+                  <TableCell>{row.room}</TableCell>
                   <TableCell>
                   {alignment === "left" && (<Switch
                     checked={row.isOn}
