@@ -1,5 +1,7 @@
 package com.ljj.easesim.requestBodies;
 
+import com.ljj.easesim.layout.Room;
+import com.ljj.easesim.elements.*;
 
 public class EditContextFormData {
     private String selectedRoom;
@@ -16,31 +18,16 @@ public class EditContextFormData {
         return selectedRoom;
     }
 
-    public void setSelectedRoom(String selectedRoom) {
-        this.selectedRoom = selectedRoom;
-    }
-
     public String getSelectedInhabitant() {
         return selectedInhabitant;
-    }
-
-    public void setSelectedInhabitant(String selectedInhabitant) {
-        this.selectedInhabitant = selectedInhabitant;
     }
 
     public String getSelectedWindow() {
         return selectedWindow;
     }
 
-    public void setSelectedWindow(String selectedWindow) {
-        this.selectedWindow = selectedWindow;
-    }
-
     public boolean isWindowBlocked() {
         return isWindowBlocked;
     }
 
-    public void setWindowBlocked(boolean windowBlocked) {
-        isWindowBlocked = windowBlocked;
-    }
 }
