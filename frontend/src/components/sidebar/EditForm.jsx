@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, Checkbox, FormControlLabel } from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Switch, Select, Checkbox, FormControlLabel } from '@mui/material';
 
 const EditForm = ({ onClose }) => {
     const [selectedRoom, setSelectedRoom] = useState('');
@@ -10,6 +10,7 @@ const EditForm = ({ onClose }) => {
     const [inhabitants, setInhabitants] = useState([]);
     const [rooms, setRooms] = useState([]);
     const [windows, setWindows] = useState([]);
+    const [windowStates, setWindowStates] = useState({});
 
     // Fetch data from backend on mount
     useEffect(() => {  
@@ -19,11 +20,19 @@ const EditForm = ({ onClose }) => {
                 setInhabitants(data.inhabitants);
                 setRooms(data.rooms);
                 setWindows(data.windows);
+                setWindowStates(data.windowStates);
+
+                // Update isWindowBlocked state based on window block state
+                if (selectedWindow && data.windowStates[selectedWindow]) {
+                    setIsWindowBlocked(data.windowStates[selectedWindow].includes("isBlocked: true"));
+                }
             })
             .then(console.log('Edit Form Data fetched successfully!'))
             .catch(error => console.error('Error fetching data:', error));
-    }, []);
+    }, [selectedWindow]);
 
+    const isSubmitDisabled = !selectedRoom || !(selectedInhabitant || selectedWindow);
+    const isWindowBlockedCheck = !selectedRoom || !selectedWindow;
 
     // Post data on submission
     const handleSubmit = (e) => {
@@ -83,6 +92,7 @@ const EditForm = ({ onClose }) => {
                             value={selectedInhabitant}
                             onChange={(e) => setSelectedInhabitant(e.target.value)}
                             label="Select Inhabitant" // Add label to prevent floating
+                            disabled={!selectedRoom} // Disable if no room is selected
                         >
                             <MenuItem value="">
                                 <em>Select Inhabitant</em>
@@ -99,6 +109,7 @@ const EditForm = ({ onClose }) => {
                             value={selectedWindow}
                             onChange={(e) => setSelectedWindow(e.target.value)}
                             label="Select Window" // Add label to prevent floating
+                            disabled={!selectedRoom} // Disable if no room is selected
                         >
                             <MenuItem value="">
                                 <em>Select Window</em>
@@ -111,19 +122,20 @@ const EditForm = ({ onClose }) => {
 
                     <FormControlLabel
                         control={
-                            <Checkbox
+                            <Switch //toggle switch instead of checkbox, still needs to get data from backend
                                 checked={isWindowBlocked}
                                 onChange={(e) => setIsWindowBlocked(e.target.checked)}
                             />
                         }
                         label="Block Window"
+                        disabled={isWindowBlockedCheck} // Disable if no room and window is selected
                     />
 
                     <DialogActions>
                         <Button onClick={onClose} color="primary">
                             Cancel
                         </Button>
-                        <Button type="submit" color="primary">
+                        <Button type="submit" color="primary" disabled={isSubmitDisabled}>
                             Submit
                         </Button>
                     </DialogActions>
