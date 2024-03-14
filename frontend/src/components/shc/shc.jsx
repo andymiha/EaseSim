@@ -12,58 +12,61 @@ import Stack from "@mui/material/Stack";
 import Switch from "@mui/material/Switch";
 import Checkbox from "@mui/material/Checkbox";
 import { useState, useEffect } from "react";
-//working
-
-//onMount fetch 
-//method get in backend in controller 
-//this method is quiered in fronend
-
-//const [lights, setLights] = useState([])
-//const [doors, setDoors] = useState([])
-//const [windows, setWindows] = useState([])
-
-const lights = [
-  { room: "Living", switchedOn: true, isAuto: true, dummy: "hi" },
-  { room: "Kitchen", switchedOn: false, isAuto: false, dummy: "hi" },
-  { room: "Bathroom", switchedOn: true, isAuto: false, dummy: "hi" },
-  { room: "BedroomOne", switchedOn: false, isAuto: false, dummy: "hi" },
-  { room: "BedroomTwo", switchedOn: true, isAuto: false, dummy: "hi" },
-  { room: "Entrance", switchedOn: false, isAuto: false, dummy: "hi" },
-  { room: "Backyard", switchedOn: false, isAuto: false, dummy: "hi" },
-  { room: "Garage", switchedOn: true, isAuto: false, dummy: "hi" },
-  { room: "Living", switchedOn: true, isAuto: false, dummy: "hi" },
-  { room: "Kitchen", switchedOn: false, isAuto: true, dummy: "hi" },
-  { room: "Bathroom", switchedOn: false, isAuto: false, dummy: "hi" },
-  { room: "BedroomOne", switchedOn: true, isAuto: false, dummy: "hi" },
-  { room: "BedroomTwo", switchedOn:true, isAuto: true, dummy: "hi" },
-  { room: "Entrance", switchedOn: true, isAuto: false, dummy: "hi" },
-  { room: "Backyard", switchedOn: false, isAuto: false, dummy: "hi" },
-  { room: "Garage", switchedOn: false, isAuto: false, dummy: "hi" },
-];
-
-const doors = [
-  { room: "BedroomTwo", isOpen: false, isAuto: true, dummy: "hi" },
-  { room: "Entrance", isOpen: true, isAuto: false, dummy: "hi" },
-  { room: "Backyard", isOpen: false, isAuto: false, dummy: "hi" },
-  { room: "Garage", isOpen: false, isAuto: false, dummy: "hi" },
-];
-
-const windows = [
-  { room: "Living", isOpen: false, isBlocked: false},
-  { room: "Kitchen", isOpen: true,  isBlocked: true },
-  { room: "Bathroom", isOpen: true,  isBlocked: false},
-  { room: "BedroomOne", isOpen: true,  isBlocked: false},
-];
-
 
 
 const SHC = () => {
+  const [lights, setLights] = useState([])
+const [doors, setDoors] = useState([])
+const [windows, setWindows] = useState([])
+
+ // Fetch data from backend on mount
+ useEffect(() => {  
+  fetch('http://localhost:8080/getHouseLights') 
+      .then(response => response.json())
+      .then(data => {
+         setLights(data)
+      })
+      .then(console.log("bluetooth connect assucessfully"))
+      .catch(error => console.error('Error fetching data:', error));
+ },
+  []);
+
+  console.log(lights);
+
+   // Fetch data from backend on mount
+ useEffect(() => {  
+  fetch('http://localhost:8080/getHouseWindows') 
+      .then(response => response.json())
+      .then(data => {
+         setWindows(data)
+      })
+      .then(console.log("bluetooth connect assucessfully"))
+      .catch(error => console.error('Error fetching data:', error));
+ },
+  []);
+
+  console.log(windows);
+
+  // useEffect(() => {  
+  //   fetch('http://localhost:8080/getHouseWindows') 
+  //       .then(response => response.json())
+  //       .then(data => {
+  //          setDoors(data)
+  //       })
+  //       .then(console.log("bluetooth connect assucessfully"))
+  //       .catch(error => console.error('Error fetching data:', error));
+  //  },
+  //   []);
+  
+  //  console.log(doors);
+
   const [rows, setRows] = useState([]);
 
   const generateRows = (data) => {
     setRows(data.map((item) => ({
-      room: item.room,
-      isOn: item.switchedOn || item.isOpen,
+      room: item.roomName || item.roomFrom,
+      roomTo: item.roomTo, 
+      isOn: item.state,
       isBlocked: item.isBlocked || false,
       isAuto: item.isAuto || false,
     })));
@@ -76,6 +79,7 @@ const SHC = () => {
   };
 
   const handleSwitchChange = (index) => { 
+
     setRows ((prevRows) => 
       prevRows.map((row, i) =>
         i === index ? {...row, isOn: !row.isOn} : row
@@ -90,11 +94,6 @@ const SHC = () => {
       )
     );
   };
-
-
-  useEffect(() => {
-    console.log("Rows updated:", rows);
-  }, [rows]);
 
 
   return (
@@ -126,7 +125,9 @@ const SHC = () => {
           <Table sx={{ minWidth: 650 , maxHeight: 440}} >
             <TableHead>
               <TableRow>
-                <TableCell>Room</TableCell>
+           {/* isAlighnment == "center" */}
+              {alignment !== "center" && <TableCell>Room</TableCell>}
+              {alignment === "center" && <TableCell>Rooms</TableCell>}
                 <TableCell>On/Off</TableCell>
                 {alignment !== "right" && <TableCell>Auto-mode</TableCell>}
               </TableRow>
@@ -137,7 +138,11 @@ const SHC = () => {
                   key={index}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell>{row.room}</TableCell>
+                  {alignment === "center" && (
+                  <TableCell>{row.room} to {row.roomTo}</TableCell>
+                   )}
+                  {alignment !== "center" &&( <TableCell>{row.room}</TableCell>
+                  )}
                   <TableCell>
                   <Switch
                     checked={row.isOn}
@@ -163,8 +168,6 @@ const SHC = () => {
     </Box>
   );
 }
-
-
 export default SHC;
 
 // export const Layout = () => {
@@ -204,5 +207,4 @@ export default SHC;
 //       </Stack>
 //     </Box>
 //   ); 
-// };
-
+ //
