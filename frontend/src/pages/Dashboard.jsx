@@ -10,6 +10,7 @@ import SHH from '../components/shh/shh';
 const Dashboard = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [selectedTab, setSelectedTab] = useState(0);
+  const [selectedRoom, setSelectedRoom] = useState(''); // State to store selected room ID
 
   const handleDrawerToggle = () => {
     setOpenDrawer(!openDrawer);
@@ -21,6 +22,10 @@ const Dashboard = () => {
 
   const handleTabChange = (event, newValue) => {
     setSelectedTab(newValue);
+  };
+
+  const handleRoomChange = (roomId) => {
+    setSelectedRoom(roomId);
   };
 
   const tabComponents = {
@@ -39,10 +44,11 @@ const Dashboard = () => {
 
 
       <SimSideBar
-          openDrawer={openDrawer}
-          handleDrawerToggle={handleDrawerToggle}
-          handleDrawerClose={handleDrawerClose}
-        />
+        openDrawer={openDrawer}
+        handleDrawerToggle={handleDrawerToggle}
+        handleDrawerClose={handleDrawerClose}
+        handleRoomChange={handleRoomChange} // Pass the setSelectedRoom function down as a prop
+      />
         
       <Grid item xs={12} sm={openDrawer ? 5 : 6}>
 
@@ -108,7 +114,7 @@ const Dashboard = () => {
           }}
         >
           {/* Add skeleton when not on */}
-          <HouseLayout />
+          <HouseLayout selectedRoom={selectedRoom} />
     
         </Paper>
       </Grid>

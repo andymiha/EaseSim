@@ -1,36 +1,36 @@
 package com.ljj.easesim.controllers;
 
-import com.ljj.easesim.FormData;
-import com.ljj.easesim.services.RoomService;
+import com.ljj.easesim.requestBodies.EditContextFormData;
+import com.ljj.easesim.services.EditContextService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ljj.easesim.layout.Room;
+
 import java.util.List;
 import java.util.Map;
 
 //Handles GET/POST requests for the EDIT FORM functionality
 @RestController
-public class FormController {
+public class EditContextFormController {
 
     @Autowired
-    private RoomService roomService;
+    private EditContextService editContextService;
 
     //returns data to the frontend edit form component
     @GetMapping("/getData")
-    public Map<String, List<String>> getData() {
-        return roomService.processGetData();
+    public Map<String, List<Room>> getData() {
+        return editContextService.processGetData();
     }
 
     //handles data from the frontend form submission
     @PostMapping("/submitForm")
-    public String submitForm(@RequestBody FormData formData) {
-        // Process form data and perform required actions
-        roomService.processFormData(formData);
+    public String submitForm(@RequestBody EditContextFormData editContextFormData) {
+        editContextService.processFormData(editContextFormData);
         return "Form submitted successfully!";
     }
-
 }
 

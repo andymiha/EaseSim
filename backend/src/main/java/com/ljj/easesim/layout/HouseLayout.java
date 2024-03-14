@@ -31,25 +31,23 @@ public class HouseLayout {
             Map<String, Door> doorMap = new HashMap<>();
 
             for(Map<String, Object> roomData : layoutData) {
+                String name = (String) roomData.get("name");
                 int windows = (int) roomData.get("windows");
                 int lights = (int) roomData.get("lights");
 
-                String name = (String) roomData.get("name");
                 List<String> doorsTo = (List<String>) roomData.get("doorsTo");
 
                 ArrayList<HouseElement> elements = new ArrayList<>();
 
                 // Add Lights
-                for(int i = 0; i <= lights; i++) {
-                    elements.add(new Light());
+                for(int i = 0; i < lights; i++) {
                     Light light = new Light();
                     light.setId(++idCounter);
                     elements.add(light);
                 }
 
                 // Add Windows
-                for(int i = 0; i <= windows; i++) {
-                    elements.add(new Window());
+                for(int i = 0; i < windows; i++) {
                     Window window = new Window();
                     window.setId(++idCounter);
                     elements.add(window);
@@ -86,46 +84,37 @@ public class HouseLayout {
         return INSTANCE;
     }
 
-    public Map<String, HouseElement> getHouseElements() {
-        Map<String, HouseElement> elementsMap = new HashMap<>();
-        for (Room room : this.rooms) {
-            for (HouseElement element : room.getElements()) {
-                elementsMap.put(room.getName(), element);
-            }
-        }
-        return elementsMap;
-    }
-
-    public Map<String, HouseElement> getHouseDoors() {
-        Map<String, HouseElement> doorsMap = new HashMap<>();
+    public Map<HouseElement, String> getHouseDoors() {
+        Map<HouseElement, String> doorsMap = new HashMap<>();
         for (Room room : this.rooms) {
             for (HouseElement element : room.getElements()) {
                 if (element instanceof Door) {
-                    doorsMap.put(room.getName(), element);
+                    doorsMap.put(element, room.getName());
                 }
             }
         }
         return doorsMap;
     }
 
-    public Map<String, HouseElement> getHouseLights() {
-        Map<String, HouseElement> lightsMap = new HashMap<>();
+    public Map<HouseElement, String> getHouseLights() {
+        Map<HouseElement, String> lightsMap = new HashMap<>();
         for (Room room : this.rooms) {
             for (HouseElement element : room.getElements()) {
                 if (element instanceof Light) {
-                    lightsMap.put(room.getName(), element);
+                    lightsMap.put(element, room.getName());
                 }
             }
         }
         return lightsMap;
     }
 
-    public Map<String, HouseElement> getHouseWindows() {
-        Map<String, HouseElement> windowsMap = new HashMap<>();
+    public Map<HouseElement, String> getHouseWindows() {
+        Map<HouseElement, String> windowsMap = new HashMap<>();
         for (Room room : this.rooms) {
             for (HouseElement element : room.getElements()) {
                 if (element instanceof Window) {
-                    windowsMap.put(room.getName(), element);
+                    System.out.println(element.getId());
+                    windowsMap.put(element, room.getName());
                 }
             }
         }

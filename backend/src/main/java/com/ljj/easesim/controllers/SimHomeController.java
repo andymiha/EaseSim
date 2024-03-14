@@ -32,9 +32,11 @@ public class SimHomeController {
 
         house.getHouseLights().forEach((key, value) -> {
             Map<String, Object> room = new HashMap<>();
-            room.put("roomName", key);
-            room.put("state", value.getState());
-            room.put("id", value.getId());
+            Light light = (Light) key;
+            room.put("roomName", value);
+            room.put("isAuto", light.getIsAutoState());
+            room.put("state", light.getState());
+            room.put("id", light.getId());
             roomsList.add(room);
         });
 
@@ -55,9 +57,11 @@ public class SimHomeController {
 
         house.getHouseWindows().forEach((key, value) -> {
             Map<String, Object> room = new HashMap<>();
-            room.put("roomName", key);
-            room.put("state", value.getState());
-            room.put("id", value.getId());
+            Window window = (Window) key;
+            room.put("roomName", value);
+            room.put("isBlocked", window.getBlockedState());
+            room.put("state", window.getState());
+            room.put("id", window.getId());
             roomsList.add(room);
         });
 
@@ -78,9 +82,11 @@ public class SimHomeController {
 
         house.getHouseDoors().forEach((key, value) -> {
             Map<String, Object> room = new HashMap<>();
-            room.put("roomName", key);
-            room.put("state", value.getState());
-            room.put("id", value.getId());
+            Door door = (Door) key;
+            room.put("roomName", value);
+            room.put("isAuto", door.getIsAutoState());
+            room.put("state", door.getState());
+            room.put("id", door.getId());
             roomsList.add(room);
         });
 
@@ -101,9 +107,9 @@ public class SimHomeController {
         AtomicReference<Light> light = new AtomicReference<Light>();
 
         house.getHouseLights().forEach((key, value) -> {
-            if (value.getId() == request.getId()) {
-                room.set(house.getRoom(key));
-                light.set((Light) value);
+            if (key.getId() == request.getId()) {
+                room.set(house.getRoom(value));
+                light.set((Light) key);
             }
         });
 
@@ -127,9 +133,9 @@ public class SimHomeController {
         AtomicReference<Window> window = new AtomicReference<Window>();
 
         house.getHouseWindows().forEach((key, value) -> {
-            if (value.getId() == request.getId()) {
-                room.set(house.getRoom(key));
-                window.set((Window) value);
+            if (key.getId() == request.getId()) {
+                room.set(house.getRoom(value));
+                window.set((Window) key);
             }
         });
 
@@ -153,9 +159,9 @@ public class SimHomeController {
         AtomicReference<Door> door = new AtomicReference<Door>();
 
         house.getHouseDoors().forEach((key, value) -> {
-            if (value.getId() == request.getId()) {
-                room.set(house.getRoom(key));
-                door.set((Door) value);
+            if (key.getId() == request.getId()) {
+                room.set(house.getRoom(value));
+                door.set((Door) key);
             }
         });
 
