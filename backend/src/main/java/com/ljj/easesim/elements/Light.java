@@ -28,10 +28,10 @@ public class Light implements HouseElement {
     }
 
     public boolean getIsAutoState() {
-        return switchedOn;
+        return isAuto;
     }
 
-    public void setIsAutoState(int id) {
-        this.id = id;
+    public void setIsAutoState(boolean isAuto) {
+        this.isAuto = isAuto;
     }
 }

@@ -25,4 +25,12 @@ public class Door implements HouseElement {
     public boolean getState() {
         return isOpen;
     }
+
+    public boolean getIsAutoState() {
+        return isAuto;
+    }
+
+    public void setIsAutoState(boolean isAuto) {
+        this.isAuto = isAuto;
+    }
 }

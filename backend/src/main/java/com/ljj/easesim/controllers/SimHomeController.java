@@ -32,10 +32,11 @@ public class SimHomeController {
 
         house.getHouseLights().forEach((key, value) -> {
             Map<String, Object> room = new HashMap<>();
+            Light light = (Light) key;
             room.put("roomName", value);
-            room.put("isAuto", value);
-            room.put("state", key.getState());
-            room.put("id", key.getId());
+            room.put("isAuto", light.getIsAutoState());
+            room.put("state", light.getState());
+            room.put("id", light.getId());
             roomsList.add(room);
         });
 
@@ -56,9 +57,11 @@ public class SimHomeController {
 
         house.getHouseWindows().forEach((key, value) -> {
             Map<String, Object> room = new HashMap<>();
+            Window window = (Window) key;
             room.put("roomName", value);
-            room.put("state", key.getState());
-            room.put("id", key.getId());
+            room.put("isBlocked", window.getBlockedState());
+            room.put("state", window.getState());
+            room.put("id", window.getId());
             roomsList.add(room);
         });
 
@@ -79,9 +82,11 @@ public class SimHomeController {
 
         house.getHouseDoors().forEach((key, value) -> {
             Map<String, Object> room = new HashMap<>();
+            Door door = (Door) key;
             room.put("roomName", value);
-            room.put("state", key.getState());
-            room.put("id", key.getId());
+            room.put("isAuto", door.getIsAutoState());
+            room.put("state", door.getState());
+            room.put("id", door.getId());
             roomsList.add(room);
         });
 
