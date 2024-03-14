@@ -46,7 +46,7 @@ const [windows, setWindows] = useState([])
 
 
   useEffect(() => {  
-    fetch('http://localhost:8080/getHouseWindows') 
+    fetch('http://localhost:8080/getHouseDoors') 
         .then(response => response.json())
         .then(data => {
            setDoors(data)
