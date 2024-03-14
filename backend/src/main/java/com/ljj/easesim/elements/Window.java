@@ -24,6 +24,11 @@ public class Window implements HouseElement {
     }
 
     @Override
+<<<<<<< HEAD
+    public void setId(int id) {
+        this.id = id;
+    }
+=======
     public boolean getState() {
         return isOpen;
     }
@@ -40,4 +45,5 @@ public class Window implements HouseElement {
     public void setBlocked(boolean blockStatus) {
         this.isBlocked = blockStatus;
     }
+>>>>>>> staging
 }

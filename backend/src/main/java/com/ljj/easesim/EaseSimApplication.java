@@ -1,6 +1,5 @@
 package com.ljj.easesim;
 
-import com.ljj.easesim.elements.Light;
 import com.ljj.easesim.layout.HouseLayout;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

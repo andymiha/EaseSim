@@ -4,7 +4,6 @@ import com.ljj.easesim.elements.Door;
 import com.ljj.easesim.interfaces.HouseElement;
 import com.ljj.easesim.interfaces.User;
 import com.ljj.easesim.interfaces.Command;
-
 import java.util.ArrayList;
 
 public class Room {
@@ -77,6 +76,5 @@ public class Room {
     public void removeUser(User user) {
         users.remove(user);
     }
-
 
 }
