@@ -10,6 +10,7 @@ import com.ljj.easesim.elements.Window;
 import com.ljj.easesim.layout.HouseLayout;
 import com.ljj.easesim.layout.Room;
 import com.ljj.easesim.requestBodies.ToggleRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,7 +33,7 @@ public class SimHomeController {
         house.getHouseLights().forEach((key, value) -> {
             Map<String, Object> room = new HashMap<>();
             room.put("roomName", key);
-            room.put("light", value.getState());
+            room.put("state", value.getState());
             room.put("id", value.getId());
             roomsList.add(room);
         });
@@ -55,7 +56,7 @@ public class SimHomeController {
         house.getHouseWindows().forEach((key, value) -> {
             Map<String, Object> room = new HashMap<>();
             room.put("roomName", key);
-            room.put("window", value.getState());
+            room.put("state", value.getState());
             room.put("id", value.getId());
             roomsList.add(room);
         });
@@ -78,7 +79,7 @@ public class SimHomeController {
         house.getHouseDoors().forEach((key, value) -> {
             Map<String, Object> room = new HashMap<>();
             room.put("roomName", key);
-            room.put("door", value.getState());
+            room.put("state", value.getState());
             room.put("id", value.getId());
             roomsList.add(room);
         });
@@ -94,7 +95,7 @@ public class SimHomeController {
     }
 
     @PostMapping("/toggleLight")
-    public String toggleLight(@RequestBody ToggleRequest request) {
+    public ResponseEntity<Map<String, Object>> toggleLight(@RequestBody ToggleRequest request) {
         HouseLayout house = HouseLayout.getInstance();
         AtomicReference<Room> room = new AtomicReference<Room>();
         AtomicReference<Light> light = new AtomicReference<Light>();
@@ -111,12 +112,16 @@ public class SimHomeController {
         room.get().setCommand(new ToggleLightCommand(light.get()));
         room.get().executeCommand();
         System.out.println(light.get().getState());
-
-        return "Light state is: " + light.get().getState();
+        // Prepare the response
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Success");
+        response.put("state", light.get().getState());
+        // Return the response
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/toggleWindow")
-    public String toggleWindow(@RequestBody ToggleRequest request) {
+    public ResponseEntity<Map<String, Object>> toggleWindow(@RequestBody ToggleRequest request) {
         HouseLayout house = HouseLayout.getInstance();
         AtomicReference<Room> room = new AtomicReference<Room>();
         AtomicReference<Window> window = new AtomicReference<Window>();
@@ -133,12 +138,16 @@ public class SimHomeController {
         room.get().setCommand(new ToggleWindowCommand(window.get()));
         room.get().executeCommand();
         System.out.println(window.get().getState());
-
-        return "Window state is: " + window.get().getState();
+        // Prepare the response
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Success");
+        response.put("state", window.get().getState());
+        // Return the response
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/toggleDoor")
-    public String toggleDoor(@RequestBody ToggleRequest request) {
+    public ResponseEntity<Map<String, Object>> toggleDoor(@RequestBody ToggleRequest request) {
         HouseLayout house = HouseLayout.getInstance();
         AtomicReference<Room> room = new AtomicReference<Room>();
         AtomicReference<Door> door = new AtomicReference<Door>();
@@ -155,7 +164,11 @@ public class SimHomeController {
         room.get().setCommand(new ToggleDoorCommand(door.get()));
         room.get().executeCommand();
         System.out.println(door.get().getState());
-
-        return "Door state is: " + door.get().getState();
+        // Prepare the response
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Success");
+        response.put("state", door.get().getState());
+        // Return the response
+        return ResponseEntity.ok(response);
     }
 }

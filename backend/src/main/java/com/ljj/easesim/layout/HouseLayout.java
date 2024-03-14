@@ -41,24 +41,18 @@ public class HouseLayout {
 
                 // Add Lights
                 for(int i = 0; i <= lights; i++) {
-<<<<<<< HEAD
                     elements.add(new Light());
-=======
                     Light light = new Light();
                     light.setId(++idCounter);
                     elements.add(light);
->>>>>>> staging
                 }
 
                 // Add Windows
                 for(int i = 0; i <= windows; i++) {
-<<<<<<< HEAD
                     elements.add(new Window());
-=======
                     Window window = new Window();
                     window.setId(++idCounter);
                     elements.add(window);
->>>>>>> staging
                 }
 
                 Room room = new RoomBuilder()
@@ -88,8 +82,6 @@ public class HouseLayout {
         }
     }
 
-<<<<<<< HEAD
-=======
     public static HouseLayout getInstance() {
         return INSTANCE;
     }
@@ -140,7 +132,6 @@ public class HouseLayout {
         return windowsMap;
     }
 
->>>>>>> staging
     public Room getRoom(String name) {
         for (Room room : this.rooms) {
             if (room.getName().equals(name)) {
@@ -149,11 +140,8 @@ public class HouseLayout {
         }
         return null;
     }
-<<<<<<< HEAD
-=======
 
     public List<Room> getRooms() {
         return rooms;
     }
->>>>>>> staging
 }

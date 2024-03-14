@@ -1,11 +1,11 @@
-// SHSService.java
+package com.ljj.easesim.services;// SHSService.java
 
 public class SHSService {
-    private final Database database;
+//    private final Database database;
 
-    public SHSService(Database database) {
-        this.database = database;
-    }
+//    public SHSService(Database database) {
+//        this.database = database;
+//    }
 
     public String getData(String userId) {
         // Logic to fetch data from the database
