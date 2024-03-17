@@ -3,9 +3,8 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - staging
       - main
-      - tests
+      - staging
   pull_request:
     types: [opened, synchronize, reopened, closed]
 
@@ -23,7 +22,8 @@ jobs:
           node-version: '20'
 
       - name: Install dependencies
-        run: yarn install
+        working-directory: frontend/
+        run: yarn
 
       - name: Setup Java
         uses: actions/setup-java@v2
@@ -45,14 +45,18 @@ jobs:
           sudo apt-get install -y gradle
 
       - name: Clean Gradle
+        working-directory: backend/
         run: |
           ./gradlew clean
 
       - name: Build with Gradle
+        working-directory: backend/
         run: gradle build
 
       - name: Run unit tests
+        working-directory: backend/
         run: gradle test
         
       - name: Build React App
+        working-directory: frontend/
         run: yarn build
