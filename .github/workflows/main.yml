@@ -51,11 +51,11 @@ jobs:
 
       - name: Build with Gradle
         working-directory: backend/
-        run: gradle build
+        run: ./gradlew build --stacktrace
 
       - name: Run unit tests
         working-directory: backend/
-        run: gradle test
+        run: ./gradlew test --stacktrace
         
       - name: Build React App
         working-directory: frontend/
