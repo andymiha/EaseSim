@@ -1,16 +1,4 @@
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
-import Switch from "@mui/material/Switch";
-import Checkbox from "@mui/material/Checkbox";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, ToggleButton, ToggleButtonGroup, Box, Stack, Switch, Checkbox } from "@mui/material";
 import { useState, useEffect } from "react";
 
 
