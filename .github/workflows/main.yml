@@ -28,8 +28,8 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v2
         with:
-          java-version: '11'
-          distribution: 'adopt'
+          java-version: '20'
+          distribution: 'temurin'  # Updated to a distribution that supports Java 20
           java-package: 'jdk'
           architecture: 'x64'
           check-latest: false
