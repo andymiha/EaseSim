@@ -1,42 +1,36 @@
-import { useState } from 'react';
-import { Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Select, MenuItem } from '@mui/material';
+import { useState, useEffect } from 'react';
+import {
+    Typography,
+    Button,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    List,
+    ListItem,
+    ListItemText,
+} from '@mui/material';
+import axios from 'axios';
+
 
 const SHS = () => {
-    const [selectedUserType, setSelectedUserType] = useState('');
-    const [addUserName, setAddUserName] = useState('');
-    const [addUserId, setAddUserId] = useState('');
-    const [houseLocation, setHouseLocation] = useState('');
-    const [openAddUserDialog, setOpenAddUserDialog] = useState(false);
     const [openLoginDialog, setOpenLoginDialog] = useState(false);
-    const [loginName, setLoginName] = useState('');
-    const [loginId, setLoginId] = useState('');
-    const [openSetLocationDialog, setOpenSetLocationDialog] = useState(false);
-    const [openDeleteUserDialog, setOpenDeleteUserDialog] = useState(false);
-    const [deleteUserId, setDeleteUserId] = useState('');
+    const [users, setUsers] = useState([]);
+    const [selectedUserId, setSelectedUserId] = useState('');
 
-    const handleOpenAddUserDialog = () => {
-        setOpenAddUserDialog(true);
-    };
-
-    const handleCloseAddUserDialog = () => {
-        setOpenAddUserDialog(false);
-    };
-
-    const handleSelectUserType = (event) => {
-        setSelectedUserType(event.target.value);
-    };
-
-    const handleAddUser = () => {
-        console.log('Adding user of type:', selectedUserType, 'with name:', addUserName, 'and ID:', addUserId);
-        setSelectedUserType('');
-        setAddUserName('');
-        setAddUserId('');
-        setOpenAddUserDialog(false);
-    };
-
-    const handleEditUser = () => {
-        console.log('Editing user...');
-    };
+    axios.get('/usersdata')
+    .then(response => {
+        console.log(response);
+        // Check if response.data is an array before setting users
+        if (Array.isArray(response.data)) {
+            setUsers(response.data); // Assuming response.data is an array of user objects
+        } else {
+            console.error('Users data is not an array:', response.data);
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching user data:', error);
+    });
 
     const handleOpenLoginDialog = () => {
         setOpenLoginDialog(true);
@@ -47,40 +41,10 @@ const SHS = () => {
     };
 
     const handleLogin = () => {
-        console.log('Logging in with name:', loginName, 'and ID:', loginId);
-    };
-
-    const handleSetDateTime = () => {
-        const currentTime = new Date().toLocaleTimeString();
-        console.log('Setting current time:', currentTime);
-    };
-
-    const handleOpenSetLocationDialog = () => {
-        setOpenSetLocationDialog(true);
-    };
-
-    const handleCloseSetLocationDialog = () => {
-        setOpenSetLocationDialog(false);
-    };
-
-    const handleSaveHouseLocation = () => {
-        console.log('Setting house location:', houseLocation);
-        setHouseLocation('');
-        handleCloseSetLocationDialog();
-    };
-
-    const handleOpenDeleteUserDialog = () => {
-        setOpenDeleteUserDialog(true);
-    };
-
-    const handleCloseDeleteUserDialog = () => {
-        setOpenDeleteUserDialog(false);
-    };
-
-    const handleDeleteUser = () => {
-        console.log('Deleting user with ID:', deleteUserId);
-        setDeleteUserId('');
-        handleCloseDeleteUserDialog();
+        // Handle login logic for the selected user
+        console.log('Logged in as user with ID:', selectedUserId);
+        setSelectedUserId(''); // Reset selectedUserId
+        setOpenLoginDialog(false);
     };
 
     return (
@@ -89,129 +53,27 @@ const SHS = () => {
             <div style={{ marginTop: '20px' }}>
                 <Button onClick={handleOpenLoginDialog} variant="contained" style={{ width: '350px', marginBottom: '10px' }}>Login</Button>
             </div>
-            <div style={{ marginTop: '20px' }}>
-                <Button onClick={handleOpenAddUserDialog} variant="contained" style={{ width: '350px', marginBottom: '10px' }}>Add or Edit User Profile</Button>
-            </div>
-            <div style={{ marginTop: '20px' }}>
-                <Button onClick={handleOpenDeleteUserDialog} variant="contained" style={{ width: '350px', marginBottom: '10px' }}>Delete User</Button>
-            </div>
-            <div style={{ marginTop: '20px' }}>
-                <Button onClick={handleSetDateTime} variant="contained" style={{ width: '350px', marginBottom: '10px' }}>Set Date and time</Button>
-            </div>
-            <div style={{ marginTop: '20px' }}>
-                <Button onClick={handleOpenSetLocationDialog} variant="contained" style={{ width: '350px', marginBottom: '10px' }}>Set house location</Button>
-            </div>
 
-            <Dialog open={openAddUserDialog} onClose={handleCloseAddUserDialog}>
-                <DialogTitle>Add or Edit User</DialogTitle>
-                <DialogContent>
-                    <Select
-                        value={selectedUserType}
-                        onChange={handleSelectUserType}
-                        fullWidth
-                        variant="outlined"
-                        style={{ marginBottom: '20px' }}
-                    >
-                        <MenuItem value="">Select User Type</MenuItem>
-                        <MenuItem value="Child">Child</MenuItem>
-                        <MenuItem value="Parent">Parent</MenuItem>
-                        <MenuItem value="Guest">Guest</MenuItem>
-                        <MenuItem value="Stranger">Stranger</MenuItem>
-                    </Select>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="addUserName"
-                        label="Name"
-                        fullWidth
-                        value={addUserName}
-                        onChange={(e) => setAddUserName(e.target.value)}
-                        style={{ marginBottom: '20px' }}
-                    />
-                    <TextField
-                        type="number"
-                        margin="dense"
-                        id="addUserId"
-                        label="ID"
-                        fullWidth
-                        value={addUserId}
-                        onChange={(e) => setAddUserId(e.target.value)}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleAddUser} color="primary" disabled={!selectedUserType || !addUserName || !addUserId}>Add</Button>
-                    <Button onClick={handleCloseAddUserDialog} color="primary">Cancel</Button>
-                    <Button onClick={handleEditUser} color="primary">Edit</Button>
-                </DialogActions>
-            </Dialog>
-
+            {/* Login Dialog */}
             <Dialog open={openLoginDialog} onClose={handleCloseLoginDialog}>
-                <DialogTitle>Login</DialogTitle>
+                <DialogTitle>Select User to Login</DialogTitle>
                 <DialogContent>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="loginName"
-                        label="Name"
-                        fullWidth
-                        value={loginName}
-                        onChange={(e) => setLoginName(e.target.value)}
-                        style={{ marginBottom: '20px' }}
-                    />
-                    <TextField
-                        type="number"
-                        margin="dense"
-                        id="loginId"
-                        label="ID"
-                        fullWidth
-                        value={loginId}
-                        onChange={(e) => setLoginId(e.target.value)}
-                    />
+                    {/* Conditional rendering for users */}
+                    {Array.isArray(users) && users.length > 0 ? (
+                        <List>
+                            {users.map(user => (
+                                <ListItem button key={user.id} onClick={() => setSelectedUserId(user.id)}>
+                                    <ListItemText primary={user.name} />
+                                </ListItem>
+                            ))}
+                        </List>
+                    ) : (
+                        <Typography>No users available</Typography>
+                    )}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleLogin} color="primary">Login</Button>
+                    <Button onClick={handleLogin} color="primary" disabled={!selectedUserId}>Login</Button>
                     <Button onClick={handleCloseLoginDialog} color="primary">Cancel</Button>
-                </DialogActions>
-            </Dialog>
-
-            <Dialog open={openSetLocationDialog} onClose={handleCloseSetLocationDialog}>
-                <DialogTitle>Set House Location</DialogTitle>
-                <DialogContent>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="houseLocation"
-                        label="House Location"
-                        fullWidth
-                        value={houseLocation}
-                        onChange={(e) => setHouseLocation(e.target.value)}
-                        style={{ marginBottom: '20px' }}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleSaveHouseLocation} color="primary">Save</Button>
-                    <Button onClick={handleCloseSetLocationDialog} color="primary">Cancel</Button>
-                </DialogActions>
-            </Dialog>
-
-            <Dialog open={openDeleteUserDialog} onClose={handleCloseDeleteUserDialog}>
-                <DialogTitle>Delete User</DialogTitle>
-                <DialogContent>
-                    <TextField
-                        type="number"
-                        autoFocus
-                        margin="dense"
-                        id="deleteUserId"
-                        label="User ID"
-                        fullWidth
-                        value={deleteUserId}
-                        onChange={(e) => setDeleteUserId(e.target.value)}
-                        style={{ marginBottom: '20px' }}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleDeleteUser} color="primary">Delete</Button>
-                    <Button onClick={handleCloseDeleteUserDialog} color="primary">Cancel</Button>
                 </DialogActions>
             </Dialog>
         </div>
