@@ -289,5 +289,3 @@ const handleLightAutoChange = (row, index) => {
   );
 }
 export default SHC;
-
- 
