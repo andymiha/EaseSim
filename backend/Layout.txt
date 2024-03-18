@@ -20,7 +20,7 @@
     {
        "name": "Kitchen",
        "windows": 2,
-       "lights": 1,
+       "lights": 2,
        "heating": true,
        "doorsTo": [
          "LivingRoom",
