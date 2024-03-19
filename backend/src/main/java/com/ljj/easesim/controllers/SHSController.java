@@ -1,6 +1,26 @@
-package com.ljj.easesim.controllers;// SHSController.java
+package com.ljj.easesim.controllers;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
 
 public class SHSController {
+
+    public SHSController() {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            File file = new File("db.json");
+            Map<String, Object> dbData = objectMapper.readValue(file, new TypeReference<>() {});
+            System.out.println(dbData.get("profiles"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 //    private final SHSService shsService;
 //
 //    public SHSController(SHSService shsService) {
