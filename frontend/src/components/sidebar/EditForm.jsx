@@ -1,16 +1,77 @@
 import React, { useState, useEffect } from 'react';
+import useDataFetching from './useDataFetching';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, Switch, FormControlLabel, Grid } from '@mui/material';
 
 const EditForm = ({ onClose }) => {
-    const [rooms, setRooms] = useState([]);
+    const { data, error, loading } = useDataFetching('http://localhost:8080/getData');
+    const rooms = data ? data.rooms : [];
+    
+   
+
+    //const [rooms, setRooms] = useState([]);
     const [selectedRoom, setSelectedRoom] = useState('');
     const [selectedInhabitant, setSelectedInhabitant] = useState('');
     const [selectedWindow, setSelectedWindow] = useState('');
     const [isWindowBlocked, setIsWindowBlocked] = useState(false);
     const [isButtonModified, setIsButtonModified] = useState(false);
     const [initialWindowBlocked, setInitialWindowBlocked] = useState(false); // New state variable to store initial window blocked state
+    const inhabitants = ["John", "Mary", "Bob", "Alice"]; // Hardcoded inhabitants
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const formData = {
+            selectedRoom,
+            selectedInhabitant,
+            selectedWindow,
+            isWindowBlocked
+        };
+
+        try {
+            const response = await fetch('http://localhost:8080/submitForm', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to submit form');
+            }
+
+            console.log('Form submitted successfully!');
+            onClose();
+        } catch (error) {
+            console.error('Error submitting form:', error);
+        }
+    };
 
     useEffect(() => {
+        if (selectedWindow !== '' && data) {
+            const room = rooms.find(room => room.name === selectedRoom);
+            const window = room?.windows.find(window => window.id === selectedWindow);
+            
+            setInitialWindowBlocked(window?.blockedState || false); // Store the initial window blocked state
+            setIsWindowBlocked(window?.blockedState || false);
+            setIsButtonModified(false);
+        }
+    }, [selectedWindow, rooms, selectedRoom, data]);
+    
+    const handleSwitchChange = (e) => {
+        setIsWindowBlocked(e.target.checked);
+        setIsButtonModified(true);
+    };
+
+    console.log('Rooms:', rooms);
+
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error.message}</div>;
+    
+    
+    
+   /*  useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await fetch('http://localhost:8080/getData');
@@ -28,9 +89,9 @@ const EditForm = ({ onClose }) => {
         fetchData();
     }, []);
 
-    const inhabitants = ["John", "Mary", "Bob", "Alice"]; // Hardcoded inhabitants
+   
 
-    const handleSubmit = async (e) => {
+    const handleSubmit2 = async (e) => {
         e.preventDefault();
 
         const formData = {
@@ -58,28 +119,11 @@ const EditForm = ({ onClose }) => {
         } catch (error) {
             console.error('Error submitting form:', error);
         }
-    };
+    }; */
 
-    useEffect(() => {
-        if (selectedWindow !== '') {
-            console.log('Entered isBlocked check')
-            
-            const room = rooms.find(room => room.name === selectedRoom);
-            const window = room?.windows.find(window => window.id === selectedWindow);
-            
-            console.log('Selected window:', window);
-            console.log('Window block state: ', window.blockedState);
-            
-            setInitialWindowBlocked(window?.blockedState || false); // Store the initial window blocked state
-            setIsWindowBlocked(window?.blockedState || false);
-            setIsButtonModified(false);
-        }
-    }, [selectedWindow, rooms]);
+    
 
-    const handleSwitchChange = (e) => {
-        setIsWindowBlocked(e.target.checked);
-        setIsButtonModified(true);
-    };
+    
     
     return (
         <Dialog open={true} onClose={onClose} fullWidth={true} maxWidth="sm">
