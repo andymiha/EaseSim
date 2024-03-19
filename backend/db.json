@@ -1,0 +1,17 @@
+{
+  "profiles": {
+    "0": {
+      "name": "Elton John",
+      "userType": "Stranger",
+      "permissions": ["testPermission"]
+    },
+    "1": {
+      "name": "Ronald McDonald",
+      "userType": "Guest",
+      "permissions": ["testPermission"]
+    }
+  },
+  "house": {
+
+  }
+}
