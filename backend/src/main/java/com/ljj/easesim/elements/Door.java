@@ -8,6 +8,7 @@ public class Door extends HouseElement {
     private boolean isBlocked;
     private AbstractMap.SimpleEntry<String, String> roomConnection;
 
+
     public Door() {
         this.isBlocked = false; // By default, window is unblocked
     }
@@ -47,4 +48,22 @@ public class Door extends HouseElement {
     public void setRoomConnection(AbstractMap.SimpleEntry<String, String> roomConnection) {
         this.roomConnection = roomConnection;
     }
+
+//    @Override
+//    public String toString() {
+//        return "Door{" +
+//                "isAuto=" + isAuto +
+//                ", isBlocked=" + isBlocked +
+//                ", roomConnection=" + roomConnection +
+//                ", room=" + room +
+//                ", id=" + id +
+//                ", isOpen=" + isOpen +
+//                '}';
+//    }
+
+    @Override
+    public String toString() {
+        return "Door id : " + id;
+    }
+
 }

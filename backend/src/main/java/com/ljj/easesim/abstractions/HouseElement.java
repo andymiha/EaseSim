@@ -3,7 +3,7 @@ package com.ljj.easesim.abstractions;
 import com.ljj.easesim.layout.Room;
 
 public abstract class HouseElement {
-    protected Room room = null;
+    protected Room room;
     protected int id;
     protected boolean isOpen;
 

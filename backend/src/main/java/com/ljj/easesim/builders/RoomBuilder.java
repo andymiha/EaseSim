@@ -27,6 +27,15 @@ public class RoomBuilder {
         return this;
     }
 
+    public RoomBuilder addElement(HouseElement element) {
+        if (this.elements == null) {
+            this.elements = new ArrayList<>();
+        }
+        this.elements.add(element);
+        return this;
+    }
+
+
     public RoomBuilder users(ArrayList<User> users) {
         this.users = users;
         return this;

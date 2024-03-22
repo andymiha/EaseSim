@@ -19,7 +19,7 @@ public class Room {
         this.users = users;
     }
 
-    //getters
+
     public int getId() {
         return this.id;
     }
@@ -93,4 +93,14 @@ public class Room {
         return lights;
     }
 
+    @Override
+    public String toString() {
+        return "Room{" +
+                "id=" + id +
+                ", command=" + command +
+                ", name='" + name + '\'' +
+                ", elements=" + elements +
+                ", users=" + users +
+                '}';
+    }
 }

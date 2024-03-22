@@ -29,4 +29,20 @@ public class Window extends HouseElement {
         isBlocked = !isBlocked;
 
     }
+
+//    @Override
+//    public String toString() {
+//        return "Window{" +
+//                "isBlocked=" + isBlocked +
+//                ", room=" + room +
+//                ", id=" + id +
+//                ", isOpen=" + isOpen +
+//                '}';
+//    }
+
+    @Override
+    public String toString() {
+        return "Window id : " + id;
+    }
+
 }

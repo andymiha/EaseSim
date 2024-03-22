@@ -21,10 +21,13 @@ public class SmartHomeSimulator {
     private static final SmartHomeSimulator INSTANCE = new SmartHomeSimulator();
     private ArrayList<User> users;
     private User loggedInUser;
+    private HouseLayout houseLayout;
 
     public SmartHomeSimulator() {
         ObjectMapper objectMapper = new ObjectMapper();
         users = new ArrayList<>();
+        houseLayout = new HouseLayout();
+
 
         try {
             File file = new File("db.json");
@@ -41,11 +44,15 @@ public class SmartHomeSimulator {
         }
 
         // Place 'Guest' in room to test permissions
-        HouseLayout.getInstance().getRoom("Bathroom").addUser(getUser(2));
+        //HouseLayout.getInstance().getRoom("Bathroom").addUser(getUser(2));
     }
 
     public static SmartHomeSimulator getInstance() {
         return INSTANCE;
+    }
+
+    public HouseLayout getHouseLayout() {
+        return houseLayout;
     }
 
     public User getUser(int id) {

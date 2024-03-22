@@ -11,6 +11,8 @@ import com.ljj.easesim.layout.Room;
 
 public class SmartHomeCore {
 
+    private final HouseLayout house = SmartHomeSimulator.getInstance().getHouseLayout();
+
     private static final SmartHomeCore INSTANCE = new SmartHomeCore();
 
     // Log all actions (save in log file) and display in console. (Observer)
@@ -21,7 +23,6 @@ public class SmartHomeCore {
 
     public Room findElementRoom(HouseElement element) {
         System.out.println("TOGGLE LIGHT");
-        HouseLayout house = HouseLayout.getInstance();
 //        System.out.println(element.getId());
         Room foundRoom = null;
         System.out.println(house.getRooms().size());

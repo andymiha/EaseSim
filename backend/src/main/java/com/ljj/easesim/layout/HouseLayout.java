@@ -16,10 +16,8 @@ public class HouseLayout {
     // ID Counter necessary for incrementing room id's when creating rooms.
     private int idCounter = 0;
     private ArrayList<Room> rooms;
-    private static final HouseLayout INSTANCE = new HouseLayout();
 
     public HouseLayout() {
-        // Example House Layout Constructor
         rooms = new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -31,37 +29,53 @@ public class HouseLayout {
             Map<String, Door> doorMap = new HashMap<>();
 
             for(Map<String, Object> roomData : layoutData) {
+                ArrayList<HouseElement> elements = new ArrayList<>();
+
                 String name = (String) roomData.get("name");
                 int windows = (int) roomData.get("windows");
                 int lights = (int) roomData.get("lights");
-
                 List<String> doorsTo = (List<String>) roomData.get("doorsTo");
 
-                ArrayList<HouseElement> elements = new ArrayList<>();
+                Light light = null;
+                Window window = null;
+                Door door = null;
 
-                // Add Lights
-                for(int i = 0; i < lights; i++) {
-                    Light light = new Light();
-                    light.setId(++idCounter);
-                    elements.add(light);
-                }
-
-                // Add Windows
-                for(int i = 0; i < windows; i++) {
-                    Window window = new Window();
-                    window.setId(++idCounter);
-                    elements.add(window);
-                }
-
-                Room room = new RoomBuilder()
+                Room room  = new RoomBuilder()
                         .id(++idCounter)
                         .name(name)
                         .elements(elements)
                         .users(new ArrayList<User>())
                         .build();
 
+                // Add Lights
+                for(int i = 0; i < lights; i++) {
+                    light = new Light();
+                    light.setId(++idCounter);
+                    elements.add(light);
+
+                    if (light != null) {
+                        light.setRoom(room);
+                        System.out.println("added light " + light.toString());
+                    } else {
+                        System.out.println("light is null");
+                    }
+                }
+
+                // Add Windows
+                for(int i = 0; i < windows; i++) {
+                    window = new Window();
+                    window.setId(++idCounter);
+                    elements.add(window);
+
+                    if (window != null) {
+                        window.setRoom(room);
+                        System.out.println("added window " + window.toString());
+                    } else {
+                        System.out.println("window is null");
+                    }
+                }
+
                 for(String roomConnectionName : doorsTo) {
-                    Door door;
                     if (doorMap.containsKey(roomConnectionName)) {
                         door = doorMap.get(roomConnectionName); // Use existing door
                     } else {
@@ -69,19 +83,35 @@ public class HouseLayout {
                         door.setId(++idCounter);
                         doorMap.put(roomConnectionName, door); // Track the new door
                     }
-                    room.addElement(door);
+                    elements.add(door);
+
+                    if (door != null) {
+                        door.setRoom(room);
+                        System.out.println("added door " + door.toString());
+                    } else {
+                        System.out.println("door is null");
+                    }
                 }
 
                 this.rooms.add(room);
+                System.out.println("Created " + room.toString() + "\n");
+
+                System.out.println("Testing getRoom on elements of Room " + room.getName() + "\n");
+                for (HouseElement element : room.getElements()) {
+                    Room location = element.getRoom();
+                    if (location != null) {
+                        // Do something with the room object
+                        System.out.println("Room found for " + element.toString() + ": " + room.getName());
+                    } else {
+                        System.out.println("Room not found for " + element.toString());
+                    }
+                }
+                System.out.println("\n-------------------------------------------------------------------");
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static HouseLayout getInstance() {
-        return INSTANCE;
     }
 
     public Map<HouseElement, String> getHouseDoors() {

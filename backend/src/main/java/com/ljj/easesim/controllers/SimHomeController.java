@@ -29,7 +29,7 @@ public class SimHomeController {
     @GetMapping("/getHouseLights")
     public String getHouseLights() {
         // test commit
-        HouseLayout house = HouseLayout.getInstance();
+        HouseLayout house = SmartHomeSimulator.getInstance().getHouseLayout();
         List<Map<String, Object>> roomsList = new ArrayList<>();
 
         house.getHouseLights().forEach((key, value) -> {
@@ -54,7 +54,7 @@ public class SimHomeController {
 
     @GetMapping("/getHouseWindows")
     public String getHouseWindows() {
-        HouseLayout house = HouseLayout.getInstance();
+        HouseLayout house = SmartHomeSimulator.getInstance().getHouseLayout();
         List<Map<String, Object>> roomsList = new ArrayList<>();
 
         house.getHouseWindows().forEach((key, value) -> {
@@ -79,7 +79,7 @@ public class SimHomeController {
 
     @GetMapping("/getHouseDoors")
     public String getHouseDoors() {
-        HouseLayout house = HouseLayout.getInstance();
+        HouseLayout house = SmartHomeSimulator.getInstance().getHouseLayout();
         List<Map<String, Object>> roomsList = new ArrayList<>();
 
         house.getHouseDoors().forEach((key, value) -> {
@@ -104,7 +104,7 @@ public class SimHomeController {
 
     @PostMapping("/toggleLight")
     public ResponseEntity<Map<String, Object>> toggleLight(@RequestBody ToggleRequest request) {
-        HouseLayout house = HouseLayout.getInstance();
+        HouseLayout house = SmartHomeSimulator.getInstance().getHouseLayout();
         SmartHomeSimulator shs = SmartHomeSimulator.getInstance();
         SmartHomeCore shc = SmartHomeCore.getInstance();
 
@@ -136,7 +136,7 @@ public class SimHomeController {
 
     @PostMapping("/toggleWindow")
     public ResponseEntity<Map<String, Object>> toggleWindow(@RequestBody ToggleRequest request) {
-        HouseLayout house = HouseLayout.getInstance();
+        HouseLayout house = SmartHomeSimulator.getInstance().getHouseLayout();
         AtomicReference<Room> room = new AtomicReference<Room>();
         AtomicReference<Window> window = new AtomicReference<Window>();
 
@@ -162,7 +162,7 @@ public class SimHomeController {
 
     @PostMapping("/toggleDoor")
     public ResponseEntity<Map<String, Object>> toggleDoor(@RequestBody ToggleRequest request) {
-        HouseLayout house = HouseLayout.getInstance();
+        HouseLayout house = SmartHomeSimulator.getInstance().getHouseLayout();
         AtomicReference<Room> room = new AtomicReference<Room>();
         AtomicReference<Door> door = new AtomicReference<Door>();
 
@@ -188,7 +188,7 @@ public class SimHomeController {
 
     @PostMapping("/toggleIsAutoLight")
     public ResponseEntity<Map<String, Object>> toggleIsAutoLight(@RequestBody ToggleRequest request) {
-        HouseLayout house = HouseLayout.getInstance();
+        HouseLayout house = SmartHomeSimulator.getInstance().getHouseLayout();
         AtomicReference<Room> room = new AtomicReference<Room>();
         AtomicReference<Light> light = new AtomicReference<Light>();
 
@@ -214,7 +214,7 @@ public class SimHomeController {
 
     @PostMapping("/toggleIsAutoDoor")
     public ResponseEntity<Map<String, Object>> toggleIsAutoDoor(@RequestBody ToggleRequest request) {
-        HouseLayout house = HouseLayout.getInstance();
+        HouseLayout house = SmartHomeSimulator.getInstance().getHouseLayout();
         AtomicReference<Room> room = new AtomicReference<Room>();
         AtomicReference<Door> door = new AtomicReference<Door>();
 
