@@ -25,6 +25,7 @@ public class SimHomeController {
 
     @GetMapping("/getHouseLights")
     public String getHouseLights() {
+        // test commit
         HouseLayout house = HouseLayout.getInstance();
         List<Map<String, Object>> roomsList = new ArrayList<>();
 

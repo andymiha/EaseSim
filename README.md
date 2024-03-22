@@ -9,21 +9,18 @@
 40258189  -  Noura Tabbara  
 
 ## Pre-requisites
-- Docker Desktop
 - yarn
 - git
 
 ## Setup Instructions
 1. Clone this repository.
-2. Open Docker Desktop.
-3. Open your repository path in your terminal.
-4. Run `docker-compose up -d` to start and build all services.
-5. go to `\backend\build\libs` folder and copy snapshot jar file to `backend` folder
-6. Rename the snapshot folder to `app` (should remain a jar file)
-7. In `\backend`, run `sh gradlew clean bootJar`
+2. Open your repository path in your terminal.
+3. cd into FrontEnd
+4. Yarn (install dependencies)
+5. Yarn dev (run front end)
+   
+- Same steps for backend
 
-
-TO BE FIXED. Run `yarn setup-frontend` for initial frontend configuration.
 
 ### Accessing the Frontend
 8. Go to [http://localhost:4123] to access EaseSim.

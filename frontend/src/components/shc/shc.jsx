@@ -1,48 +1,34 @@
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import Box from "@mui/material/Box";
-import Stack from "@mui/material/Stack";
-import Switch from "@mui/material/Switch";
-import Checkbox from "@mui/material/Checkbox";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, ToggleButton, ToggleButtonGroup, Box, Stack, Switch, Checkbox } from "@mui/material";
 import { useState, useEffect } from "react";
 
 
 const SHC = () => {
   const [lights, setLights] = useState([])
-const [doors, setDoors] = useState([])
-const [windows, setWindows] = useState([])
+  const [doors, setDoors] = useState([])
+  const [windows, setWindows] = useState([])
 
- // Fetch data from backend on mount
- useEffect(() => {  
-  fetch('http://localhost:8080/getHouseLights') 
-      .then(response => response.json())
-      .then(data => {
-         setLights(data)
-      })
-      .then(console.log("bluetooth connect assucessfully"))
-      .catch(error => console.error('Error fetching data:', error));
- },
-  []);
+  useEffect(() => {  
+    fetch('http://localhost:8080/getHouseLights') 
+        .then(response => response.json())
+        .then(data => {
+          setLights(data)
+        })
+        .then(console.log("bluetooth connect assucessfully"))
+        .catch(error => console.error('Error fetching data:', error));
+  },
+    []);
 
 
-   // Fetch data from backend on mount
- useEffect(() => {  
-  fetch('http://localhost:8080/getHouseWindows') 
-      .then(response => response.json())
-      .then(data => {
-         setWindows(data)
-      })
-      .then(console.log("bluetooth connect assucessfully"))
-      .catch(error => console.error('Error fetching data:', error));
- },
-  []);
+  useEffect(() => {  
+    fetch('http://localhost:8080/getHouseWindows') 
+        .then(response => response.json())
+        .then(data => {
+          setWindows(data)
+        })
+        .then(console.log("bluetooth connect assucessfully"))
+        .catch(error => console.error('Error fetching data:', error));
+  },
+    []);
 
 
   useEffect(() => {  
@@ -303,4 +289,3 @@ const handleLightAutoChange = (row, index) => {
   );
 }
 export default SHC;
-
