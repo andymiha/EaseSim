@@ -161,7 +161,7 @@ const handleWindowChange = (row, index) => {
 
 const handleLightAutoChange = (row, index) => {
 
-    fetch('http://localhost:8080/toggleWindow', {
+    fetch('http://localhost:8080/toggleIsAutoLight', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
@@ -190,8 +190,8 @@ const handleLightAutoChange = (row, index) => {
   };
 
   const handleDoorAutoChange = (row, index) => {
-
-    fetch('http://localhost:8080/toggleWindow', {
+    console.log(row)
+    fetch('http://localhost:8080/toggleIsAutoDoor', {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json'
