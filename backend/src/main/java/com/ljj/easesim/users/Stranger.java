@@ -1,6 +1,7 @@
 package com.ljj.easesim.users;
 
 import com.ljj.easesim.interfaces.User;
+import com.ljj.easesim.layout.Room;
 
 public class Stranger implements User {
     private int id;
@@ -19,5 +20,10 @@ public class Stranger implements User {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public boolean hasRoomAccess(Room room) {
+        return false;
     }
 }

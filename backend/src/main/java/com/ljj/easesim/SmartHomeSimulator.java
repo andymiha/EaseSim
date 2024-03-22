@@ -2,6 +2,9 @@ package com.ljj.easesim;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ljj.easesim.commands.ToggleLightCommand;
+import com.ljj.easesim.elements.Light;
+import com.ljj.easesim.interfaces.HouseElement;
 import com.ljj.easesim.interfaces.User;
 import com.ljj.easesim.layout.HouseLayout;
 import com.ljj.easesim.users.Child;
@@ -16,16 +19,21 @@ import java.util.Map;
 
 import static java.lang.Integer.parseInt;
 
+// Allow upload CSV for tempature info.
 public class SmartHomeSimulator {
-    private HouseLayout house;
+    private SmartHomeCore shc;
     private ArrayList<User> users;
     private User loggedInUser;
 
     public SmartHomeSimulator() {
         ObjectMapper objectMapper = new ObjectMapper();
         users = new ArrayList<>();
-        house = new HouseLayout();
+        shc = new SmartHomeCore();
+        new HouseLayout();
 
+        // Test toggle using SHC
+        Light light = shc.toggle(HouseLayout.getInstance().getRoom("Bedroom1").getLights().get(0));
+        System.out.println(light.getState());
         try {
             File file = new File("db.json");
             Map<String, Object> dbData = objectMapper.readValue(file, new TypeReference<>() {});
@@ -83,4 +91,6 @@ public class SmartHomeSimulator {
     public void deleteUser(int id) {
         users.removeIf(user -> user.getId() == id);
     }
+
+    // God API Method
 }
