@@ -1,4 +1,4 @@
-package com.ljj.easesim.interfaces;
+package com.ljj.easesim.abstractions;
 
 import com.ljj.easesim.layout.Room;
 

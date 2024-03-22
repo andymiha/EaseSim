@@ -1,36 +1,50 @@
 package com.ljj.easesim.elements;
 
-import com.ljj.easesim.interfaces.HouseElement;
+import com.ljj.easesim.abstractions.HouseElement;
 import java.util.AbstractMap;
 
-public class Door implements HouseElement {
-    private int id;
-    private boolean isOpen;
+public class Door extends HouseElement {
     private boolean isAuto;
+    private boolean isBlocked;
     private AbstractMap.SimpleEntry<String, String> roomConnection;
-    @Override
-    public void toggle() {
-        isOpen = !isOpen;
+
+    public Door() {
+        this.isBlocked = false; // By default, window is unblocked
     }
 
     @Override
-    public int getId() {
-        return id;
+    public void toggle() {
+        if (!isBlocked) {
+            isOpen = !isOpen;
+        }
     }
-    @Override
-    public void setId(int id) {
-        this.id = id;
+
+    public boolean getBlockedState() {
+        return isBlocked;
     }
-    @Override
-    public boolean getState() {
-        return isOpen;
+
+    public void setBlocked(boolean blocked) {
+        isBlocked = blocked;
+    }
+
+    public void toggleBlocked() {
+        isBlocked = !isBlocked;
+
     }
 
     public boolean getIsAutoState() {
         return isAuto;
     }
 
-    public void setIsAutoState(boolean isAuto) {
-        this.isAuto = isAuto;
+    public void setIsAutoState(boolean auto) {
+        this.isAuto = auto;
+    }
+
+    public AbstractMap.SimpleEntry<String, String> getRoomConnection() {
+        return roomConnection;
+    }
+
+    public void setRoomConnection(AbstractMap.SimpleEntry<String, String> roomConnection) {
+        this.roomConnection = roomConnection;
     }
 }

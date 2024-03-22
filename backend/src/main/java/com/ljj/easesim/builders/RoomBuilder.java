@@ -1,8 +1,8 @@
 package com.ljj.easesim.builders;
 
 import com.ljj.easesim.layout.Room;
-import com.ljj.easesim.interfaces.HouseElement;
-import com.ljj.easesim.interfaces.User;
+import com.ljj.easesim.abstractions.HouseElement;
+import com.ljj.easesim.abstractions.User;
 
 import java.util.ArrayList;
 

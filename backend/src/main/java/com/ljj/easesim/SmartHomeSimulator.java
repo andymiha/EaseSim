@@ -2,10 +2,7 @@ package com.ljj.easesim;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ljj.easesim.commands.ToggleLightCommand;
-import com.ljj.easesim.elements.Light;
-import com.ljj.easesim.interfaces.HouseElement;
-import com.ljj.easesim.interfaces.User;
+import com.ljj.easesim.abstractions.User;
 import com.ljj.easesim.layout.HouseLayout;
 import com.ljj.easesim.users.Child;
 import com.ljj.easesim.users.Guest;
@@ -19,7 +16,7 @@ import java.util.Map;
 
 import static java.lang.Integer.parseInt;
 
-// Allow upload CSV for tempature info.
+// Allow upload CSV for temperature info.
 public class SmartHomeSimulator {
     private static final SmartHomeSimulator INSTANCE = new SmartHomeSimulator();
     private ArrayList<User> users;

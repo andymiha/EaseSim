@@ -1,6 +1,6 @@
 package com.ljj.easesim.users;
 
-import com.ljj.easesim.interfaces.User;
+import com.ljj.easesim.abstractions.User;
 import com.ljj.easesim.layout.Room;
 
 public class Stranger implements User {

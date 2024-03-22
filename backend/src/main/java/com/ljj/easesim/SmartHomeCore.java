@@ -4,15 +4,10 @@ import com.ljj.easesim.commands.*;
 import com.ljj.easesim.elements.Door;
 import com.ljj.easesim.elements.Light;
 import com.ljj.easesim.elements.Window;
-import com.ljj.easesim.interfaces.Command;
-import com.ljj.easesim.interfaces.HouseElement;
-import com.ljj.easesim.interfaces.User;
+import com.ljj.easesim.abstractions.HouseElement;
+import com.ljj.easesim.abstractions.User;
 import com.ljj.easesim.layout.HouseLayout;
 import com.ljj.easesim.layout.Room;
-import com.ljj.easesim.users.Child;
-import com.ljj.easesim.users.Guest;
-import com.ljj.easesim.users.Parent;
-import com.ljj.easesim.users.Stranger;
 
 public class SmartHomeCore {
 
@@ -30,6 +25,7 @@ public class SmartHomeCore {
 //        System.out.println(element.getId());
         Room foundRoom = null;
         System.out.println(house.getRooms().size());
+
         for (Room room : house.getRooms()) {
             for (HouseElement roomElement : room.getElements()) {
                 if (roomElement.getId() == element.getId()) {

@@ -7,7 +7,7 @@ import com.ljj.easesim.commands.*;
 import com.ljj.easesim.elements.Door;
 import com.ljj.easesim.elements.Light;
 import com.ljj.easesim.elements.Window;
-import com.ljj.easesim.interfaces.User;
+import com.ljj.easesim.abstractions.User;
 import com.ljj.easesim.layout.HouseLayout;
 import com.ljj.easesim.layout.Room;
 import com.ljj.easesim.requestBodies.ToggleRequest;

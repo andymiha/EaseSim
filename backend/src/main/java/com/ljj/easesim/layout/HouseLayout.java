@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.ljj.easesim.builders.RoomBuilder;
 import com.ljj.easesim.elements.*;
-import com.ljj.easesim.interfaces.HouseElement;
-import com.ljj.easesim.interfaces.User;
+import com.ljj.easesim.abstractions.HouseElement;
+import com.ljj.easesim.abstractions.User;
 
 import java.io.File;
 import java.io.IOException;

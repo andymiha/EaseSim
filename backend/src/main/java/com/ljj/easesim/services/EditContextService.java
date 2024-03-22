@@ -3,15 +3,11 @@ package com.ljj.easesim.services;
 import com.ljj.easesim.requestBodies.EditContextFormData;
 import org.springframework.stereotype.Service;
 
-import com.ljj.easesim.interfaces.HouseElement;
-import com.ljj.easesim.interfaces.Command;
 import com.ljj.easesim.layout.HouseLayout;
 import com.ljj.easesim.layout.Room;
 import com.ljj.easesim.elements.Window;
-import com.ljj.easesim.commands.ToggleBlockWindowCommand;
 
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

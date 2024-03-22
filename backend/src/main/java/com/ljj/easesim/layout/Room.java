@@ -1,7 +1,7 @@
 package com.ljj.easesim.layout;
 
 import com.ljj.easesim.elements.*;
-import com.ljj.easesim.interfaces.*;
+import com.ljj.easesim.abstractions.*;
 
 import java.util.ArrayList;
 
