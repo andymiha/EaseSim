@@ -22,12 +22,11 @@ import static java.lang.Integer.parseInt;
 // Allow upload CSV for tempature info.
 public class SmartHomeSimulator {
     private static final SmartHomeSimulator INSTANCE = new SmartHomeSimulator();
-    private ArrayList<User> users;
+    private ArrayList<User> users= new ArrayList<>();
     private User loggedInUser;
 
     public SmartHomeSimulator() {
         ObjectMapper objectMapper = new ObjectMapper();
-        users = new ArrayList<>();
 
         try {
             File file = new File("db.json");

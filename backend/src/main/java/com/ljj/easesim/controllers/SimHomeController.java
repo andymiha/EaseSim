@@ -26,6 +26,20 @@ import java.util.concurrent.atomic.AtomicReference;
 @RestController
 public class SimHomeController {
 
+    @GetMapping("/getUsers")
+    public String getUsers() {
+        SmartHomeSimulator shs = SmartHomeSimulator.getInstance();
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(shs.getUsers());
+        } catch (Exception e) {
+            // Handle the error properly
+            e.printStackTrace();
+            return "Error converting to JSON";
+        }
+    }
+
     @GetMapping("/getHouseLights")
     public String getHouseLights() {
         // test commit
