@@ -4,6 +4,7 @@ import com.ljj.easesim.commands.*;
 import com.ljj.easesim.elements.Door;
 import com.ljj.easesim.elements.Light;
 import com.ljj.easesim.elements.Window;
+import com.ljj.easesim.interfaces.Command;
 import com.ljj.easesim.interfaces.HouseElement;
 import com.ljj.easesim.interfaces.User;
 import com.ljj.easesim.layout.HouseLayout;
@@ -14,7 +15,15 @@ import com.ljj.easesim.users.Parent;
 import com.ljj.easesim.users.Stranger;
 
 public class SmartHomeCore {
+
+    private static final SmartHomeCore INSTANCE = new SmartHomeCore();
+
     // Log all actions (save in log file) and display in console. (Observer)
+
+    public static SmartHomeCore getInstance() {
+        return INSTANCE;
+    }
+
     public Room findElementRoom(HouseElement element) {
         System.out.println("TOGGLE LIGHT");
         HouseLayout house = HouseLayout.getInstance();
@@ -95,11 +104,23 @@ public class SmartHomeCore {
         return light;
     }
 
-    public Door toggleIsAuto(Door door) {
+    public Light toggleIsAuto(Light light, User user) {
+        Room elementRoom = findElementRoom(light);
+        if (user.hasRoomAccess(elementRoom)) {
+            // Toggle the element, return state
+            elementRoom.setCommand(new ToggleIsAutoLightCommand(light));
+            elementRoom.executeCommand();
+        }
+        return light;
+    }
+
+    public Door toggleIsAuto(Door door, User user) {
         Room elementRoom = findElementRoom(door);
-        // Toggle the element, return state
-        elementRoom.setCommand(new ToggleIsAutoDoorCommand(door));
-        elementRoom.executeCommand();
+        if (user.hasRoomAccess(elementRoom)) {
+            // Toggle the element, return state
+            elementRoom.setCommand(new ToggleIsAutoDoorCommand(door));
+            elementRoom.executeCommand();
+        }
         return door;
     }
 }

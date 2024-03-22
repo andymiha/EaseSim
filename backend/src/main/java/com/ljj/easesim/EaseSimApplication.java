@@ -10,7 +10,7 @@ public class EaseSimApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(EaseSimApplication.class, args);
-		SmartHomeSimulator shs = new SmartHomeSimulator();
+		SmartHomeSimulator shs = SmartHomeSimulator.getInstance();
 	}
 
 }

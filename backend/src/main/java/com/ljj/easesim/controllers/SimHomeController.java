@@ -1,10 +1,13 @@
 package com.ljj.easesim.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ljj.easesim.SmartHomeCore;
+import com.ljj.easesim.SmartHomeSimulator;
 import com.ljj.easesim.commands.*;
 import com.ljj.easesim.elements.Door;
 import com.ljj.easesim.elements.Light;
 import com.ljj.easesim.elements.Window;
+import com.ljj.easesim.interfaces.User;
 import com.ljj.easesim.layout.HouseLayout;
 import com.ljj.easesim.layout.Room;
 import com.ljj.easesim.requestBodies.ToggleRequest;
@@ -102,25 +105,31 @@ public class SimHomeController {
     @PostMapping("/toggleLight")
     public ResponseEntity<Map<String, Object>> toggleLight(@RequestBody ToggleRequest request) {
         HouseLayout house = HouseLayout.getInstance();
-        AtomicReference<Room> room = new AtomicReference<Room>();
-        AtomicReference<Light> light = new AtomicReference<Light>();
+        SmartHomeSimulator shs = SmartHomeSimulator.getInstance();
+        SmartHomeCore shc = SmartHomeCore.getInstance();
 
-        house.getHouseLights().forEach((key, value) -> {
-            if (key.getId() == request.getId()) {
-                room.set(house.getRoom(value));
-                light.set((Light) key);
+        // Find Light using id
+        Light foundLight = null;
+        for (Light light : house.getLights()) {
+            if (light.getId() == request.getId()) {
+                foundLight = light;
             }
-        });
+        }
 
-        // Toggle using Command Design Pattern
-        System.out.println(light.get().getState());
-        room.get().setCommand(new ToggleLightCommand(light.get()));
-        room.get().executeCommand();
-        System.out.println(light.get().getState());
+        // Find User using id
+        User foundUser = null;
+        for (User user : shs.getUsers()) {
+            if (user.getId() == request.getUserId()) {
+                foundUser = user;
+            }
+        }
+
+        foundLight = shc.toggle(foundLight, foundUser);
+
         // Prepare the response
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Success");
-        response.put("state", light.get().getState());
+        response.put("state", foundLight.getState());
         // Return the response
         return ResponseEntity.ok(response);
     }

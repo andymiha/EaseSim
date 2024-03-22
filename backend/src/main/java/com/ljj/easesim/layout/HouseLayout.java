@@ -134,12 +134,12 @@ public class HouseLayout {
         return rooms;
     }
 
-    public ArrayList<HouseElement> getAllLights() {
-        ArrayList<HouseElement> lights = new ArrayList<>();
+    public ArrayList<Light> getLights() {
+        ArrayList<Light> lights = new ArrayList<>();
         for (Room room : this.rooms) {
             for (HouseElement element : room.getElements()) {
                 if (element instanceof Light) {
-                    lights.add(element);
+                    lights.add((Light) element);
                 }
             }
         }

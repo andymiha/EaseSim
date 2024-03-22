@@ -21,19 +21,14 @@ import static java.lang.Integer.parseInt;
 
 // Allow upload CSV for tempature info.
 public class SmartHomeSimulator {
-    private SmartHomeCore shc;
+    private static final SmartHomeSimulator INSTANCE = new SmartHomeSimulator();
     private ArrayList<User> users;
     private User loggedInUser;
 
     public SmartHomeSimulator() {
         ObjectMapper objectMapper = new ObjectMapper();
         users = new ArrayList<>();
-        shc = new SmartHomeCore();
-        new HouseLayout();
 
-        // Test toggle using SHC
-        Light light = shc.toggle(HouseLayout.getInstance().getRoom("Bedroom1").getLights().get(0));
-        System.out.println(light.getState());
         try {
             File file = new File("db.json");
             Map<String, Object> dbData = objectMapper.readValue(file, new TypeReference<>() {});
@@ -47,6 +42,13 @@ public class SmartHomeSimulator {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        // Place 'Guest' in room to test permissions
+        HouseLayout.getInstance().getRoom("Bathroom").addUser(getUser(2));
+    }
+
+    public static SmartHomeSimulator getInstance() {
+        return INSTANCE;
     }
 
     public User getUser(int id) {
