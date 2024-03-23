@@ -19,7 +19,7 @@ import java.util.Map;
 
 import static java.lang.Integer.parseInt;
 
-// Allow upload CSV for tempature info.
+// Allow upload CSV for temperature info.
 public class SmartHomeSimulator {
     private static final SmartHomeSimulator INSTANCE = new SmartHomeSimulator();
     private ArrayList<User> users= new ArrayList<>();

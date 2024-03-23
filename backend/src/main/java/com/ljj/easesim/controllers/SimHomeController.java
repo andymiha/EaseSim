@@ -12,10 +12,7 @@ import com.ljj.easesim.layout.HouseLayout;
 import com.ljj.easesim.layout.Room;
 import com.ljj.easesim.requestBodies.ToggleRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +36,42 @@ public class SimHomeController {
             return "Error converting to JSON";
         }
     }
+
+    @GetMapping("/getUser/{id}")
+    public String getUser(@PathVariable("id") int id){
+        SmartHomeSimulator shs = SmartHomeSimulator.getInstance();
+        User user = shs.getUser(id);
+
+        if (user != null) {
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                return mapper.writeValueAsString((user);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return "Error converting to JSON";
+            }
+        }
+        else{
+            return "User not found";
+        }
+    }
+
+//    @PostMapping("/addUser")
+//    public ResponseEntity <Map<String, Object>> addUser(@RequestParam int id,
+//                                          @RequestParam String userType,
+//                                          @RequestParam String name) {
+//        SmartHomeSimulator shs = SmartHomeSimulator.getInstance();
+//        User user = null;
+//        user = shs.addUser(id, userType, name); // Assume addUser method returns a boolean indicating success
+//
+//        Map<String, Object> response = new HashMap<>();
+//        response.put("message", "Success");
+//        response.put("user", user);
+//        return ResponseEntity.ok(response);
+//
+//    }
+
+
 
     @GetMapping("/getHouseLights")
     public String getHouseLights() {
