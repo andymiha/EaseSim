@@ -1,68 +1,36 @@
 package com.ljj.easesim.elements;
 
-import com.ljj.easesim.abstractions.HouseElement;
+import com.ljj.easesim.interfaces.HouseElement;
 import java.util.AbstractMap;
 
-public class Door extends HouseElement {
+public class Door implements HouseElement {
+    private int id;
+    private boolean isOpen;
     private boolean isAuto;
-    private boolean isBlocked;
-
-    //the main room door is inherited through the abstract definition
-    //
     private AbstractMap.SimpleEntry<String, String> roomConnection;
-
-
-    public Door() {
-        this.isBlocked = false; // By default, window is unblocked
+    @Override
+    public void toggle() {
+        isOpen = !isOpen;
     }
 
     @Override
-    public void toggle() {
-        if (!isBlocked) {
-            isOpen = !isOpen;
-        }
+    public int getId() {
+        return id;
     }
-
-    public boolean getBlockedState() {
-        return isBlocked;
+    @Override
+    public void setId(int id) {
+        this.id = id;
     }
-
-    public void setBlocked(boolean blocked) {
-        isBlocked = blocked;
-    }
-
-    public void toggleBlocked() {
-        isBlocked = !isBlocked;
-
+    @Override
+    public boolean getState() {
+        return isOpen;
     }
 
     public boolean getIsAutoState() {
         return isAuto;
     }
 
-    public void setIsAutoState(boolean auto) {
-        this.isAuto = auto;
+    public void setIsAutoState(boolean isAuto) {
+        this.isAuto = isAuto;
     }
-
-    public AbstractMap.SimpleEntry<String, String> getRoomConnection() {
-        return roomConnection;
-    }
-
-    public void setRoomConnection(AbstractMap.SimpleEntry<String, String> roomConnection) {
-        this.roomConnection = roomConnection;
-    }
-
-    @Override
-    public String toString() {
-        return "Door{" +
-                "id=" + id +
-                ", room=" + room.getName() +
-                ", roomConnection=" + roomConnection +
-                ", isBlocked=" + isBlocked +
-                ", isAuto=" + isAuto +
-                ", isOpen=" + isOpen +
-                '}';
-    }
-
-
 }

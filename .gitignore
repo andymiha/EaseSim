@@ -1,6 +1,5 @@
 .DS_Store
 workspace.code-workspace
-/backend/bin/.**
 frontend/node_modules
 frontend/package-lock.json
 backend/bin/

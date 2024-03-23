@@ -1,4 +1,4 @@
-package com.ljj.easesim.abstractions;
+package com.ljj.easesim.interfaces;
 
 public interface Command {
     void execute();

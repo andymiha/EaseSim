@@ -2,7 +2,7 @@ package com.ljj.easesim.commands;
 
 
 import com.ljj.easesim.elements.Window;
-import com.ljj.easesim.abstractions.Command;
+import com.ljj.easesim.interfaces.Command;
 
 public class ToggleBlockWindowCommand implements Command {
 

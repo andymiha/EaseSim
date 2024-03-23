@@ -1,8 +1,8 @@
 package com.ljj.easesim.builders;
 
 import com.ljj.easesim.layout.Room;
-import com.ljj.easesim.abstractions.HouseElement;
-import com.ljj.easesim.abstractions.User;
+import com.ljj.easesim.interfaces.HouseElement;
+import com.ljj.easesim.interfaces.User;
 
 import java.util.ArrayList;
 
@@ -26,15 +26,6 @@ public class RoomBuilder {
         this.elements = elements;
         return this;
     }
-
-    public RoomBuilder addElement(HouseElement element) {
-        if (this.elements == null) {
-            this.elements = new ArrayList<>();
-        }
-        this.elements.add(element);
-        return this;
-    }
-
 
     public RoomBuilder users(ArrayList<User> users) {
         this.users = users;

@@ -1,7 +1,7 @@
 package com.ljj.easesim.layout;
 
 import com.ljj.easesim.elements.*;
-import com.ljj.easesim.abstractions.*;
+import com.ljj.easesim.interfaces.*;
 
 import java.util.ArrayList;
 
@@ -19,7 +19,7 @@ public class Room {
         this.users = users;
     }
 
-
+    //getters
     public int getId() {
         return this.id;
     }
@@ -93,14 +93,4 @@ public class Room {
         return lights;
     }
 
-    @Override
-    public String toString() {
-        return "Room{" +
-                "id=" + id +
-                ", command=" + command +
-                ", name='" + name + '\'' +
-                ", elements=" + elements +
-                ", users=" + users +
-                '}';
-    }
 }
