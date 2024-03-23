@@ -30,6 +30,7 @@ public class HouseLayout {
             List<Map<String, Object>> layoutData = objectMapper.readValue(file, new TypeReference<>() {});
             Map<String, Door> doorMap = new HashMap<>();
 
+            System.out.println("\nDISPLAYING CREATED ROOMS...");
             // Iterate over obj array in the Layout.txt file and create Rooms
             for(Map<String, Object> roomData : layoutData) {
                 ArrayList<HouseElement> elements = new ArrayList<>();
@@ -86,10 +87,10 @@ public class HouseLayout {
                 this.rooms.add(room);
 
                 // Display Separator Line
-                System.out.println("\n" + "-".repeat(700));
+                System.out.println("-".repeat(700));
 
                 // Display room content
-                System.out.println("Created " + room.toString() + "\n");
+                System.out.println("Created " + room.toString());
 
                 // Display getRoom test results
 //                System.out.println("Testing getRoom on elements of Room " + room.getName() + "\n");
@@ -102,7 +103,6 @@ public class HouseLayout {
 //                    }
 //                }
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
