@@ -52,13 +52,7 @@ public class HouseLayout {
                     light = new Light();
                     light.setId(++idCounter);
                     elements.add(light);
-
-                    if (light != null) {
-                        light.setRoom(room);
-                        System.out.println("added light " + light.toString());
-                    } else {
-                        System.out.println("light is null");
-                    }
+                    light.setRoom(room);
                 }
 
                 // Add Windows
@@ -66,13 +60,7 @@ public class HouseLayout {
                     window = new Window();
                     window.setId(++idCounter);
                     elements.add(window);
-
-                    if (window != null) {
-                        window.setRoom(room);
-                        System.out.println("added window " + window.toString());
-                    } else {
-                        System.out.println("window is null");
-                    }
+                    window.setRoom(room);
                 }
 
                 for(String roomConnectionName : doorsTo) {
@@ -82,15 +70,10 @@ public class HouseLayout {
                         door = new Door(); // Create new door
                         door.setId(++idCounter);
                         doorMap.put(roomConnectionName, door); // Track the new door
+                        door.setRoom(room);
                     }
                     elements.add(door);
 
-                    if (door != null) {
-                        door.setRoom(room);
-                        System.out.println("added door " + door.toString());
-                    } else {
-                        System.out.println("door is null");
-                    }
                 }
 
                 this.rooms.add(room);
@@ -100,7 +83,6 @@ public class HouseLayout {
                 for (HouseElement element : room.getElements()) {
                     Room location = element.getRoom();
                     if (location != null) {
-                        // Do something with the room object
                         System.out.println("Room found for " + element.toString() + ": " + room.getName());
                     } else {
                         System.out.println("Room not found for " + element.toString());

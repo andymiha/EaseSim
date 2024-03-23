@@ -11,7 +11,7 @@ public class EaseSimApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(EaseSimApplication.class, args);
 		SmartHomeSimulator shs = SmartHomeSimulator.getInstance();
-		shs.testSHCFunctions();
+		//shs.testSHCFunctions();
 	}
 
 }

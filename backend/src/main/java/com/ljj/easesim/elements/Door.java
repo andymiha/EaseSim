@@ -6,6 +6,9 @@ import java.util.AbstractMap;
 public class Door extends HouseElement {
     private boolean isAuto;
     private boolean isBlocked;
+
+    //the main room door is inherited through the abstract definition
+    //
     private AbstractMap.SimpleEntry<String, String> roomConnection;
 
 
