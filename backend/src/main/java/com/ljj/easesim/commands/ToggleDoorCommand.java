@@ -1,7 +1,7 @@
 package com.ljj.easesim.commands;
 
 import com.ljj.easesim.elements.Door;
-import com.ljj.easesim.interfaces.Command;
+import com.ljj.easesim.abstractions.Command;
 
 public class ToggleDoorCommand implements Command {
     private Door door;
