@@ -1,7 +1,7 @@
 package com.ljj.easesim.commands;
 
 import com.ljj.easesim.elements.Light;
-import com.ljj.easesim.interfaces.Command;
+import com.ljj.easesim.abstractions.Command;
 
 public class ToggleLightCommand implements Command {
     private Light light;
