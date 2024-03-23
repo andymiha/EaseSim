@@ -118,7 +118,7 @@ public class Room {
         return "Room{" +
                 "id=" + id +
                 ", command=" + command +
-                ", name='" + name + '\'' +
+                ", name=" + name  +
                 ", elements=" + elements +
                 ", users=" + users +
                 '}';
