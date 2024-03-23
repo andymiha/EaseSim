@@ -1,12 +1,26 @@
 /* SHHStyles.css */
 
+/* Style for the edit-temp input */
 .edit-temp-input {
     width: 80px;
+    height: 32px; /* Adjust height as needed */
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
   }
+/* Style for the time cell */
+.time-cell {
+    white-space: normal;
+    width: 200px; /* Adjust width as needed */
+  }
   
-  /* Add more styles as needed for components in the SHH tab */
-  
+  /* Style for the Select component */
+  .time-cell .MuiSelect-root {
+    width: 200px;/* Allow the Select component to fill the entire width of the time cell */
+    height: 32px; /* Adjust height to match edit-temp input */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
