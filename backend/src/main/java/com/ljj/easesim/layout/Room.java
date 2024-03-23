@@ -12,6 +12,10 @@ public class Room {
     private ArrayList<HouseElement> elements;
     private ArrayList<User> users;
 
+    private double currentTemp;
+
+    private double desiredTemp;
+
     public Room(int id, String name, ArrayList<HouseElement> elements, ArrayList<User> users) {
         this.id = id;
         this.name = name;
@@ -26,6 +30,22 @@ public class Room {
 
     public String getName() {
         return this.name;
+    }
+
+    public double getCurrentTemp() {
+        return currentTemp;
+    }
+
+    public double getDesiredTemp() {
+        return desiredTemp;
+    }
+
+    public void setCurrentTemp(double currentTemp) {
+        this.currentTemp = currentTemp;
+    }
+
+    public void setDesiredTemp(double desiredTemp) {
+        this.desiredTemp = desiredTemp;
     }
 
     public ArrayList<User> getUsers() {

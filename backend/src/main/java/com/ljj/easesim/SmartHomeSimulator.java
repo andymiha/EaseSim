@@ -2,11 +2,15 @@ package com.ljj.easesim;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import com.ljj.easesim.controllers.ClockController;
 import com.ljj.easesim.abstractions.*;
 import com.ljj.easesim.layout.*;
 import com.ljj.easesim.elements.*;
 import com.ljj.easesim.users.*;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -22,12 +26,15 @@ public class SmartHomeSimulator {
 
     private final SmartHomeCore shc;
     private final SmartHomeHeating shh;
+    ClockController clockController;  // Instantiate the ClockController
+
 
     public SmartHomeSimulator() {
         users = new ArrayList<>();
         houseLayout = new HouseLayout();
         shc = SmartHomeCore.getInstance();
         shh = SmartHomeHeating.getInstance();
+        clockController = new ClockController();
 
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -103,6 +110,9 @@ public class SmartHomeSimulator {
         users.removeIf(user -> user.getId() == id);
     }
 
+//    public void startClock(){
+//        clockController.startClock();
+//    }
 
     //----------------------------------------------------------------------------------------------------------------
     //SHC testing

@@ -3,11 +3,11 @@ package com.ljj.easesim.elements;
 import com.ljj.easesim.abstractions.HouseElement;
 
 public class Light extends HouseElement {
+    private boolean isAuto;
+
     public Light() {
         this.isAuto = false;
     }
-
-    private boolean isAuto;
 
     public boolean getIsAutoState() {
         return isAuto;
@@ -21,7 +21,7 @@ public class Light extends HouseElement {
     public String toString() {
         return "Light{" +
                 "id=" + id +
-                ", room=" + room.getName() +
+                ", room="  +
                 ", isAuto=" + isAuto +
                 ", isOpen=" + isOpen +
                 '}';

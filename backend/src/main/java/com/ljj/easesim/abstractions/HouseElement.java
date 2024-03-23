@@ -1,9 +1,13 @@
 package com.ljj.easesim.abstractions;
 
-import com.ljj.easesim.layout.Room;
+import com.ljj.easesim.SmartHomeSimulator;
+import com.ljj.easesim.layout.*;
+
+import java.util.Map;
+import java.util.HashMap;
 
 public abstract class HouseElement {
-    protected Room room;
+    protected String roomName;
     protected int id;
     protected boolean isOpen;
 
@@ -27,11 +31,15 @@ public abstract class HouseElement {
         isOpen = !isOpen;
     }
 
-    public Room getRoom() {
-        return room;
+    public String getRoomName() {
+        return roomName;
     }
 
-    public void setRoom(Room room) {
-        this.room = room;
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+
+    public Room getRoom(int roomId) {
+        return SmartHomeSimulator.getInstance().getHouseLayout().getRoom(roomName);
     }
 }
