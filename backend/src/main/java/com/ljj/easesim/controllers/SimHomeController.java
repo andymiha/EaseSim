@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static java.lang.Integer.parseInt;
+
 @RestController
 public class SimHomeController {
 
@@ -45,7 +47,7 @@ public class SimHomeController {
         if (user != null) {
             ObjectMapper mapper = new ObjectMapper();
             try {
-                return mapper.writeValueAsString((user);
+                return mapper.writeValueAsString((user));
             } catch (Exception e) {
                 e.printStackTrace();
                 return "Error converting to JSON";
