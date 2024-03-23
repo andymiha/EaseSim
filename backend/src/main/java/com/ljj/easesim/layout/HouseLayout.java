@@ -14,12 +14,28 @@ import java.util.*;
 
 public class HouseLayout {
     // ID Counter necessary for incrementing room ids when creating rooms.
+
+    private static HouseLayout instance = null;
     private int idCounter = 0;
     private ArrayList<Room> rooms;
+
+    public static HouseLayout getInstance() {
+        if (instance == null) {
+            instance = new HouseLayout();
+        }
+        return instance;
+    }
+
 
     // Constructor
     public HouseLayout() {
         rooms = new ArrayList<>();
+        initializeRooms();
+
+    }
+
+    //Creates all rooms
+    private void initializeRooms() {
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
@@ -106,6 +122,7 @@ public class HouseLayout {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     // Methods

@@ -31,7 +31,7 @@ public class SmartHomeSimulator {
 
     public SmartHomeSimulator() {
         users = new ArrayList<>();
-        houseLayout = new HouseLayout();
+        houseLayout = HouseLayout.getInstance();
         shc = SmartHomeCore.getInstance();
         shh = SmartHomeHeating.getInstance();
         clockController = new ClockController();
