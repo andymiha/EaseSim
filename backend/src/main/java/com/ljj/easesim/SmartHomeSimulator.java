@@ -125,30 +125,40 @@ public class SmartHomeSimulator {
 
     public void testSHCFunctions() {
         // Create sample light, window, and door
-        Light sampleLight = new Light();
-        Window sampleWindow = new Window();
-        Door sampleDoor = new Door();
+        Light sampleLight = houseLayout.getRooms().get(0).getLights().get(0);
+        Window sampleWindow = houseLayout.getRooms().get(0).getWindows().get(0);
+        Door sampleDoor = houseLayout.getRooms().get(0).getDoors().get(0);
 
         // Test toggleLight function
-        System.out.println("Testing toggleLight:");
+        System.out.println("Testing toggleLight for " + sampleLight.toString());
         toggleLight(sampleLight);
+        System.out.println("Result: " + sampleLight.toString());
+
 
         // Test toggleWindow function
-        System.out.println("\nTesting toggleWindow:");
+        System.out.println("\nTesting toggleWindow for " + sampleWindow.toString());
         toggleWindow(sampleWindow);
+        System.out.println("Result: " + sampleWindow.toString());
+
 
         // Test toggleDoor function
-        System.out.println("\nTesting toggleDoor:");
+        System.out.println("\nTesting toggleDoor for " + sampleDoor.toString());
         toggleDoor(sampleDoor);
+        System.out.println("Result: " + sampleDoor.toString());
+
 
         // Test toggleIsAutoLight function
-        System.out.println("\nTesting toggleIsAutoLight:");
+        System.out.println("\nTesting toggleIsAutoLight for " + sampleLight.toString());
         toggleIsAutoLight(sampleLight);
+        System.out.println("Result: " + sampleLight.toString());
 
         // Test toggleIsAutoDoor function with a sample user
-        System.out.println("\nTesting toggleIsAutoDoor:");
+        System.out.println("\nTesting toggleLIsAutoDoor for " + sampleDoor.toString());
         User sampleUser = new Guest(1, "John Doe");
         toggleIsAutoDoor(sampleDoor, sampleUser);
+        System.out.println("Result: " + sampleDoor.toString());
+
+        //fix setRoom to doors (multiple rooms to doors)
     }
 
     // God API Method

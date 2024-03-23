@@ -49,21 +49,17 @@ public class Door extends HouseElement {
         this.roomConnection = roomConnection;
     }
 
-//    @Override
-//    public String toString() {
-//        return "Door{" +
-//                "isAuto=" + isAuto +
-//                ", isBlocked=" + isBlocked +
-//                ", roomConnection=" + roomConnection +
-//                ", room=" + room +
-//                ", id=" + id +
-//                ", isOpen=" + isOpen +
-//                '}';
-//    }
-
     @Override
     public String toString() {
-        return "Door id : " + id;
+        return "Door{" +
+                "id=" + id +
+                ", room=" + room.getName() +
+                ", roomConnection=" + roomConnection +
+                ", isBlocked=" + isBlocked +
+                ", isAuto=" + isAuto +
+                ", isOpen=" + isOpen +
+                '}';
     }
+
 
 }

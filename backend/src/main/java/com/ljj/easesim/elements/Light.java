@@ -17,18 +17,13 @@ public class Light extends HouseElement {
         this.isAuto = isAuto;
     }
 
-//    @Override
-//    public String toString() {
-//        return "Light{" +
-//                "isAuto=" + isAuto +
-//                ", room=" + room +
-//                ", id=" + id +
-//                ", isOpen=" + isOpen +
-//                '}';
-//    }
-
     @Override
     public String toString() {
-        return "Light id : " + id;
+        return "Light{" +
+                "id=" + id +
+                ", room=" + room.getName() +
+                ", isAuto=" + isAuto +
+                ", isOpen=" + isOpen +
+                '}';
     }
 }
