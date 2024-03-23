@@ -1,10 +1,13 @@
 package com.ljj.easesim.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ljj.easesim.SmartHomeCore;
+import com.ljj.easesim.SmartHomeSimulator;
 import com.ljj.easesim.commands.*;
 import com.ljj.easesim.elements.Door;
 import com.ljj.easesim.elements.Light;
 import com.ljj.easesim.elements.Window;
+import com.ljj.easesim.abstractions.User;
 import com.ljj.easesim.layout.HouseLayout;
 import com.ljj.easesim.layout.Room;
 import com.ljj.easesim.requestBodies.ToggleRequest;
@@ -23,10 +26,24 @@ import java.util.concurrent.atomic.AtomicReference;
 @RestController
 public class SimHomeController {
 
+    @GetMapping("/getUsers")
+    public String getUsers() {
+        SmartHomeSimulator shs = SmartHomeSimulator.getInstance();
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(shs.getUsers());
+        } catch (Exception e) {
+            // Handle the error properly
+            e.printStackTrace();
+            return "Error converting to JSON";
+        }
+    }
+
     @GetMapping("/getHouseLights")
     public String getHouseLights() {
         // test commit
-        HouseLayout house = HouseLayout.getInstance();
+        HouseLayout house = SmartHomeSimulator.getInstance().getHouseLayout();
         List<Map<String, Object>> roomsList = new ArrayList<>();
 
         house.getHouseLights().forEach((key, value) -> {
@@ -51,7 +68,7 @@ public class SimHomeController {
 
     @GetMapping("/getHouseWindows")
     public String getHouseWindows() {
-        HouseLayout house = HouseLayout.getInstance();
+        HouseLayout house = SmartHomeSimulator.getInstance().getHouseLayout();
         List<Map<String, Object>> roomsList = new ArrayList<>();
 
         house.getHouseWindows().forEach((key, value) -> {
@@ -76,7 +93,7 @@ public class SimHomeController {
 
     @GetMapping("/getHouseDoors")
     public String getHouseDoors() {
-        HouseLayout house = HouseLayout.getInstance();
+        HouseLayout house = SmartHomeSimulator.getInstance().getHouseLayout();
         List<Map<String, Object>> roomsList = new ArrayList<>();
 
         house.getHouseDoors().forEach((key, value) -> {
@@ -101,33 +118,39 @@ public class SimHomeController {
 
     @PostMapping("/toggleLight")
     public ResponseEntity<Map<String, Object>> toggleLight(@RequestBody ToggleRequest request) {
-        HouseLayout house = HouseLayout.getInstance();
-        AtomicReference<Room> room = new AtomicReference<Room>();
-        AtomicReference<Light> light = new AtomicReference<Light>();
+        HouseLayout house = SmartHomeSimulator.getInstance().getHouseLayout();
+        SmartHomeSimulator shs = SmartHomeSimulator.getInstance();
+        SmartHomeCore shc = SmartHomeCore.getInstance();
 
-        house.getHouseLights().forEach((key, value) -> {
-            if (key.getId() == request.getId()) {
-                room.set(house.getRoom(value));
-                light.set((Light) key);
+        // Find Light using id
+        Light foundLight = null;
+        for (Light light : house.getLights()) {
+            if (light.getId() == request.getId()) {
+                foundLight = light;
             }
-        });
+        }
 
-        // Toggle using Command Design Pattern
-        System.out.println(light.get().getState());
-        room.get().setCommand(new ToggleLightCommand(light.get()));
-        room.get().executeCommand();
-        System.out.println(light.get().getState());
+        // Find User using id
+        User foundUser = null;
+        for (User user : shs.getUsers()) {
+            if (user.getId() == request.getUserId()) {
+                foundUser = user;
+            }
+        }
+
+        foundLight = shc.toggle(foundLight, foundUser);
+
         // Prepare the response
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Success");
-        response.put("state", light.get().getState());
+        response.put("state", foundLight.getState());
         // Return the response
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/toggleWindow")
     public ResponseEntity<Map<String, Object>> toggleWindow(@RequestBody ToggleRequest request) {
-        HouseLayout house = HouseLayout.getInstance();
+        HouseLayout house = SmartHomeSimulator.getInstance().getHouseLayout();
         AtomicReference<Room> room = new AtomicReference<Room>();
         AtomicReference<Window> window = new AtomicReference<Window>();
 
@@ -153,7 +176,7 @@ public class SimHomeController {
 
     @PostMapping("/toggleDoor")
     public ResponseEntity<Map<String, Object>> toggleDoor(@RequestBody ToggleRequest request) {
-        HouseLayout house = HouseLayout.getInstance();
+        HouseLayout house = SmartHomeSimulator.getInstance().getHouseLayout();
         AtomicReference<Room> room = new AtomicReference<Room>();
         AtomicReference<Door> door = new AtomicReference<Door>();
 
@@ -179,7 +202,7 @@ public class SimHomeController {
 
     @PostMapping("/toggleIsAutoLight")
     public ResponseEntity<Map<String, Object>> toggleIsAutoLight(@RequestBody ToggleRequest request) {
-        HouseLayout house = HouseLayout.getInstance();
+        HouseLayout house = SmartHomeSimulator.getInstance().getHouseLayout();
         AtomicReference<Room> room = new AtomicReference<Room>();
         AtomicReference<Light> light = new AtomicReference<Light>();
 
@@ -205,7 +228,7 @@ public class SimHomeController {
 
     @PostMapping("/toggleIsAutoDoor")
     public ResponseEntity<Map<String, Object>> toggleIsAutoDoor(@RequestBody ToggleRequest request) {
-        HouseLayout house = HouseLayout.getInstance();
+        HouseLayout house = SmartHomeSimulator.getInstance().getHouseLayout();
         AtomicReference<Room> room = new AtomicReference<Room>();
         AtomicReference<Door> door = new AtomicReference<Door>();
 
