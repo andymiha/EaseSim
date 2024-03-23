@@ -24,16 +24,12 @@ public class SmartHomeSimulator {
     private User loggedInUser;
     private final HouseLayout houseLayout;
 
-    private final SmartHomeCore shc;
-    private final SmartHomeHeating shh;
     ClockController clockController;  // Instantiate the ClockController
 
 
     public SmartHomeSimulator() {
         users = new ArrayList<>();
         houseLayout = HouseLayout.getInstance();
-        shc = SmartHomeCore.getInstance();
-        shh = SmartHomeHeating.getInstance();
         clockController = new ClockController();
 
 
@@ -110,109 +106,57 @@ public class SmartHomeSimulator {
         users.removeIf(user -> user.getId() == id);
     }
 
+    //METHODS
+
+    public String getCurrentTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        Date currentTime = new Date();
+        return dateFormat.format(currentTime);
+    }
+
 //    public void startClock(){
 //        clockController.startClock();
 //    }
 
-    //----------------------------------------------------------------------------------------------------------------
-    //SHC testing
-    //To be rethought/refactored -- just for testing purposes
-    public void toggleLight(Light light) {
-        shc.toggle(light); // Use SHC method to toggle light
-    }
+//    //----------------------------------------------------------------------------------------------------------------
+//    //SHH testing
+//    //To be rethought/refactored -- just for testing purposes
+//
+//    // God API Method
+//
+//    public void testSHHFunctions() {
+//        // Display Separator Line
+//        System.out.println("\n" + "-".repeat(700));
+//        System.out.println("-".repeat(700));
+//        System.out.println("TESTING SHH FUNCTIONS\n");
+//
+//        System.out.println("\nTesting heating zone creation...\n");
+//
+//        shh.createHeatingZone("Living Room");
+//        System.out.println("Living Room heating zone created successfully.");
+//        System.out.println("Living Room heating zone is empty: " + shh.getRoomsInHeatingZone("Living Room").isEmpty());
+//
+//        shh.createHeatingZone("Kitchen");
+//        System.out.println("Kitchen heating zone created successfully.");
+//        System.out.println("Kitchen heating zone is empty: " + shh.getRoomsInHeatingZone("Kitchen").isEmpty());
+//
+//        SmartHomeHeating shh = SmartHomeHeating.getInstance();
+//
+//        // Test adding rooms to heating zones
+//        Room room1 = houseLayout.getRooms().get(0);
+//        Room room2 = houseLayout.getRooms().get(1);
+//
+//        shh.addRoomToHeatingZone("Living Room", room1);
+//        shh.addRoomToHeatingZone("Kitchen", room2);
+//
+//        // Verify that rooms are added to the correct heating zones
+//        System.out.println("\nTesting adding rooms to heating zones...\n");
+//
+//        System.out.println("Room added to Living Room heating zone: " + shh.getRoomsInHeatingZone("Living Room").contains(room1));
+//        System.out.println("Room added to Kitchen heating zone: " + shh.getRoomsInHeatingZone("Kitchen").contains(room2));
+//
+//        System.out.println("Living Room heating zone contents: " + shh.getRoomsInHeatingZone("Living Room"));
+//        System.out.println("Kitchen heating zone contents: " + shh.getRoomsInHeatingZone("Kitchen"));
+//    }
 
-    public void toggleWindow(Window window) {
-        shc.toggle(window); // Use SHC method to toggle window
-    }
-
-    public void toggleDoor(Door door) {
-        shc.toggle(door); // Use SHC method to toggle door
-    }
-
-    public void toggleIsAutoLight(Light light) {
-        shc.toggleIsAuto(light); // Use SHC method to toggle light's auto state
-    }
-
-    public void toggleIsAutoDoor(Door door, User user) {
-        shc.toggleIsAuto(door, user); // Use SHC method to toggle door's auto state with user permissions
-    }
-
-    public void testSHCFunctions() {
-        // Create sample light, window, and door
-        Light sampleLight = houseLayout.getRooms().get(0).getLights().get(0);
-        Window sampleWindow = houseLayout.getRooms().get(0).getWindows().get(0);
-        Door sampleDoor = houseLayout.getRooms().get(0).getDoors().get(0);
-
-        // Test toggleLight function
-        System.out.println("Testing toggleLight for " + sampleLight.toString());
-        toggleLight(sampleLight);
-        System.out.println("Result: " + sampleLight.toString());
-
-
-        // Test toggleWindow function
-        System.out.println("\nTesting toggleWindow for " + sampleWindow.toString());
-        toggleWindow(sampleWindow);
-        System.out.println("Result: " + sampleWindow.toString());
-
-
-        // Test toggleDoor function
-        System.out.println("\nTesting toggleDoor for " + sampleDoor.toString());
-        toggleDoor(sampleDoor);
-        System.out.println("Result: " + sampleDoor.toString());
-
-
-        // Test toggleIsAutoLight function
-        System.out.println("\nTesting toggleIsAutoLight for " + sampleLight.toString());
-        toggleIsAutoLight(sampleLight);
-        System.out.println("Result: " + sampleLight.toString());
-
-        // Test toggleIsAutoDoor function with a sample user
-        System.out.println("\nTesting toggleLIsAutoDoor for " + sampleDoor.toString());
-        User sampleUser = new Guest(1, "John Doe");
-        toggleIsAutoDoor(sampleDoor, sampleUser);
-        System.out.println("Result: " + sampleDoor.toString());
-
-    }
-
-    //----------------------------------------------------------------------------------------------------------------
-    //SHH testing
-    //To be rethought/refactored -- just for testing purposes
-
-    // God API Method
-
-    public void testHeatingZoneCreation() {
-        // Display Separator Line
-        System.out.println("\n" + "-".repeat(700));
-        System.out.println("-".repeat(700));
-
-        System.out.println("\nTesting heating zone creation...\n");
-
-        shh.createHeatingZone("Living Room");
-        System.out.println("Living Room heating zone created successfully.");
-        System.out.println("Living Room heating zone is empty: " + shh.getRoomsInHeatingZone("Living Room").isEmpty());
-
-        shh.createHeatingZone("Kitchen");
-        System.out.println("Kitchen heating zone created successfully.");
-        System.out.println("Kitchen heating zone is empty: " + shh.getRoomsInHeatingZone("Kitchen").isEmpty());
-    }
-
-    public void testAddingRoomsToHeatingZone() {
-        SmartHomeHeating shh = SmartHomeHeating.getInstance();
-
-        // Test adding rooms to heating zones
-        Room room1 = houseLayout.getRooms().get(0);
-        Room room2 = houseLayout.getRooms().get(1);
-
-        shh.addRoomToHeatingZone("Living Room", room1);
-        shh.addRoomToHeatingZone("Kitchen", room2);
-
-        // Verify that rooms are added to the correct heating zones
-        System.out.println("\nTesting adding rooms to heating zones...\n");
-
-        System.out.println("Room added to Living Room heating zone: " + shh.getRoomsInHeatingZone("Living Room").contains(room1));
-        System.out.println("Room added to Kitchen heating zone: " + shh.getRoomsInHeatingZone("Kitchen").contains(room2));
-
-        System.out.println("Living Room heating zone contents: " + shh.getRoomsInHeatingZone("Living Room"));
-        System.out.println("Kitchen heating zone contents: " + shh.getRoomsInHeatingZone("Kitchen"));
-    }
 }

@@ -21,7 +21,7 @@ public class Light extends HouseElement {
     public String toString() {
         return "Light{" +
                 "id=" + id +
-                ", room="  + roomName +
+                ", roomName="  + roomName +
                 ", isAuto=" + isAuto +
                 ", isOpen=" + isOpen +
                 '}';
