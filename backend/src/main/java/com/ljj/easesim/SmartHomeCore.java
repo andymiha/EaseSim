@@ -22,10 +22,10 @@ public class SmartHomeCore {
     }
 
     public Room findElementRoom(HouseElement element) {
-        System.out.println("TOGGLE LIGHT");
+        System.out.println("TOGGLE " + element.toString());
 //        System.out.println(element.getId());
         Room foundRoom = null;
-        System.out.println(house.getRooms().size());
+        System.out.println("Size = " + house.getRooms().size());
 
         for (Room room : house.getRooms()) {
             for (HouseElement roomElement : room.getElements()) {

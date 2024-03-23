@@ -2,12 +2,11 @@ package com.ljj.easesim;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ljj.easesim.abstractions.HouseElement;
 import com.ljj.easesim.abstractions.User;
 import com.ljj.easesim.layout.HouseLayout;
-import com.ljj.easesim.users.Child;
-import com.ljj.easesim.users.Guest;
-import com.ljj.easesim.users.Parent;
-import com.ljj.easesim.users.Stranger;
+import com.ljj.easesim.elements.*;
+import com.ljj.easesim.users.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,17 +17,20 @@ import static java.lang.Integer.parseInt;
 
 // Allow upload CSV for temperature info.
 public class SmartHomeSimulator {
-    private static final SmartHomeSimulator INSTANCE = new SmartHomeSimulator();
+    private static SmartHomeSimulator INSTANCE = null;
     private ArrayList<User> users;
     private User loggedInUser;
-    private HouseLayout houseLayout;
+    private final HouseLayout houseLayout;
+
+    private final SmartHomeCore shc;
 
     public SmartHomeSimulator() {
-        ObjectMapper objectMapper = new ObjectMapper();
         users = new ArrayList<>();
         houseLayout = new HouseLayout();
+        shc = SmartHomeCore.getInstance();
 
 
+        ObjectMapper objectMapper = new ObjectMapper();
         try {
             File file = new File("db.json");
             Map<String, Object> dbData = objectMapper.readValue(file, new TypeReference<>() {});
@@ -47,7 +49,30 @@ public class SmartHomeSimulator {
         //HouseLayout.getInstance().getRoom("Bathroom").addUser(getUser(2));
     }
 
+    public void toggleLight(Light light) {
+        shc.toggle(light); // Use SHC method to toggle light
+    }
+
+    public void toggleWindow(Window window) {
+        shc.toggle(window); // Use SHC method to toggle window
+    }
+
+    public void toggleDoor(Door door) {
+        shc.toggle(door); // Use SHC method to toggle door
+    }
+
+    public void toggleIsAutoLight(Light light) {
+        shc.toggleIsAuto(light); // Use SHC method to toggle light's auto state
+    }
+
+    public void toggleIsAutoDoor(Door door, User user) {
+        shc.toggleIsAuto(door, user); // Use SHC method to toggle door's auto state with user permissions
+    }
+
     public static SmartHomeSimulator getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new SmartHomeSimulator(); // Create new instance if null
+        }
         return INSTANCE;
     }
 
@@ -96,6 +121,34 @@ public class SmartHomeSimulator {
 
     public void deleteUser(int id) {
         users.removeIf(user -> user.getId() == id);
+    }
+
+    public void testSHCFunctions() {
+        // Create sample light, window, and door
+        Light sampleLight = new Light();
+        Window sampleWindow = new Window();
+        Door sampleDoor = new Door();
+
+        // Test toggleLight function
+        System.out.println("Testing toggleLight:");
+        toggleLight(sampleLight);
+
+        // Test toggleWindow function
+        System.out.println("\nTesting toggleWindow:");
+        toggleWindow(sampleWindow);
+
+        // Test toggleDoor function
+        System.out.println("\nTesting toggleDoor:");
+        toggleDoor(sampleDoor);
+
+        // Test toggleIsAutoLight function
+        System.out.println("\nTesting toggleIsAutoLight:");
+        toggleIsAutoLight(sampleLight);
+
+        // Test toggleIsAutoDoor function with a sample user
+        System.out.println("\nTesting toggleIsAutoDoor:");
+        User sampleUser = new Guest(1, "John Doe");
+        toggleIsAutoDoor(sampleDoor, sampleUser);
     }
 
     // God API Method
