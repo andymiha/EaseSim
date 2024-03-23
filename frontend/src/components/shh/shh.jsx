@@ -10,7 +10,9 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import ToggleButton from '@mui/material/ToggleButton';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 import './shh.css';
 
 const SHH = () => {
@@ -35,6 +37,27 @@ const SHH = () => {
       setSelectedTime(event.target.value);
     };
 
+
+//very import this is a handle delete function but it only works for hardcoded data, make sure that this eventually connects to backend
+    const handleDelete = (idToDelete) => {
+          const updatedZoneSettings = zoneSettings.filter(row => row.id !== idToDelete);
+          const zoneSettings = updatedZoneSettings;
+    
+    
+        };
+
+
+
+//very important this is a handle add function but it only works for hardcoded data, make sure that this eventually connects to backend  
+    const handleAddZone = () => {
+   
+    };
+    
+
+//very important this is a handle add function but it only works for hardcoded data, make sure that this eventually connects to backend  
+const handleAddZoneRoom= () => {
+   
+};
   
 
   
@@ -99,16 +122,30 @@ const SHH = () => {
                   <MenuItem value="Evening">Evening</MenuItem>
                 </Select>
               </TableCell>
+
+              <TableCell>
+        <IconButton onClick={() => handleDelete(row.id)} aria-label="delete">
+          <DeleteIcon />
+        </IconButton>
+      </TableCell>
+     
               </TableRow>
             ))}
+
+<TableRow>
+      <TableCell colSpan={5}> {/* Spanning all columns */}
+        <IconButton onClick={handleAddZone} aria-label="add">
+          <AddIcon />
+        </IconButton>
+      </TableCell>
+    </TableRow>
+         
           </TableBody>
+          
         </Table>
       </TableContainer>
 </div>
     
-
-
-
 
 
       <h3>Rooms: Heating and Cooling</h3>
@@ -135,11 +172,30 @@ const SHH = () => {
                   />
 
               </TableCell>
+
+              
+              <TableCell>
+        <IconButton onClick={() => handleDelete(row.id)} aria-label="delete">
+          <DeleteIcon />
+        </IconButton>
+      </TableCell>
               </TableRow>
             ))}
+
+
+<TableRow>
+      <TableCell colSpan={5}> {/* Spanning all columns */}
+        <IconButton onClick={handleAddZoneRoom} aria-label="add">
+          <AddIcon />
+        </IconButton>
+      </TableCell>
+    </TableRow>
+         
           </TableBody>
+          
         </Table>
       </TableContainer>
+      
     </div>
   );
 };
