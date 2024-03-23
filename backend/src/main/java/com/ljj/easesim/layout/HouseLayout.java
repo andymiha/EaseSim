@@ -13,21 +13,24 @@ import java.io.IOException;
 import java.util.*;
 
 public class HouseLayout {
-    // ID Counter necessary for incrementing room id's when creating rooms.
+    // ID Counter necessary for incrementing room ids when creating rooms.
     private int idCounter = 0;
     private ArrayList<Room> rooms;
 
+    // Constructor
     public HouseLayout() {
         rooms = new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
 
-        // Read Layout.txt
-        // Iterate over obj array in the Layout.txt file
         try {
+            // Open the Layout.txt File
             File file = new File("Layout.txt");
+
+            // Read Layout.txt
             List<Map<String, Object>> layoutData = objectMapper.readValue(file, new TypeReference<>() {});
             Map<String, Door> doorMap = new HashMap<>();
 
+            // Iterate over obj array in the Layout.txt file and create Rooms
             for(Map<String, Object> roomData : layoutData) {
                 ArrayList<HouseElement> elements = new ArrayList<>();
 
@@ -36,16 +39,18 @@ public class HouseLayout {
                 int lights = (int) roomData.get("lights");
                 List<String> doorsTo = (List<String>) roomData.get("doorsTo");
 
-                Light light = null;
-                Window window = null;
-                Door door = null;
-
+                // Build empty room
                 Room room  = new RoomBuilder()
                         .id(++idCounter)
                         .name(name)
                         .elements(elements)
                         .users(new ArrayList<User>())
                         .build();
+
+                // Populate elements collection
+                Light light = null;
+                Window window = null;
+                Door door = null;
 
                 // Add Lights
                 for(int i = 0; i < lights; i++) {
@@ -63,6 +68,7 @@ public class HouseLayout {
                     window.setRoom(room);
                 }
 
+                // Add Doors
                 for(String roomConnectionName : doorsTo) {
                     if (doorMap.containsKey(roomConnectionName)) {
                         door = doorMap.get(roomConnectionName); // Use existing door
@@ -76,9 +82,16 @@ public class HouseLayout {
 
                 }
 
+                // Add Rooms
                 this.rooms.add(room);
+
+                // Display Separator Line
+                System.out.println("\n" + "-".repeat(700));
+
+                // Display room content
                 System.out.println("Created " + room.toString() + "\n");
 
+                // Display getRoom test results
                 System.out.println("Testing getRoom on elements of Room " + room.getName() + "\n");
                 for (HouseElement element : room.getElements()) {
                     Room location = element.getRoom();
@@ -88,7 +101,6 @@ public class HouseLayout {
                         System.out.println("Room not found for " + element.toString());
                     }
                 }
-                System.out.println("\n-------------------------------------------------------------------");
             }
 
         } catch (IOException e) {
@@ -96,6 +108,7 @@ public class HouseLayout {
         }
     }
 
+    // Methods
     public Map<HouseElement, String> getHouseDoors() {
         Map<HouseElement, String> doorsMap = new HashMap<>();
         for (Room room : this.rooms) {

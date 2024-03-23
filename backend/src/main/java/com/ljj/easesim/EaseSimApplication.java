@@ -12,6 +12,8 @@ public class EaseSimApplication {
 		SpringApplication.run(EaseSimApplication.class, args);
 		SmartHomeSimulator shs = SmartHomeSimulator.getInstance();
 		//shs.testSHCFunctions();
+		shs.testHeatingZoneCreation();
+		shs.testAddingRoomsToHeatingZone();
 	}
 
 }
