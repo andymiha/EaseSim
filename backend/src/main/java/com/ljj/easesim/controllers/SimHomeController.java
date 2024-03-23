@@ -11,6 +11,7 @@ import com.ljj.easesim.abstractions.User;
 import com.ljj.easesim.layout.HouseLayout;
 import com.ljj.easesim.layout.Room;
 import com.ljj.easesim.requestBodies.ToggleRequest;
+import com.ljj.easesim.requestBodies.UserRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,20 +59,33 @@ public class SimHomeController {
         }
     }
 
-//    @PostMapping("/addUser")
-//    public ResponseEntity <Map<String, Object>> addUser(@RequestParam int id,
-//                                          @RequestParam String userType,
-//                                          @RequestParam String name) {
-//        SmartHomeSimulator shs = SmartHomeSimulator.getInstance();
-//        User user = null;
-//        user = shs.addUser(id, userType, name); // Assume addUser method returns a boolean indicating success
-//
-//        Map<String, Object> response = new HashMap<>();
-//        response.put("message", "Success");
-//        response.put("user", user);
-//        return ResponseEntity.ok(response);
-//
-//    }
+    @PostMapping("/addUser")
+    public ResponseEntity <Map<String, Object>> addUser(@RequestBody UserRequest request) {
+        SmartHomeSimulator shs = SmartHomeSimulator.getInstance();
+        User user = shs.addUser(0, request.getUserType(), request.getName());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Success");
+        response.put("user", user);
+        return ResponseEntity.ok(response);
+
+    }
+
+    @PostMapping("/deleteUser/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable("id") int id){
+        SmartHomeSimulator shs = new SmartHomeSimulator();
+
+        for (User user: shs.getUsers()){
+            if(user.getId() == id){
+                shs.deleteUser(id);
+                return ResponseEntity.ok("User deleted successfully");
+            }
+
+
+
+        }
+        return ResponseEntity.notFound().build();
+    }
 
 
 
