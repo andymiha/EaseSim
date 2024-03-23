@@ -56,7 +56,7 @@ public class Door extends HouseElement {
     public String toString() {
         return "Door{" +
                 "id=" + id +
-                ", room=" +
+                ", room=" + roomName +
                 ", roomConnection=" + roomConnection +
                 ", isBlocked=" + isBlocked +
                 ", isAuto=" + isAuto +
