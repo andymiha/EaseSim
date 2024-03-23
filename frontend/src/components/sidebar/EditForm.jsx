@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, Switch, FormControlLabel, Grid } from '@mui/material';
 
-const EditForm = ({ onClose }) => {
+const EditForm = ({ onClose, windowStates, updateWindowStates }) => {
     const [rooms, setRooms] = useState([]);
     const [selectedRoom, setSelectedRoom] = useState('');
     const [selectedInhabitant, setSelectedInhabitant] = useState('');
@@ -9,6 +9,7 @@ const EditForm = ({ onClose }) => {
     const [isWindowBlocked, setIsWindowBlocked] = useState(false);
     const [isButtonModified, setIsButtonModified] = useState(false);
     const [initialWindowBlocked, setInitialWindowBlocked] = useState(false); // New state variable to store initial window blocked state
+    
 
     useEffect(() => {
         const fetchData = async () => {
@@ -20,6 +21,16 @@ const EditForm = ({ onClose }) => {
                 const data = await response.json();
                 console.log('Rooms:', data.rooms);
                 setRooms(data.rooms);
+
+                // Extract initial window states from data
+            const initialWindowStates = {};
+            data.rooms.forEach(room => {
+                room.windows.forEach(window => {
+                    initialWindowStates[window.id] = window.blockedState;
+                });
+            });
+            updateWindowStates(initialWindowStates);
+
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -53,6 +64,9 @@ const EditForm = ({ onClose }) => {
                 throw new Error('Failed to submit form');
             }
 
+               // Update windowStates
+               updateWindowStates(selectedWindow, isWindowBlocked);
+               
             console.log('Form submitted successfully!');
             onClose();
         } catch (error) {

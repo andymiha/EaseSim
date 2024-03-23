@@ -6,11 +6,13 @@ import SHS from '../components/shs/shs';
 import SHC from '../components/shc/shc'; 
 import SHP from '../components/shp/shp';
 import SHH from '../components/shh/shh';
+import EditForm from '../components/sidebar/EditForm'; // Import the EditForm component
 
 const Dashboard = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [selectedTab, setSelectedTab] = useState(0);
   const [selectedRoom, setSelectedRoom] = useState(''); // State to store selected room ID
+  const [windowStates, setWindowStates] = useState({}); // State to hold window states
 
   const handleDrawerToggle = () => {
     setOpenDrawer(!openDrawer);
@@ -28,6 +30,14 @@ const Dashboard = () => {
     setSelectedRoom(roomId);
   };
 
+      // Function to update window states
+  const updateWindowStates = (windowId, isBlocked) => {
+    setWindowStates(prevStates => ({
+      ...prevStates,
+        [windowId]: isBlocked
+        }));
+    };
+
   const tabComponents = {
     0: <SHS />,
     1: <SHC />,
@@ -41,17 +51,16 @@ const Dashboard = () => {
         {/* Empty Grid item for adjusting layout */}
       </Grid>
 
-
-
       <SimSideBar
         openDrawer={openDrawer}
         handleDrawerToggle={handleDrawerToggle}
         handleDrawerClose={handleDrawerClose}
         handleRoomChange={handleRoomChange} // Pass the setSelectedRoom function down as a prop
+        windowStates={windowStates} // Pass windowStates to SimSideBar
+        updateWindowStates={updateWindowStates} // Pass updateWindowStates to SimSideBar
       />
         
       <Grid item xs={12} sm={openDrawer ? 5 : 6}>
-
         <Paper
           component="div"
           elevation={3}
@@ -67,7 +76,6 @@ const Dashboard = () => {
             padding: '16px',
             marginLeft: '1%',
             transition: 'left 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, right 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms',
-            
           }}
         >
           <Tabs
@@ -93,10 +101,8 @@ const Dashboard = () => {
       </Grid>
 
       <Grid item xs={12} sm={openDrawer ? 5 : 6}>
-
-{/* Box 2*/}
         <Paper
-            elevation={3}
+          elevation={3}
           component="div"
           sx={{
             position: 'absolute',
@@ -110,42 +116,33 @@ const Dashboard = () => {
             marginLeft: '1%',
             marginRight: '1%',
             transition: 'left 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, right 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms',
-            
           }}
         >
-          {/* Add skeleton when not on */}
-          <HouseLayout selectedRoom={selectedRoom} />
-    
+          <HouseLayout selectedRoom={selectedRoom} windowStates={windowStates}/>
         </Paper>
       </Grid>
 
+
       <Grid item lg={10} md={12} sm={openDrawer ? 5 : 6} sx={{ position: 'absolute', width: '100%', height:'20%', bottom:'0', left: openDrawer ? '240px' : '0' }}>
-  <Paper  
-    elevation={3}
-    component="div"
-    sx={{
-      overflow: 'auto',
-      padding: '16px',
-      Height:'100%',
-      maxWidth:'90%',
-      height: '100%', 
-      margin:'1%',
-      transition: 'left 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, right 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms',
-    }}
-  >
-    {/* Add content for the bottom Paper here */}
-    <Typography paragraph>
-      Your content for the bottom Paper.
-    </Typography>
-  </Paper>
-</Grid>
-
-
-      
+        <Paper  
+          elevation={3}
+          component="div"
+          sx={{
+            overflow: 'auto',
+            padding: '16px',
+            Height:'100%',
+            maxWidth:'90%',
+            height: '100%', 
+            margin:'1%',
+            transition: 'left 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, right 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms',
+          }}
+        >
+          <Typography paragraph>
+            Your content for the bottom Paper.
+          </Typography>
+        </Paper>
+      </Grid>
     </Grid>
-
-
-
   );
 };
 

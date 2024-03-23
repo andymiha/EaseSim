@@ -15,9 +15,11 @@ const typographyStyle = {
 
 const temperature = 25; 
 
-const SimSideBar = ({ openDrawer, handleDrawerToggle, handleDrawerClose, handleRoomChange }) => {
+const SimSideBar = ({ openDrawer, handleDrawerToggle, handleDrawerClose, handleRoomChange, windowStates, updateWindowStates  }) => {
   const [showForm, setShowForm] = useState(false);
   const [openModal, setOpenModal] = useState(false); // State to control modal visibility
+  
+
 
   const handleSelectRoom = (event) => {
     const selectedRoomId = event.target.value;
@@ -31,6 +33,8 @@ const SimSideBar = ({ openDrawer, handleDrawerToggle, handleDrawerClose, handleR
   const handleModalClose = () => {
     setOpenModal(false); // Close the modal
   };
+
+
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -188,7 +192,7 @@ const SimSideBar = ({ openDrawer, handleDrawerToggle, handleDrawerClose, handleR
       <Dialog open={openModal} onClose={handleModalClose}>
         <DialogTitle>Edit Context</DialogTitle>
         <DialogContent>
-          <EditForm onClose={handleModalClose} />
+        <EditForm onClose={handleModalClose} windowStates={windowStates} updateWindowStates={updateWindowStates} />
         </DialogContent>
       </Dialog>
     </Box>
