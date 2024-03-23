@@ -1,10 +1,9 @@
 package com.ljj.easesim.elements;
 
-import com.ljj.easesim.interfaces.HouseElement;
+import com.ljj.easesim.abstractions.HouseElement;
 
-public class Window implements HouseElement {
-    private int id;
-    private boolean isOpen;
+public class Window extends HouseElement {
+
     private boolean isBlocked;
 
     public Window() {
@@ -18,32 +17,26 @@ public class Window implements HouseElement {
         }
     }
 
-    @Override
-    public int getId() {
-        return id;
-    }
-
-    @Override
-<<<<<<< HEAD
-    public void setId(int id) {
-        this.id = id;
-    }
-=======
-    public boolean getState() {
-        return isOpen;
-    }
-
     public boolean getBlockedState() {
         return isBlocked;
     }
 
-    @Override
-    public void setId(int id) {
-        this.id = id;
+    public void setBlocked(boolean blocked) {
+        isBlocked = blocked;
     }
 
-    public void setBlocked(boolean blockStatus) {
-        this.isBlocked = blockStatus;
+    public void toggleBlocked() {
+        isBlocked = !isBlocked;
+
     }
->>>>>>> staging
+
+    @Override
+    public String toString() {
+        return "Window{" +
+                "id=" + id +
+                ", room=" + room.getName() +
+                ", isBlocked=" + isBlocked +
+                ", isOpen=" + isOpen +
+                '}';
+    }
 }

@@ -1,9 +1,8 @@
 package com.ljj.easesim.layout;
 
-import com.ljj.easesim.elements.Door;
-import com.ljj.easesim.interfaces.HouseElement;
-import com.ljj.easesim.interfaces.User;
-import com.ljj.easesim.interfaces.Command;
+import com.ljj.easesim.elements.*;
+import com.ljj.easesim.abstractions.*;
+
 import java.util.ArrayList;
 
 public class Room {
@@ -20,7 +19,7 @@ public class Room {
         this.users = users;
     }
 
-    //getters
+
     public int getId() {
         return this.id;
     }
@@ -29,16 +28,39 @@ public class Room {
         return this.name;
     }
 
-    public Command getCommand() {
-        return this.command;
-    }
-
     public ArrayList<User> getUsers() {
         return this.users;
     }
 
+    public void addUser(User user) {
+        users.add(user);
+    }
+
+    public void removeUser(User user) {
+        users.remove(user);
+    }
+
+    public Command getCommand() {
+        return this.command;
+    }
+    public void setCommand(Command command) {
+        this.command = command;
+    }
+
+    public void executeCommand() {
+        command.execute();
+    }
+
     public ArrayList<HouseElement> getElements() {
         return this.elements;
+    }
+
+    public void addElement(HouseElement element) {
+        elements.add(element);
+    }
+
+    public void removeElement(HouseElement element) {
+        elements.remove(element);
     }
 
     public ArrayList<Door> getDoors() {
@@ -51,30 +73,34 @@ public class Room {
         return doors;
     }
 
-    //setters
-    public void setCommand(Command command) {
-        this.command = command;
+    public ArrayList<Window> getWindows() {
+        ArrayList<Window> windows = new ArrayList<>();
+        for (HouseElement element : elements) {
+            if (element instanceof Window) {
+                windows.add((Window) element);
+            }
+        }
+        return windows;
     }
 
-    //Other methods
-    public void executeCommand() {
-        command.execute();
+    public ArrayList<Light> getLights() {
+        ArrayList<Light> lights = new ArrayList<>();
+        for (HouseElement element : elements) {
+            if (element instanceof Light) {
+                lights.add((Light) element);
+            }
+        }
+        return lights;
     }
 
-    public void addElement(HouseElement element) {
-        elements.add(element);
+    @Override
+    public String toString() {
+        return "Room{" +
+                "id=" + id +
+                ", command=" + command +
+                ", name='" + name + '\'' +
+                ", elements=" + elements +
+                ", users=" + users +
+                '}';
     }
-
-    public void removeElement(HouseElement element) {
-        elements.remove(element);
-    }
-
-    public void addUser(User user) {
-        users.add(user);
-    }
-
-    public void removeUser(User user) {
-        users.remove(user);
-    }
-
 }

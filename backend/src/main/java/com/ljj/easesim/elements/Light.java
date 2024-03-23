@@ -1,28 +1,29 @@
 package com.ljj.easesim.elements;
 
-import com.ljj.easesim.interfaces.HouseElement;
+import com.ljj.easesim.abstractions.HouseElement;
 
-public class Light implements HouseElement {
-    private int id;
-    private boolean switchedOn;
+public class Light extends HouseElement {
+    public Light() {
+        this.isAuto = false;
+    }
 
-    @Override
-    public void toggle() {
-        switchedOn = !switchedOn;
+    private boolean isAuto;
+
+    public boolean getIsAutoState() {
+        return isAuto;
+    }
+
+    public void setIsAutoState(boolean isAuto) {
+        this.isAuto = isAuto;
     }
 
     @Override
-    public int getId() {
-        return id;
-    }
-
-    @Override
-    public boolean getState() {
-        return switchedOn;
-    }
-
-    @Override
-    public void setId(int id) {
-        this.id = id;
+    public String toString() {
+        return "Light{" +
+                "id=" + id +
+                ", room=" + room.getName() +
+                ", isAuto=" + isAuto +
+                ", isOpen=" + isOpen +
+                '}';
     }
 }

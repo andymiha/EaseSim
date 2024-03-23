@@ -1,14 +1,16 @@
-package com.ljj.easesim;
+package com.ljj.easesim.requestBodies;
 
+import com.ljj.easesim.layout.Room;
+import com.ljj.easesim.elements.*;
 
-public class FormData {
+public class EditContextFormData {
     private String selectedRoom;
     private String selectedInhabitant;
     private String selectedWindow;
     private boolean isWindowBlocked;
 
     // Default constructor
-    public FormData() {
+    public EditContextFormData() {
     }
 
     // Getters and setters
@@ -16,31 +18,16 @@ public class FormData {
         return selectedRoom;
     }
 
-    public void setSelectedRoom(String selectedRoom) {
-        this.selectedRoom = selectedRoom;
-    }
-
     public String getSelectedInhabitant() {
         return selectedInhabitant;
-    }
-
-    public void setSelectedInhabitant(String selectedInhabitant) {
-        this.selectedInhabitant = selectedInhabitant;
     }
 
     public String getSelectedWindow() {
         return selectedWindow;
     }
 
-    public void setSelectedWindow(String selectedWindow) {
-        this.selectedWindow = selectedWindow;
-    }
-
     public boolean isWindowBlocked() {
         return isWindowBlocked;
     }
 
-    public void setWindowBlocked(boolean windowBlocked) {
-        isWindowBlocked = windowBlocked;
-    }
 }

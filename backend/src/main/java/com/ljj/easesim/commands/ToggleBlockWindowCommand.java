@@ -1,9 +1,11 @@
 package com.ljj.easesim.commands;
 
+
 import com.ljj.easesim.elements.Window;
-import com.ljj.easesim.interfaces.Command;
+import com.ljj.easesim.abstractions.Command;
 
 public class ToggleBlockWindowCommand implements Command {
+
     private Window window;
     private boolean isBlocked;
 
@@ -14,6 +16,6 @@ public class ToggleBlockWindowCommand implements Command {
 
     @Override
     public void execute() {
-        window.setBlocked(!isBlocked);
+        window.toggleBlocked();
     }
 }

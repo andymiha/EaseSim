@@ -15,9 +15,14 @@ const typographyStyle = {
 
 const temperature = 25; 
 
-const SimSideBar = ({ openDrawer, handleDrawerToggle, handleDrawerClose }) => {
+const SimSideBar = ({ openDrawer, handleDrawerToggle, handleDrawerClose, handleRoomChange }) => {
   const [showForm, setShowForm] = useState(false);
   const [openModal, setOpenModal] = useState(false); // State to control modal visibility
+
+  const handleSelectRoom = (event) => {
+    const selectedRoomId = event.target.value;
+    handleRoomChange(selectedRoomId); // Call the handleRoomChange function with the selected room ID
+  };
 
   const handleEditClick = () => {
     setOpenModal(true); // Open the modal when Edit button is clicked
@@ -121,13 +126,17 @@ const SimSideBar = ({ openDrawer, handleDrawerToggle, handleDrawerClose }) => {
                   name: 'Location',
                   id: 'uncontrolled-native',
                 }}
+                onChange={handleSelectRoom} // Call the handleSelectRoom function when room selection changes
               >
                 <option value="">Select Room</option>
-                <option value={10}>Kitchen</option>
-                <option value={20}>Living Room</option>
-                <option value={30}>Bedroom 1</option>
-                <option value={30}>Bedroom 2</option>
-                <option value={30}>Bathroom</option>
+                <option value={"kitchen"}>Kitchen</option>
+                <option value={"living-room"}>Living Room</option>
+                <option value={"bedroom-1"}>Bedroom 1</option>
+                <option value={"bedroom-2"}>Bedroom 2</option>
+                <option value={"bathroom"}>Bathroom</option>
+                <option value={"garage"}>Garage</option>
+                <option value={"backyard"}>Backyard</option>
+                <option value={"frontyard"}>Front yard</option>
               </NativeSelect>
             </FormControl>
   
