@@ -6,14 +6,17 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
 import com.ljj.easesim.elements.*;
 import com.ljj.easesim.abstractions.*;
+import com.ljj.easesim.controllers.DateController;
 
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class })
 public class EaseSimApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(EaseSimApplication.class, args);
+
 		SmartHomeSimulator shs = SmartHomeSimulator.getInstance();
 		SmartHomeCore shc = SmartHomeCore.getInstance();
+		SmartHomeHeating shh = SmartHomeHeating.getInstance();
 
 		// Test data
 		Light sampleLight = (Light) shs.getHouseLayout().getRooms().get(0).getElements().get(0);
@@ -33,6 +36,13 @@ public class EaseSimApplication {
 //		shc.toggle(sampleDoor);
 //		shc.toggleIsAuto(sampleLight);
 //		shc.toggleIsAuto(sampleDoor, sampleUser);
+
+		// Testing SHH functionalities
+		System.out.println("\n" + "-".repeat(700));
+		System.out.println("-".repeat(700));
+		System.out.println("TESTING SHH FUNCTIONS ...\n");
+		System.out.println("DISPLAY HEATING ZONES CONTENTS...\n");
+		shh.printHeatingZones();
 
 
 

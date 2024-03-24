@@ -3,11 +3,10 @@ package com.ljj.easesim;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.ljj.easesim.controllers.ClockController;
 import com.ljj.easesim.abstractions.*;
 import com.ljj.easesim.layout.*;
-import com.ljj.easesim.elements.*;
 import com.ljj.easesim.users.*;
+import com.ljj.easesim.controllers.DateController;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,13 +23,13 @@ public class SmartHomeSimulator {
     private User loggedInUser;
     private final HouseLayout houseLayout;
 
-    ClockController clockController;  // Instantiate the ClockController
+    //DateController dateController;  // Instantiate the ClockController
 
 
     public SmartHomeSimulator() {
         users = new ArrayList<>();
         houseLayout = HouseLayout.getInstance();
-        clockController = new ClockController();
+        //dateController = new DateController();
 
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -72,6 +71,10 @@ public class SmartHomeSimulator {
         return null; // User not found
     }
 
+//    public DateController getDateController() {
+//        return dateController;
+//    }
+
     public ArrayList<User> getUsers() {
         return new ArrayList<>(users); // Return a copy of the users list
     }
@@ -107,12 +110,6 @@ public class SmartHomeSimulator {
     }
 
     //METHODS
-
-    public String getCurrentTime() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-        Date currentTime = new Date();
-        return dateFormat.format(currentTime);
-    }
 
 //    public void startClock(){
 //        clockController.startClock();

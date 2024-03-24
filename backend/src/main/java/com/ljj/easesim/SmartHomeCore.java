@@ -22,10 +22,10 @@ public class SmartHomeCore {
 
     //METHODS
 
-    public void printCurrentTimeFromSHS() {
-        String currentTime = shs.getCurrentTime();
-        System.out.println("Current Time from SHS: " + currentTime);
-    }
+//    public void printCurrentTimeFromSHS() {
+//        String currentTime = shs.getDateController().getCurrentTime();
+//        System.out.println("Current Time from SHS: " + currentTime);
+//    }
 
     public Room findElementRoom(HouseElement element) {
         System.out.println("TOGGLE " + element.toString());
