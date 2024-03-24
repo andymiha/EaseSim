@@ -5,85 +5,127 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.ljj.easesim.builders.RoomBuilder;
 import com.ljj.easesim.elements.*;
-import com.ljj.easesim.interfaces.HouseElement;
-import com.ljj.easesim.interfaces.User;
+import com.ljj.easesim.abstractions.HouseElement;
+import com.ljj.easesim.abstractions.User;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
 public class HouseLayout {
-    // ID Counter necessary for incrementing room id's when creating rooms.
+    // ID Counter necessary for incrementing room ids when creating rooms.
+
+    private static HouseLayout instance = null;
     private int idCounter = 0;
     private ArrayList<Room> rooms;
-    private static final HouseLayout INSTANCE = new HouseLayout();
 
+    public static HouseLayout getInstance() {
+        if (instance == null) {
+            instance = new HouseLayout();
+        }
+        return instance;
+    }
+
+
+    // Constructor
     public HouseLayout() {
-        // Example House Layout Constructor
         rooms = new ArrayList<>();
+        initializeRooms();
+
+    }
+
+    //Creates all rooms
+    private void initializeRooms() {
         ObjectMapper objectMapper = new ObjectMapper();
 
-        // Read Layout.txt
-        // Iterate over obj array in the Layout.txt file
         try {
+            // Open the Layout.txt File
             File file = new File("Layout.txt");
+
+            // Read Layout.txt
             List<Map<String, Object>> layoutData = objectMapper.readValue(file, new TypeReference<>() {});
             Map<String, Door> doorMap = new HashMap<>();
 
+            System.out.println("\nDISPLAYING CREATED ROOMS...");
+            // Iterate over obj array in the Layout.txt file and create Rooms
             for(Map<String, Object> roomData : layoutData) {
+                ArrayList<HouseElement> elements = new ArrayList<>();
+
                 String name = (String) roomData.get("name");
                 int windows = (int) roomData.get("windows");
                 int lights = (int) roomData.get("lights");
-
                 List<String> doorsTo = (List<String>) roomData.get("doorsTo");
 
-                ArrayList<HouseElement> elements = new ArrayList<>();
-
-                // Add Lights
-                for(int i = 0; i < lights; i++) {
-                    Light light = new Light();
-                    light.setId(++idCounter);
-                    elements.add(light);
-                }
-
-                // Add Windows
-                for(int i = 0; i < windows; i++) {
-                    Window window = new Window();
-                    window.setId(++idCounter);
-                    elements.add(window);
-                }
-
-                Room room = new RoomBuilder()
+                // Build empty room
+                Room room  = new RoomBuilder()
                         .id(++idCounter)
                         .name(name)
                         .elements(elements)
                         .users(new ArrayList<User>())
                         .build();
 
+                // Populate elements collection
+                Light light = null;
+                Window window = null;
+                Door door = null;
+
+                // Add Lights
+                for(int i = 0; i < lights; i++) {
+                    light = new Light();
+                    light.setId(++idCounter);
+                    elements.add(light);
+                    light.setRoomName(room.getName());
+                }
+
+                // Add Windows
+                for(int i = 0; i < windows; i++) {
+                    window = new Window();
+                    window.setId(++idCounter);
+                    elements.add(window);
+                    window.setRoomName(room.getName());
+                }
+
+                // Add Doors
                 for(String roomConnectionName : doorsTo) {
-                    Door door;
                     if (doorMap.containsKey(roomConnectionName)) {
                         door = doorMap.get(roomConnectionName); // Use existing door
                     } else {
                         door = new Door(); // Create new door
                         door.setId(++idCounter);
                         doorMap.put(roomConnectionName, door); // Track the new door
+                        door.setRoomName(room.getName());
                     }
-                    room.addElement(door);
+                    elements.add(door);
+
                 }
 
+                // Add Rooms
                 this.rooms.add(room);
-            }
 
+                // Display Separator Line
+                System.out.println("-".repeat(700));
+
+                // Display room content
+                System.out.println("Created " + room.toString());
+
+                // Display getRoom test results
+//                System.out.println("Testing getRoom on elements of Room " + room.getName() + "\n");
+//                for (HouseElement element : room.getElements()) {
+//                    Room location = element.getRoom();
+//                    if (location != null) {
+//                        System.out.println("Room found for " + element.toString() + ": " + room.getName());
+//                    } else {
+//                        System.out.println("Room not found for " + element.toString());
+//                    }
+//                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
-    public static HouseLayout getInstance() {
-        return INSTANCE;
-    }
-
+    // Methods
     public Map<HouseElement, String> getHouseDoors() {
         Map<HouseElement, String> doorsMap = new HashMap<>();
         for (Room room : this.rooms) {
@@ -130,7 +172,19 @@ public class HouseLayout {
         return null;
     }
 
-    public List<Room> getRooms() {
+    public ArrayList<Room> getRooms() {
         return rooms;
+    }
+
+    public ArrayList<Light> getLights() {
+        ArrayList<Light> lights = new ArrayList<>();
+        for (Room room : this.rooms) {
+            for (HouseElement element : room.getElements()) {
+                if (element instanceof Light) {
+                    lights.add((Light) element);
+                }
+            }
+        }
+        return lights;
     }
 }
