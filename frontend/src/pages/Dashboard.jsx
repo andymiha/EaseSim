@@ -11,6 +11,7 @@ const Dashboard = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [selectedTab, setSelectedTab] = useState(0);
   const [selectedRoom, setSelectedRoom] = useState(''); // State to store selected room ID
+  const [windowsOnState, setWindowsOnState] = useState({});//holds window states
 
   const handleDrawerToggle = () => {
     setOpenDrawer(!openDrawer);
@@ -28,6 +29,12 @@ const Dashboard = () => {
     setSelectedRoom(roomId);
   };
 
+  const updateWindowsOnStates = (windowId, isWindowOpen) => {
+    setWindowsOnState(prevWindowsOnStates => ({
+         ...prevWindowsOnStates, 
+         [windowId]: isWindowOpen 
+    }));
+  }
   const tabComponents = {
     0: <SHS />,
     1: <SHC />,
@@ -114,7 +121,7 @@ const Dashboard = () => {
           }}
         >
           {/* Add skeleton when not on */}
-          <HouseLayout selectedRoom={selectedRoom} />
+          <HouseLayout selectedRoom={selectedRoom} windowsOnState = {windowsOnState} />
     
         </Paper>
       </Grid>
