@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';  // Import Provider
 import store from './store'; // Import the store
 import Dashboard from './pages/Dashboard';
+import SHS from './components/shs/shsNew';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { purple } from '@mui/material/colors';
 
