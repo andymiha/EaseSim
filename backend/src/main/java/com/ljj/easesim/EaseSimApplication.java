@@ -17,12 +17,21 @@ public class EaseSimApplication {
 		SmartHomeSimulator shs = SmartHomeSimulator.getInstance();
 		SmartHomeCore shc = SmartHomeCore.getInstance();
 		SmartHomeHeating shh = SmartHomeHeating.getInstance();
+		DateController clock = new DateController(); //Do a POST request to http://localhost:8080/api/time/acceleration and pass "1" to start clock
 
 		// Test data
 		Light sampleLight = (Light) shs.getHouseLayout().getRooms().get(0).getElements().get(0);
 		Window sampleWindow = (Window) shs.getHouseLayout().getRooms().get(0).getElements().get(1);
 		Door sampleDoor = (Door) shs.getHouseLayout().getRooms().get(0).getElements().get(2);
 		User sampleUser = shs.getUser(1);
+
+		// Testing SHS functionalities
+		System.out.println("\n" + "-".repeat(700));
+		System.out.println("-".repeat(700));
+		System.out.println("TESTING SHS FUNCTIONS ...\n");
+		System.out.println("DISPLAY GETTEMPFROMCSV...\n");
+		System.out.println("Temp is: " + shs.getTemperatureFromCSV(clock.getCurrentDate(), clock.getCurrentTime()));
+
 
 		// Testing SHC functionalities
 		System.out.println("\n" + "-".repeat(700));
@@ -43,6 +52,8 @@ public class EaseSimApplication {
 		System.out.println("TESTING SHH FUNCTIONS ...\n");
 		System.out.println("DISPLAY HEATING ZONES CONTENTS...\n");
 		shh.printHeatingZones();
+
+
 
 
 

@@ -18,18 +18,7 @@ public class SmartHomeHeating {
     private SmartHomeHeating() {
         isActive = false;
         heatingZones = new HashMap<>();
-
-        createHeatingZone("Garage");
-        addRoomToHeatingZone("Garage", HouseLayout.getInstance().getRoom("Garage"));
-
-        createHeatingZone("Zone1");
-        addRoomToHeatingZone("Zone1", HouseLayout.getInstance().getRoom("Bedroom1"));
-        addRoomToHeatingZone("Zone1", HouseLayout.getInstance().getRoom("Bedroom2"));
-
-        createHeatingZone("Zone2");
-        addRoomToHeatingZone("Zone2", HouseLayout.getInstance().getRoom("Bathroom"));
-        addRoomToHeatingZone("Zone2", HouseLayout.getInstance().getRoom("LivingRoom"));
-        addRoomToHeatingZone("Zone2", HouseLayout.getInstance().getRoom("Kitchen"));
+        generateHeatingZones();
     }
 
     public boolean isActive() {
@@ -72,6 +61,20 @@ public class SmartHomeHeating {
 
     public List<Room> getRoomsInHeatingZone(String zoneName) {
         return heatingZones.getOrDefault(zoneName, new ArrayList<>());
+    }
+
+    public void generateHeatingZones() {
+        createHeatingZone("Garage");
+        addRoomToHeatingZone("Garage", HouseLayout.getInstance().getRoom("Garage"));
+
+        createHeatingZone("Zone1");
+        addRoomToHeatingZone("Zone1", HouseLayout.getInstance().getRoom("Bedroom1"));
+        addRoomToHeatingZone("Zone1", HouseLayout.getInstance().getRoom("Bedroom2"));
+
+        createHeatingZone("Zone2");
+        addRoomToHeatingZone("Zone2", HouseLayout.getInstance().getRoom("Bathroom"));
+        addRoomToHeatingZone("Zone2", HouseLayout.getInstance().getRoom("LivingRoom"));
+        addRoomToHeatingZone("Zone2", HouseLayout.getInstance().getRoom("Kitchen"));
     }
 
     public void printHeatingZones() {
