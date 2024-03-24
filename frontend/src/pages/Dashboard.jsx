@@ -41,6 +41,19 @@ const Dashboard = () => {
 
   }, []);
 
+  //set dispatches for any changes in doors, windows, lights
+  useEffect(() => {
+  
+    dispatch({ type: 'UPDATE_WINDOWS_OPEN_STATE', payload: windows });
+    dispatch({ type: 'UPDATE_WINDOWS_BLOCKED_STATE', payload: windows });
+    dispatch({ type: 'UPDATE_DOORS_OPEN_STATE', payload: doors });
+    dispatch({ type: 'UPDATE_DOORS_AUTO_STATE', payload: doors });
+    dispatch({ type: 'UPDATE_LIGHTS_OPEN_STATE', payload: lights });
+    dispatch({ type: 'UPDATE_LIGHTS_AUTO_STATE', payload: lights });
+
+  }, [lights, doors, windows, dispatch]);
+
+
   //create constant element states
   const globalWindows = JSON.stringify(useSelector(state => state.windows));
   const globalDoors = JSON.stringify(useSelector(state => state.doors));

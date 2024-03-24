@@ -2,7 +2,7 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import { useState, useEffect } from "react";
 
 
-const SHC = () => {
+const SHC = (globalWindows, globalLights, globalDoors) => {
   const [lights, setLights] = useState([])
   const [doors, setDoors] = useState([])
   const [windows, setWindows] = useState([])
