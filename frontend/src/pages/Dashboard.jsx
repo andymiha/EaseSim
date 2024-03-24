@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import SimSideBar from '../components/sidebar/SimSideBar';
 import { Grid, Paper, Tab, Tabs, Typography } from '@mui/material';
 import HouseLayout from '../components/houselayout/HouseLayout'; 
@@ -12,6 +13,7 @@ const Dashboard = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [selectedRoom, setSelectedRoom] = useState(''); // State to store selected room ID
   const [windowsOnState, setWindowsOnState] = useState({});//holds window states
+  
 
   const handleDrawerToggle = () => {
     setOpenDrawer(!openDrawer);
@@ -29,12 +31,14 @@ const Dashboard = () => {
     setSelectedRoom(roomId);
   };
 
-  const updateWindowsOnStates = (windowId, isWindowOpen) => {
-    setWindowsOnState(prevWindowsOnStates => ({
-         ...prevWindowsOnStates, 
-         [windowId]: isWindowOpen 
-    }));
-  }
+  const globalWindows = JSON.stringify(useSelector(state => state.windows));
+
+  // const updateWindowsOnStates = (windowId, isWindowOpen) => {
+  //   setWindowsOnState(prevWindowsOnStates => ({
+  //        ...prevWindowsOnStates, 
+  //        [windowId]: isWindowOpen 
+  //   }));
+  // }
   const tabComponents = {
     0: <SHS />,
     1: <SHC />,
@@ -143,6 +147,7 @@ const Dashboard = () => {
     {/* Add content for the bottom Paper here */}
     <Typography paragraph>
       Your content for the bottom Paper.
+      {globalWindows}
     </Typography>
   </Paper>
 </Grid>

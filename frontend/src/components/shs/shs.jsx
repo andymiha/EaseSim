@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Typography, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, Select, MenuItem } from '@mui/material';
 
 const SHS = () => {
+    const dispatch = useDispatch();
     // State to hold the selected user type for adding a user
     const [selectedUserType, setSelectedUserType] = useState('');
     // State to hold the name of the user to add
@@ -68,6 +70,7 @@ const SHS = () => {
 
     // Function to handle login
     const handleLogin = () => {
+        dispatch({ type: 'SET_WINDOWS', payload: [{ jonIsCool: true, id: "jesus" }] });
         // Additional logic for handling login
         console.log('Logging in with name:', loginName, 'and ID:', loginId);
     };
