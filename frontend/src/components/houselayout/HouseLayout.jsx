@@ -2,8 +2,13 @@ import React from 'react';
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack"
+import {useState, useEffect} from 'react';
+import { useSelector, useDispatch} from 'react-redux';
 
 const HouseLayout = ({ selectedRoom }) => {
+
+  const [activeOverlays, setActiveOverlays] = useState([]);
+  const windows = useSelector((state) => state.windows);
 
 // Define stick figure positions for each room
 const stickFigurePositions = {
@@ -22,6 +27,18 @@ const stickFigurePositions = {
 
   // Check if selectedRoom is defined and exists in stickFigurePositions
   const stickFigurePosition = selectedRoom && stickFigurePositions[selectedRoom];
+
+  const updateOverlays = () => {
+    const overlays = windows
+      .filter((window) => window.state === true)
+      .map((window) => window.id);
+    setActiveOverlays(overlays);
+  };
+
+  // Call updateOverlays whenever windows array changes
+  useEffect(() => {
+    updateOverlays();
+  }, [windows]);
 
   return (
     <Box>
@@ -56,6 +73,20 @@ const stickFigurePositions = {
     }}
   />
 )}
+{activeOverlays.map((overlayId) => (
+          <div
+            key={overlayId}
+            style={{
+              position: 'absolute',
+              top: '0',
+              left: '0',
+              width: '100%',
+              height: '100%',
+              background: 'rgba(0, 0, 0, 0.5)', // Example overlay color
+              zIndex: '100', // Ensure overlay is on top of other elements
+            }}
+          />
+))}
       </Stack>
     </Box>
   ); 

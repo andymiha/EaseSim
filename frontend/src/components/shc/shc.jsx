@@ -1,6 +1,7 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, ToggleButton, ToggleButtonGroup, Box, Stack, Switch, Checkbox } from "@mui/material";
 import { useState, useEffect } from "react";
 
+//fix update state reducer fxns
 
 const SHC = (globalWindows, globalLights, globalDoors) => {
   const [lights, setLights] = useState([])

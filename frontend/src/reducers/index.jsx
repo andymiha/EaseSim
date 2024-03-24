@@ -12,19 +12,20 @@ function rootReducer(state = initialState, action) {
     case 'SET_WINDOWS':
         return { ...state, windows: action.payload };
     case 'UPDATE_WINDOW_OPEN_STATE':
-      return {
-        ...state,
-        windows: state.windows.map((window, index) =>
-          index === action.payload.index ? { ...window, state: action.payload.state } : window
-        ),
-      };
+        return state.map(window =>
+            window.id === action.payload.id
+              ? { ...window, isBlocked: action.payload.isBlocked }
+              : window
+          );
     case 'UPDATE_WINDOW_BLOCKED_STATE':
-        return {
-          ...state,
-          windows: state.windows.map((window, index) =>
-            index === action.payload.index ? { ...window, state: action.payload.state } : window
-          ),
-    };
+        return state.map(window =>
+            window.id === action.payload.id
+              ? { ...window, state: action.payload.state }
+              : window
+          );
+   
+
+   
 
     //door actiona
     case 'SET_DOORS':
