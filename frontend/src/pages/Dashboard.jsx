@@ -17,19 +17,19 @@ const Dashboard = () => {
 
   //dummy data
   const lights = [
-    { id: 1, name: 'Living Room Light', status: 'on', brightness: 80 },
-    { id: 2, name: 'Bedroom Light', status: 'off', brightness: 0 },
-    { id: 3, name: 'Kitchen Light', status: 'on', brightness: 100 },
+    { id: 1, name: 'Living Room Light', state: true, isAuto: false},
+    { id: 2, name: 'Bedroom Light', state: true, isAuto: false},
+    { id: 3, name: 'Kitchen Light', state: false, isAuto: false },
   ];
   const windows = [
-    { id: 1, name: 'Living Room window', status: 'on', brightness: 80 },
-    { id: 2, name: 'Bedroom window', status: 'off', brightness: 0 },
-    { id: 3, name: 'Kitchen window', status: 'on', brightness: 100 },
+    { id: 1, name: 'Living Room window', state: true },
+    { id: 2, name: 'Bedroom window', state: false},
+    { id: 3, name: 'Kitchen window', state: true},
   ];
   const doors = [
-    { id: 1, name: 'Living Room door', status: 'on', brightness: 80 },
-    { id: 2, name: 'Bedroom door', status: 'off', brightness: 0 },
-    { id: 3, name: 'Kitchen dppr', status: 'on', brightness: 100 },
+    { id: 1, name: 'Living Room door', state: false, isAuto: false },
+    { id: 2, name: 'Bedroom door', state: false, isAuto: false},
+    { id: 3, name: 'Kitchen dppr', state: true, isAuto: false },
   ];
 
   //set dispatches for initial page render 
