@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import SimSideBar from '../components/sidebar/SimSideBar';
 import { Grid, Paper, Tab, Tabs, Typography } from '@mui/material';
@@ -7,13 +7,44 @@ import SHS from '../components/shs/shs';
 import SHC from '../components/shc/shc'; 
 import SHP from '../components/shp/shp';
 import SHH from '../components/shh/shh';
+import { useDispatch } from 'react-redux';
 
 const Dashboard = () => {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [selectedTab, setSelectedTab] = useState(0);
   const [selectedRoom, setSelectedRoom] = useState(''); // State to store selected room ID
-  const [windowsOnState, setWindowsOnState] = useState({});//holds window states
+  const dispatch = useDispatch();
+
+  //dummy data
+  const lights = [
+    { id: 1, name: 'Living Room Light', status: 'on', brightness: 80 },
+    { id: 2, name: 'Bedroom Light', status: 'off', brightness: 0 },
+    { id: 3, name: 'Kitchen Light', status: 'on', brightness: 100 },
+  ];
+  const windows = [
+    { id: 1, name: 'Living Room window', status: 'on', brightness: 80 },
+    { id: 2, name: 'Bedroom window', status: 'off', brightness: 0 },
+    { id: 3, name: 'Kitchen window', status: 'on', brightness: 100 },
+  ];
+  const doors = [
+    { id: 1, name: 'Living Room door', status: 'on', brightness: 80 },
+    { id: 2, name: 'Bedroom door', status: 'off', brightness: 0 },
+    { id: 3, name: 'Kitchen dppr', status: 'on', brightness: 100 },
+  ];
+
+  //set dispatches for initial page render 
+  useEffect(() => {
   
+    dispatch({ type: 'SET_WINDOWS', payload: windows });
+    dispatch({ type: 'SET_DOORS', payload: doors });
+    dispatch({ type: 'SET_LIGHTS', payload: lights });
+
+  }, []);
+
+  //create constant element states
+  const globalWindows = JSON.stringify(useSelector(state => state.windows));
+  const globalDoors = JSON.stringify(useSelector(state => state.doors));
+  const globalLights = JSON.stringify(useSelector(state => state.lights));
 
   const handleDrawerToggle = () => {
     setOpenDrawer(!openDrawer);
@@ -31,14 +62,8 @@ const Dashboard = () => {
     setSelectedRoom(roomId);
   };
 
-  const globalWindows = JSON.stringify(useSelector(state => state.windows));
+  
 
-  // const updateWindowsOnStates = (windowId, isWindowOpen) => {
-  //   setWindowsOnState(prevWindowsOnStates => ({
-  //        ...prevWindowsOnStates, 
-  //        [windowId]: isWindowOpen 
-  //   }));
-  // }
   const tabComponents = {
     0: <SHS />,
     1: <SHC />,
@@ -125,7 +150,7 @@ const Dashboard = () => {
           }}
         >
           {/* Add skeleton when not on */}
-          <HouseLayout selectedRoom={selectedRoom} windowsOnState = {windowsOnState} />
+          <HouseLayout selectedRoom={selectedRoom} />
     
         </Paper>
       </Grid>
@@ -148,6 +173,8 @@ const Dashboard = () => {
     <Typography paragraph>
       Your content for the bottom Paper.
       {globalWindows}
+      {globalDoors}
+      {globalLights}
     </Typography>
   </Paper>
 </Grid>

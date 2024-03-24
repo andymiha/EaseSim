@@ -1,7 +1,7 @@
 const initialState = {
   windows: [{ id: 1, state: true }],
-  doors: [],
-  lights: [],
+  doors: [{ id: 2, state: true }],
+  lights: [{ id: 3, state: true }],
   userName: "Gilbert",
 };
 
@@ -22,6 +22,9 @@ function rootReducer(state = initialState, action) {
           index === action.payload.index ? { ...window, state: action.payload.state } : window
         ),
       };
+
+    case 'SET_DOORS':
+        return { ...state, doors: action.payload };  
     case 'ADD_DOOR':
       return { ...state, doors: [...state.doors, action.payload] };
     case 'REMOVE_DOOR':
@@ -33,6 +36,9 @@ function rootReducer(state = initialState, action) {
           index === action.payload.index ? { ...door, state: action.payload.state } : door
         ),
       };
+    
+    case 'SET LIGHTS':
+        return { ...state, lights: action.payload };
     case 'ADD_LIGHT':
       return { ...state, lights: [...state.lights, action.payload] };
     case 'REMOVE_LIGHT':
