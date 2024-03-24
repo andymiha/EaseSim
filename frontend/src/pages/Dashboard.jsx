@@ -29,7 +29,7 @@ const Dashboard = () => {
   const doors = [
     { id: 1, name: 'Living Room door', state: false, isAuto: false },
     { id: 2, name: 'Bedroom door', state: false, isAuto: false},
-    { id: 3, name: 'Kitchen dppr', state: true, isAuto: false },
+    { id: 3, name: 'Kitchen door', state: true, isAuto: false },
   ];
 
   //set dispatches for initial page render 
