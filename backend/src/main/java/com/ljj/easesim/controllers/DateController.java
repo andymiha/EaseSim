@@ -52,6 +52,7 @@ public class DateController {
 
             if (previousTime.getHour() != currentTime.getHour()) {
                 System.out.println("\tHour changed: " + previousTime.getHour() + " -> " + currentTime.getHour());
+                //BUG HERE - probably inside of getTemp...
                 //double temp = shs.getTemperatureFromCSV(getCurrentDate(), getCurrentTime());
                 //System.out.println("New Temperature: " + temp);
             }
