@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
+import SHS from './components/shs/shsNew';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { purple } from '@mui/material/colors';
 
@@ -23,6 +24,7 @@ const App = () => {
       <Router>
         <Routes>
           <Route path="/" element={<Dashboard />} />
+          <Route path="login" element={<SHS />} />
           {/* Add routes for other pages */}
         </Routes>
       </Router>

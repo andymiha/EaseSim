@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import SimSideBar from '../components/sidebar/SimSideBar';
 import { Grid, Paper, Tab, Tabs, Typography } from '@mui/material';
 import HouseLayout from '../components/houselayout/HouseLayout'; 
-import SHS from '../components/shs/shs'; 
+import SHS from '../components/shs/shsNew';
 import SHC from '../components/shc/shc'; 
 import SHP from '../components/shp/shp';
 import SHH from '../components/shh/shh';
