@@ -1,4 +1,4 @@
-package com.ljj.easesim;
+package com.ljj.easesim.commands;
 
 import com.ljj.easesim.commands.ToggleIsAutoLightCommand;
 import com.ljj.easesim.commands.ToggleLightCommand;
