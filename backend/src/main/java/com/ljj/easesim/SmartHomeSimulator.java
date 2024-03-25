@@ -74,7 +74,7 @@ public class SmartHomeSimulator {
 
     //METHODS
 
-    private void mapUsersFromJson(String fileName) {
+    public void mapUsersFromJson(String fileName) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             File file = new File(fileName);
