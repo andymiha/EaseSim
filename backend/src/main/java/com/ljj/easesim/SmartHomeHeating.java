@@ -18,6 +18,7 @@ public class SmartHomeHeating {
     private SmartHomeHeating() {
         isActive = false;
         heatingZones = new HashMap<>();
+        generateHeatingZones();
     }
 
     public boolean isActive() {
@@ -37,6 +38,13 @@ public class SmartHomeHeating {
         }
     }
 
+    public void deleteHeatingZone(String zoneName) {
+        if (!heatingZones.containsKey(zoneName)) {
+            throw new IllegalArgumentException("Heating zone '" + zoneName + "' does not exist.");
+        }
+        heatingZones.remove(zoneName);
+    }
+
     public void addRoomToHeatingZone(String zoneName, Room room) {
         if (!heatingZones.containsKey(zoneName)) {
             throw new IllegalArgumentException("Heating zone '" + zoneName + "' does not exist.");
@@ -53,5 +61,33 @@ public class SmartHomeHeating {
 
     public List<Room> getRoomsInHeatingZone(String zoneName) {
         return heatingZones.getOrDefault(zoneName, new ArrayList<>());
+    }
+
+    public void generateHeatingZones() {
+        createHeatingZone("Garage");
+        addRoomToHeatingZone("Garage", HouseLayout.getInstance().getRoom("Garage"));
+
+        createHeatingZone("Zone1");
+        addRoomToHeatingZone("Zone1", HouseLayout.getInstance().getRoom("Bedroom1"));
+        addRoomToHeatingZone("Zone1", HouseLayout.getInstance().getRoom("Bedroom2"));
+
+        createHeatingZone("Zone2");
+        addRoomToHeatingZone("Zone2", HouseLayout.getInstance().getRoom("Bathroom"));
+        addRoomToHeatingZone("Zone2", HouseLayout.getInstance().getRoom("LivingRoom"));
+        addRoomToHeatingZone("Zone2", HouseLayout.getInstance().getRoom("Kitchen"));
+    }
+
+    public void printHeatingZones() {
+        for (Map.Entry<String, List<Room>> entry : heatingZones.entrySet()) {
+            String zoneName = entry.getKey();
+            List<Room> rooms = entry.getValue();
+
+            System.out.println("Heating Zone: " + zoneName);
+            System.out.println("Rooms:");
+            for (Room room : rooms) {
+                System.out.println("- " + room.getName());
+            }
+            System.out.println();
+        }
     }
 }
