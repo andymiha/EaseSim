@@ -88,6 +88,59 @@ public class SimHomeController {
     }
 
 
+    @GetMapping("/getHouseElements")
+    public String getHouseElements() {
+        // test commit
+        HouseLayout house = SmartHomeSimulator.getInstance().getHouseLayout();
+        List<Map<String, Object>> lights = new ArrayList<>();
+        List<Map<String, Object>> windows = new ArrayList<>();
+        List<Map<String, Object>> doors = new ArrayList<>();
+
+        house.getHouseLights().forEach((key, value) -> {
+            Map<String, Object> room = new HashMap<>();
+            Light light = (Light) key;
+            room.put("roomName", value);
+            room.put("isAuto", light.getIsAutoState());
+            room.put("state", light.getState());
+            room.put("id", light.getId());
+            lights.add(room);
+        });
+
+        house.getHouseDoors().forEach((key, value) -> {
+            Map<String, Object> room = new HashMap<>();
+            Door door = (Door) key;
+            room.put("roomName", value);
+            room.put("isAuto", door.getIsAutoState());
+            room.put("state", door.getState());
+            room.put("id", door.getId());
+            doors.add(room);
+        });
+
+        house.getHouseWindows().forEach((key, value) -> {
+            Map<String, Object> room = new HashMap<>();
+            Window window = (Window) key;
+            room.put("roomName", value);
+            room.put("isBlocked", window.getBlockedState());
+            room.put("state", window.getState());
+            room.put("id", window.getId());
+            windows.add(room);
+        });
+
+        Map<String, List<Map<String, Object>>> elements = new HashMap<>();
+        elements.put("lights", lights);
+        elements.put("windows", windows);
+        elements.put("doors", doors);
+
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(elements);
+        } catch (Exception e) {
+            // Handle the error properly
+            e.printStackTrace();
+            return "Error converting to JSON";
+        }
+    }
 
     @GetMapping("/getHouseLights")
     public String getHouseLights() {

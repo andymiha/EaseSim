@@ -11,12 +11,20 @@ import com.ljj.easesim.layout.Room;
 
 public class SmartHomeCore {
     private final HouseLayout house = SmartHomeSimulator.getInstance().getHouseLayout();
+    private final SmartHomeSimulator shs = SmartHomeSimulator.getInstance();
     private static final SmartHomeCore INSTANCE = new SmartHomeCore();
 
     // Log all actions (save in log file) and display in console. (Observer)
 
     public static SmartHomeCore getInstance() {
         return INSTANCE;
+    }
+
+    //METHODS
+
+    public void printCurrentTimeFromSHS() {
+        String currentTime = shs.getCurrentTime();
+        System.out.println("Current Time from SHS: " + currentTime);
     }
 
     public Room findElementRoom(HouseElement element) {
