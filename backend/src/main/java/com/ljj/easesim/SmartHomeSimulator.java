@@ -15,13 +15,15 @@ import java.util.*;
 import static java.lang.Integer.parseInt;
 
 // Allow upload CSV for temperature info.
-public class SmartHomeSimulator {
+public class SmartHomeSimulator implements TemperatureObservable {
     private static SmartHomeSimulator INSTANCE = null;
     private ArrayList<User> users;
     private User loggedInUser;
     private final HouseLayout houseLayout;
     private File outsideTempsFile;
     private double outsideTemp;
+
+    private List<TemperatureObserver> temperatureObservers;
 
 
 
@@ -30,6 +32,7 @@ public class SmartHomeSimulator {
         houseLayout = HouseLayout.getInstance();
         mapUsersFromJson("db.json");
         outsideTempsFile = new File("OutdoorTemp.csv");
+        temperatureObservers = new ArrayList<>();
     }
 
     public static SmartHomeSimulator getInstance() {
@@ -72,6 +75,26 @@ public class SmartHomeSimulator {
         this.outsideTemp = outsideTemp;
     }
 
+    @Override
+    public void registerObserver(TemperatureObserver observer) {
+        temperatureObservers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(TemperatureObserver observer) {
+        temperatureObservers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+                                                // Implement this method to get indoor temperature
+        double outdoorTemp = getOutsideTemp(); // Implement this method to get outdoor temperature
+
+        for (TemperatureObserver observer : temperatureObservers) {
+            observer.updateTemperature(outdoorTemp);
+        }
+    }
+
     //METHODS
 
     private void mapUsersFromJson(String fileName) {
@@ -105,8 +128,8 @@ public class SmartHomeSimulator {
                     double temperature = Double.parseDouble(parts[2]);
 
                     // Debugging outputs to check values
-                    System.out.println("csvDate: '" + csvDate + "', date: '" + date + "'");
-                    System.out.println("csvTime: '" + csvTime.substring(0,2) + "', time: '" + time.substring(0,2) + "'"); //substring times to match hours (discard minutes & seconds)
+                    //System.out.println("csvDate: '" + csvDate + "', date: '" + date + "'");
+                    //System.out.println("csvTime: '" + csvTime.substring(0,2) + "', time: '" + time.substring(0,2) + "'"); //substring times to match hours (discard minutes & seconds)
 
                     if (csvDate.equals(date) && csvTime.substring(0,2).equals(time.substring(0,2))) {
                         return temperature;

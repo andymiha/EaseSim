@@ -1,8 +1,10 @@
 package com.ljj.easesim.controllers;
 
+import com.ljj.easesim.SmartHomeHeating;
 import org.springframework.web.bind.annotation.*;
 
 import com.ljj.easesim.SmartHomeSimulator;
+import com.ljj.easesim.services.HVAC;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -15,7 +17,12 @@ import java.time.format.DateTimeFormatter;
 @RequestMapping("/api/time")
 public class DateController {
 
-    SmartHomeSimulator shs;
+    private SmartHomeSimulator shs;
+
+    private SmartHomeHeating shh;
+
+    private HVAC hvac;
+
     private LocalDate currentDate;
     private int accelerationFactor;
     private LocalTime currentTime;
@@ -25,22 +32,12 @@ public class DateController {
 
     public DateController() {
         this.shs = SmartHomeSimulator.getInstance();
+        this.shh = SmartHomeHeating.getInstance();
+        this.hvac = HVAC.getInstance();
         this.accelerationFactor = 1;
         this.currentDate = LocalDate.of(2022, 3, 1); // Start date on March 1st, 2022
         this.currentTime = LocalTime.of(0, 0, 0); // Start time at midnight
     }
-
-//    public void startClock() {
-//        executorService = Executors.newSingleThreadScheduledExecutor();
-//
-//        executorService.scheduleAtFixedRate(() -> {
-//            if (currentTime.getHour() == 23 && currentTime.getMinute() == 59 && currentTime.getSecond() == 59) {
-//                currentDate = currentDate.plusDays(1); // Increment date by 1 day
-//            }
-//            currentTime = currentTime.plusSeconds(accelerationFactor); // Increment time by acceleration factor
-//            printCurrentDateTimeNewLine(); // Print current date and time in new lines
-//        }, 0, 1, TimeUnit.SECONDS); // Start immediately and repeat every second
-//    }
 
     public void startClock() {
         executorService = Executors.newSingleThreadScheduledExecutor();
@@ -48,13 +45,16 @@ public class DateController {
         executorService.scheduleAtFixedRate(() -> {
             LocalTime previousTime = currentTime; // Make a copy of the current time
 
-            currentTime = currentTime.plusSeconds(accelerationFactor); // Increment time by acceleration factor
+            currentTime = currentTime.plusSeconds(accelerationFactor);// Increment time by acceleration factor
+            trackChangeTemp(accelerationFactor);
 
             if (previousTime.getHour() != currentTime.getHour()) {
                 System.out.println("\tHour changed: " + previousTime.getHour() + " -> " + currentTime.getHour());
                 //BUG HERE - probably inside of getTemp...
-                //double temp = shs.getTemperatureFromCSV(getCurrentDate(), getCurrentTime());
-                //System.out.println("New Temperature: " + temp);
+                double temp = shs.getTemperatureFromCSV(getCurrentDate(), getCurrentTime());
+                shs.setOutsideTemp(temp);
+                System.out.println("New Temperature DataController: " + temp);
+                System.out.println("New Temperature SHS: " + shs.getOutsideTemp());
             }
 
             //change incrementation condition -- increment if previous hour > next hour
@@ -69,6 +69,29 @@ public class DateController {
     public int changeAccelerationFactor(int newFactor) {
         this.accelerationFactor = newFactor;
         return accelerationFactor;
+    }
+
+    //called in DateController
+    //pass acceleration rate and do 0.1 * rate to speed up/slow down
+    public void trackChangeTemp(int accelerationFactor) {
+        if (hvac.isHvacRunning()) {
+            if (hvac.getCurrentTemperature() < hvac.getDesiredTemperature()) {
+                hvac.setCurrentTemperature(hvac.getCurrentTemperature() + 0.1*accelerationFactor);
+            } else if (hvac.getCurrentTemperature() > hvac.getDesiredTemperature()) {
+                hvac.setCurrentTemperature(hvac.getCurrentTemperature() - 0.1*accelerationFactor);
+            }
+        } else { // HVAC not running  -- temp changes according to outside
+            double currentTemperature = hvac.getCurrentTemperature();
+            double outsideTemperature = hvac.getOutsideTemperature();
+
+            if (currentTemperature < outsideTemperature) {
+                hvac.setCurrentTemperature(currentTemperature + 0.05*accelerationFactor);
+            } else if (currentTemperature > outsideTemperature) {
+                hvac.setCurrentTemperature(currentTemperature - 0.05*accelerationFactor);
+            }
+        }
+        System.out.println("\nCurrent Temperature: " + hvac.getCurrentTemperature());
+        hvac.controlHVAC(); // Check if HVAC needs to start or stop after each time step
     }
 
     public void printCurrentDateTimeNewLine() {
@@ -113,5 +136,18 @@ public class DateController {
         } else {
             return "Clock is already stopped!";
         }
+    }
+
+    @PostMapping("/hvac/desiredTemperature")
+    public String setDesiredTemperature(@RequestBody double desiredTemperature) {
+        hvac.setDesiredTemperature(desiredTemperature);
+        return "Desired temperature set to " + desiredTemperature;
+    }
+
+    @PostMapping("/hvac/assignHVACZone")
+    public String assignHVACZone(@RequestBody String zoneName) {
+        zoneName = zoneName.replace("\"", "");
+        shh.assignHVACZone(zoneName);
+        return "Assigned HVAC zone: " + zoneName;
     }
 }

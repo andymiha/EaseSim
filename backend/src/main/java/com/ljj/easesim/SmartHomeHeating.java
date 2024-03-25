@@ -1,17 +1,22 @@
 package com.ljj.easesim;
 
 import com.ljj.easesim.layout.*;
+import com.ljj.easesim.abstractions.*;
+import com.ljj.easesim.services.HVAC;
+import com.ljj.easesim.services.HeatingZone;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SmartHomeHeating {
+public class SmartHomeHeating implements TemperatureObserver{
     private final HouseLayout house = SmartHomeSimulator.getInstance().getHouseLayout();
     private static final SmartHomeHeating INSTANCE = new SmartHomeHeating();
     private boolean isActive;
-    private Map<String, List<Room>> heatingZones;
+    private Map<String, HeatingZone> heatingZones;
+    private HVAC hvac;
+
 
     // Log all actions (save in log file) and display in console. (Observer)
 
@@ -19,6 +24,8 @@ public class SmartHomeHeating {
         isActive = false;
         heatingZones = new HashMap<>();
         generateHeatingZones();
+        SmartHomeSimulator.getInstance().registerObserver(this);
+        this.hvac = HVAC.getInstance();
     }
 
     public boolean isActive() {
@@ -32,36 +39,63 @@ public class SmartHomeHeating {
         return INSTANCE;
     }
 
+
+    @Override
+    public void updateTemperature(double outdoorTemperature) {
+        // Update heating based on temperature changes
+        if (isActive) {
+            hvac.setOutsideTemperature(outdoorTemperature);
+
+            // Implement heating logic based on indoor and outdoor temperatures
+            // Example:
+//            if (outdoorTemperature < 10) {
+//                // Turn on heating
+//            } else {
+//                // Turn off heating
+//            }
+        }
+    }
+
     public void createHeatingZone(String zoneName) {
         if (!heatingZones.containsKey(zoneName)) {
-            heatingZones.put(zoneName, new ArrayList<>());
+            heatingZones.put(zoneName, new HeatingZone(zoneName));
         }
     }
 
     public void deleteHeatingZone(String zoneName) {
-        if (!heatingZones.containsKey(zoneName)) {
-            throw new IllegalArgumentException("Heating zone '" + zoneName + "' does not exist.");
-        }
         heatingZones.remove(zoneName);
     }
 
     public void addRoomToHeatingZone(String zoneName, Room room) {
-        if (!heatingZones.containsKey(zoneName)) {
-            throw new IllegalArgumentException("Heating zone '" + zoneName + "' does not exist.");
+        HeatingZone heatingZone = heatingZones.get(zoneName);
+        if (heatingZone != null) {
+            heatingZone.addRoom(room);
         }
-        heatingZones.get(zoneName).add(room);
     }
 
+
     public void removeRoomFromHeatingZone(String zoneName, Room room) {
-        if (!heatingZones.containsKey(zoneName)) {
-            throw new IllegalArgumentException("Heating zone '" + zoneName + "' does not exist.");
+        HeatingZone heatingZone = heatingZones.get(zoneName);
+        if (heatingZone != null) {
+            heatingZone.removeRoom(room);
         }
-        heatingZones.get(zoneName).remove(room);
     }
 
     public List<Room> getRoomsInHeatingZone(String zoneName) {
-        return heatingZones.getOrDefault(zoneName, new ArrayList<>());
+        HeatingZone heatingZone = heatingZones.get(zoneName);
+        return heatingZone != null ? heatingZone.getRooms() : new ArrayList<>();
     }
+
+    public void assignHVACZone(String zoneName) {
+        HeatingZone heatingZone = heatingZones.get(zoneName);
+        if (heatingZone != null) {
+            hvac.setZone(heatingZone);
+        }
+        System.out.println(zoneName);
+
+        //show a message if heating zone fails !
+    }
+
 
     public void generateHeatingZones() {
         createHeatingZone("Garage");
@@ -78,16 +112,19 @@ public class SmartHomeHeating {
     }
 
     public void printHeatingZones() {
-        for (Map.Entry<String, List<Room>> entry : heatingZones.entrySet()) {
+        for (Map.Entry<String, HeatingZone> entry : heatingZones.entrySet()) {
             String zoneName = entry.getKey();
-            List<Room> rooms = entry.getValue();
+            HeatingZone heatingZone = entry.getValue();
 
             System.out.println("Heating Zone: " + zoneName);
             System.out.println("Rooms:");
-            for (Room room : rooms) {
+            for (Room room : heatingZone.getRooms()) {
                 System.out.println("- " + room.getName());
             }
             System.out.println();
         }
     }
+
+
+
 }
