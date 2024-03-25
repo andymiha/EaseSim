@@ -1,17 +1,16 @@
 package com.ljj.easesim;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import com.ljj.easesim.abstractions.HouseElement;
+import com.ljj.easesim.elements.Light;
+import com.ljj.easesim.elements.Window;
+import com.ljj.easesim.layout.HouseLayout;
+import com.ljj.easesim.layout.Room;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
-
-import com.ljj.easesim.elements.Light;
-import com.ljj.easesim.elements.Window;
-import com.ljj.easesim.interfaces.HouseElement; //abstractions
-import com.ljj.easesim.layout.HouseLayout;
-import com.ljj.easesim.layout.Room;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class HouseLayoutTest {
 

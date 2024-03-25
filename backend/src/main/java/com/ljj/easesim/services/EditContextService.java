@@ -57,7 +57,7 @@ public class EditContextService {
     }
 
     //Helper methods for POST
-    private int extractWindowNumber(String selectedWindow) {
+    public int extractWindowNumber(String selectedWindow) {
         // Use regular expression to extract the integer part
         String windowNumberStr = selectedWindow.replaceAll("\\D+", "");
         // Parse the window number string to an integer

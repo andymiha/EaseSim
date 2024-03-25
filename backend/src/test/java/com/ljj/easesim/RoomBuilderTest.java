@@ -2,8 +2,8 @@ package com.ljj.easesim;
 
 import com.ljj.easesim.builders.RoomBuilder;
 import com.ljj.easesim.layout.Room;
-import com.ljj.easesim.interfaces.HouseElement;
-import com.ljj.easesim.interfaces.User;
+import com.ljj.easesim.abstractions.HouseElement;
+import com.ljj.easesim.abstractions.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
