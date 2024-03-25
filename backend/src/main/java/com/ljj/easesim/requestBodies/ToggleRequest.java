@@ -2,7 +2,6 @@ package com.ljj.easesim.requestBodies;
 public class ToggleRequest {
     private int id;
     private int userId;
-    private boolean state;
 
     // Getters and setters
     public int getId() {
@@ -12,5 +11,12 @@ public class ToggleRequest {
         return userId;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
 }
 
