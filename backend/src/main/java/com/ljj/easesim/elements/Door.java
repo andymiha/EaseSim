@@ -27,31 +27,29 @@ public class Door extends HouseElement {
         return isBlocked;
     }
 
-    public void setBlocked(boolean blocked) {
+    /* not used for now
+    *  public void setBlocked(boolean blocked) {
         isBlocked = blocked;
-    }
+    } */
 
     public void toggleBlocked() {
         isBlocked = !isBlocked;
 
     }
-
     public boolean getIsAutoState() {
         return isAuto;
     }
-
     public void setIsAutoState(boolean auto) {
         this.isAuto = auto;
     }
-
     public AbstractMap.SimpleEntry<String, String> getRoomConnection() {
         return roomConnection;
     }
-
+    /* not used for now
     public void setRoomConnection(AbstractMap.SimpleEntry<String, String> roomConnection) {
         this.roomConnection = roomConnection;
     }
-
+*/
     @Override
     public String toString() {
         return "Door{" +

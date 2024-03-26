@@ -132,4 +132,40 @@ public class RoomTest {
         assertEquals(users, room.getUsers());
     }
 
+    // Testing getWindows() method
+    @Test
+    void testWindows() {
+        ArrayList<HouseElement> elements = new ArrayList<>();
+        elements.add(new Light()); // Adding a light, should not be included
+        elements.add(new Door());  // Adding a door, should not be included
+        elements.add(new Window());
+        elements.add(new Window());
+        elements.add(new Light());
+        Room room = new Room(1, "Living Room", elements, new ArrayList<>());
+
+        ArrayList<Window> windows = room.getWindows();
+        assertEquals(2, windows.size()); // There should be 2 windows
+        for (HouseElement element : windows) {
+            assertTrue(element instanceof Window); // All elements should be instances of Window
+        }
+    }
+
+    // Testing getLights() method
+    @Test
+    void testLights() {
+        ArrayList<HouseElement> elements = new ArrayList<>();
+        elements.add(new Light());
+        elements.add(new Door());  // Adding a door, should not be included
+        elements.add(new Window()); // Adding a window, should not be included
+        elements.add(new Light());
+        Room room = new Room(1, "Living Room", elements, new ArrayList<>());
+
+        ArrayList<Light> lights = room.getLights();
+        assertEquals(2, lights.size()); // There should be 2 lights
+        for (HouseElement element : lights) {
+            assertTrue(element instanceof Light); // All elements should be instances of Light
+        }
+    }
+
+
 }

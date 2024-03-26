@@ -39,4 +39,6 @@ public class Window extends HouseElement {
                 ", isOpen=" + isOpen +
                 '}';
     }
+
+
 }
