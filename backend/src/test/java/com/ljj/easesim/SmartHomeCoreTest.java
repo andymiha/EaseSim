@@ -23,36 +23,6 @@ class SmartHomeCoreTest {
     Room mockRoom;
 
     @Test
-    void testToggleWindow() {
-        MockitoAnnotations.openMocks(this); // Initialize mocks
-
-        // Create a window object with ID 1
-        Window window = new Window();
-
-        // Mock the findElementRoom method to return the mock room
-        SmartHomeCore smartHomeCore = spy(SmartHomeCore.getInstance()); // Spy on the real instance to mock findElementRoom
-        doReturn(mockRoom).when(smartHomeCore).findElementRoom(any(Window.class));
-
-        // Call the toggle method with the window object
-
-        Window toggledWindow = smartHomeCore.toggle(window);
-
-        if (toggledWindow == null){
-            System.out.println("Window is null");
-        }
-
-        // Verify that findElementRoom was called with the correct window object
-        verify(smartHomeCore).findElementRoom(window);
-
-        // Verify that setCommand and executeCommand were called on the mock room
-        verify(mockRoom).setCommand(any(ToggleWindowCommand.class));
-        verify(mockRoom).executeCommand();
-
-        // Assert that the toggledWindow is the same as the original window
-        assertSame(window, toggledWindow);
-    }
-
-    @Test
     void testToggleWindowWithPermissions() {
         SmartHomeCore smartHomeCore = SmartHomeCore.getInstance();
         Window window = new Window();

@@ -37,7 +37,7 @@ public class Room {
         return this.name;
     }
 
-  /* not used for now
+
     public double getCurrentTemp() {
         return currentTemp;
     }
@@ -53,7 +53,7 @@ public class Room {
     public void setDesiredTemp(double desiredTemp) {
         this.desiredTemp = desiredTemp;
     }
-*/
+
     public ArrayList<User> getUsers() {
         return this.users;
     }
