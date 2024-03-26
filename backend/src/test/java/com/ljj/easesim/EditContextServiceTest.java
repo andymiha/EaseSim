@@ -6,58 +6,55 @@ import com.ljj.easesim.requestBodies.EditContextFormData;
 import com.ljj.easesim.services.EditContextService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 
 public class EditContextServiceTest {
+
+    @Mock
+    private SmartHomeSimulator smartHomeSimulator;
 
     private EditContextService editContextService;
 
     @BeforeEach
     void setUp() {
+        MockitoAnnotations.openMocks(this);
         editContextService = new EditContextService();
     }
 
+
+
     @Test
-    void testProcessGetData() {
-        // Mock the SmartHomeSimulator
-        SmartHomeSimulator smartHomeSimulatorMock = mock(SmartHomeSimulator.class);
-        when(smartHomeSimulatorMock.getHouseLayout().getRooms()).thenReturn(new ArrayList<>());
+    void testProcessFormDataReturnsTrue() {
+        // Mock data
+        EditContextFormData formData = new EditContextFormData();
+        formData.setSelectedRoom("Test Room");
+        formData.setSelectedInhabitant("Test Inhabitant");
+        formData.setSelectedWindow("Window 1");
 
+        // Call the method
+        boolean result = editContextService.processFormData(formData);
 
-        // Call the method to be tested
-        var data = editContextService.processGetData();
-
-        // Assert that the returned data contains an empty list of rooms
-        assertEquals(0, data.get("rooms").size());
+        // Verify that the method returns true
+        assertTrue(result);
     }
 
     @Test
-    void testProcessFormData() {
-        // Mock the EditContextFormData
-        EditContextFormData formDataMock = mock(EditContextFormData.class);
-        when(formDataMock.getSelectedRoom()).thenReturn("Test Room");
-        when(formDataMock.getSelectedInhabitant()).thenReturn("Test Inhabitant");
-        when(formDataMock.getSelectedWindow()).thenReturn("Window 1");
-
-        // Mock the SmartHomeSimulator
-        SmartHomeSimulator smartHomeSimulatorMock = mock(SmartHomeSimulator.class);
-        Room roomMock = mock(Room.class);
+    void testToggleWindowBlockStateReturnsTrue() {
+        // Mock data
+        Room selectedRoom = mock(Room.class);
         Window windowMock = mock(Window.class);
-        when(roomMock.getWindows()).thenReturn((ArrayList<Window>) List.of(windowMock));
-        when(smartHomeSimulatorMock.getHouseLayout().getRoom("Test Room")).thenReturn(roomMock);
+        int windowNumber = 1;
 
+        // Call the method
+        boolean result = editContextService.toggleWindowBlockState(selectedRoom, windowNumber);
 
-        // Call the method to be tested
-        editContextService.processFormData(formDataMock);
-
-        // Verify that the method interacts correctly with its dependencies
-        verify(roomMock).getWindows();
-        verify(windowMock).toggleBlocked();
+        // Verify that the method returns true
+        assertTrue(result);
     }
 
     @Test

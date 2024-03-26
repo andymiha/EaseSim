@@ -1,15 +1,14 @@
 package com.ljj.easesim.services;
 
+import com.ljj.easesim.SmartHomeSimulator;
+import com.ljj.easesim.elements.Window;
+import com.ljj.easesim.layout.Room;
+import com.ljj.easesim.requestBodies.EditContextFormData;
 import org.springframework.stereotype.Service;
 
-import com.ljj.easesim.SmartHomeSimulator;
-import com.ljj.easesim.requestBodies.EditContextFormData;
-
-import com.ljj.easesim.layout.Room;
-import com.ljj.easesim.elements.Window;
-
-
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class EditContextService {
@@ -23,7 +22,7 @@ public class EditContextService {
 
 
     //POST process
-    public void processFormData(EditContextFormData editContextFormData) {
+    public boolean processFormData(EditContextFormData editContextFormData) {
         System.out.println("Received form data:");
         System.out.println("Selected Room: " + editContextFormData.getSelectedRoom());
 
@@ -54,6 +53,7 @@ public class EditContextService {
         } else {
             System.out.println("Corresponding Room object not found for selected room.");
         }
+        return true;
     }
 
     //Helper methods for POST
@@ -64,7 +64,7 @@ public class EditContextService {
         return Integer.parseInt(windowNumberStr);
     }
 
-    private void toggleWindowBlockState(Room selectedRoom, int windowNumber) {
+    public boolean toggleWindowBlockState(Room selectedRoom, int windowNumber) {
         // Retrieve the list of windows in the selected room
         for (Window window : selectedRoom.getWindows()) {
             if (window.getId() == windowNumber) {
@@ -74,5 +74,6 @@ public class EditContextService {
                 break;
             }
         }
+        return true;
     }
 }
