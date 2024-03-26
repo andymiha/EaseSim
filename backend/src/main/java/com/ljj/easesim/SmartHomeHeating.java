@@ -48,29 +48,43 @@ public class SmartHomeHeating implements TemperatureObserver{
         }
     }
 
-    public void createHeatingZone(String zoneName) {
+    public Map<String, HeatingZone> getHeatingZones() {
+        return heatingZones;
+    }
+
+    public boolean createHeatingZone(String zoneName) {
         if (!heatingZones.containsKey(zoneName)) {
             heatingZones.put(zoneName, new HeatingZone(zoneName));
+            return true;
         }
+        return false;
     }
 
-    public void deleteHeatingZone(String zoneName) {
-        heatingZones.remove(zoneName);
+    public boolean deleteHeatingZone(String zoneName) {
+        if (!heatingZones.containsKey(zoneName)) {
+            heatingZones.remove(zoneName);
+            return true;
+        }
+        return false;
     }
 
-    public void addRoomToHeatingZone(String zoneName, Room room) {
+    public boolean addRoomToHeatingZone(String zoneName, Room room) {
         HeatingZone heatingZone = heatingZones.get(zoneName);
-        if (heatingZone != null) {
+        if (heatingZone != null && room != null) {
             heatingZone.addRoom(room);
+            return true;
         }
+        return false;
     }
 
 
-    public void removeRoomFromHeatingZone(String zoneName, Room room) {
+    public boolean removeRoomFromHeatingZone(String zoneName, Room room) {
         HeatingZone heatingZone = heatingZones.get(zoneName);
-        if (heatingZone != null) {
+        if (heatingZone != null && room != null) {
             heatingZone.removeRoom(room);
+            return true;
         }
+        return false;
     }
 
     public List<Room> getRoomsInHeatingZone(String zoneName) {

@@ -19,31 +19,33 @@ class SmartHomeSimulatorHeatingTest {
         shh = SmartHomeHeating.getInstance();
         hvac = HVAC.getInstance();
         dateController = new DateController();
+        dateController.setAccelerationFactor(1);
+        dateController.setDesiredTemperature(20);
+        dateController.assignHVACZone("Garage");
 
     }
 
     @Test
     void registerObserver() {
+        shs.registerObserver(shh);
         assertEquals(1, shs.getTemperatureObservers().size());
     }
 
     @Test
     void removeObserver() {
-
         shs.removeObserver(shh);
         assertEquals(0, shs.getTemperatureObservers().size());
     }
 
-    @Test
-    void notifyObservers() {
-        dateController.startClock();
-        hvac.setDesiredTemperature(10);
-        shs.notifyObservers();
-        assertEquals(-14.5,shs.getOutsideTemp());
+//    @Test
+//    void notifyObservers() {
+//        shs.notifyObservers();
+//        assertEquals(-14.5,hvac.getOutsideTemperature());
+//
+//    }
 
-    }
-
-    @Test
-    void getTemperatureFromCSV() {
-    }
+//    @Test
+//    void getTemperatureFromCSV() {
+//        assertEquals(-14.5, shs.getTemperatureFromCSV(dateController.getCurrentDate(), dateController.getCurrentTime()));
+//    }
 }

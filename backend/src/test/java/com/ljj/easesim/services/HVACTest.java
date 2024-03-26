@@ -18,8 +18,8 @@ class HVACTest {
     void testSetZone() {
         HeatingZone heatingZone = new HeatingZone("TestZone");
 
-        // Initially, HVAC is not running
-        assertFalse(hvac.isHvacRunning());
+        //hvac should be on when program starts as long as current temp (10) and desired temp (20) are distinct.
+        assertTrue(hvac.isHvacRunning());
 
         // Setting zone should change current and desired temperatures and start HVAC
         hvac.setZone(heatingZone);
@@ -32,7 +32,8 @@ class HVACTest {
 
     @Test
     void testControlHVAC() {
-        assertFalse(hvac.isHvacRunning());
+        //hvac should be on when program starts as long as current temp (10) and desired temp (20) are distinct.
+        assertTrue(hvac.isHvacRunning());
 
         hvac.setCurrentTemperature(10);
         hvac.setDesiredTemperature(20);

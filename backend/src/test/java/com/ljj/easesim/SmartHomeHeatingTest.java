@@ -22,8 +22,7 @@ class SmartHomeHeatingTest {
 
     @Test
     void testToggleActive() {
-        assertFalse(smartHomeHeating.isActive());
-        smartHomeHeating.toggleActive();
+        //when the program is run, SHH is automatically toggled
         assertTrue(smartHomeHeating.isActive());
         smartHomeHeating.toggleActive();
         assertFalse(smartHomeHeating.isActive());
@@ -39,11 +38,12 @@ class SmartHomeHeatingTest {
 
     @Test
     void testCreateHeatingZone() {
-
+        assertTrue(smartHomeHeating.createHeatingZone("Zone3"));
     }
 
     @Test
     void testDeleteHeatingZone() {
+        assertTrue(smartHomeHeating.deleteHeatingZone("Zone3"));
     }
 
     @Test
@@ -52,5 +52,13 @@ class SmartHomeHeatingTest {
 
     @Test
     void testAssignHVACZone() {
+    }
+
+    @Test
+    void removeRoomFromHeatingZone() {
+    }
+
+    @Test
+    void printHeatingZones() {
     }
 }
