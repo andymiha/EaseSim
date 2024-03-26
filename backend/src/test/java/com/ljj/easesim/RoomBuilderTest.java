@@ -69,8 +69,8 @@ public class RoomBuilderTest {
         // Verify that the Room object has the correct name
         assertEquals(name, room.getName());
         // Verify that the Room object has an empty list of elements
-        assertEquals(new ArrayList<>(), room.getElements());
+        assertEquals(null, room.getElements());
         // Verify that the Room object has an empty list of users
-        assertEquals(new ArrayList<>(), room.getUsers());
+        assertEquals(null, room.getUsers());
     }
 }
