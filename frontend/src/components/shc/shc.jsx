@@ -1,11 +1,13 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, ToggleButton, ToggleButtonGroup, Box, Stack, Switch, Checkbox } from "@mui/material";
 import { useState, useEffect } from "react";
 
+//fix update state reducer fxns
 
-const SHC = () => {
+const SHC = (globalWindows, globalLights, globalDoors) => {
   const [lights, setLights] = useState([])
   const [doors, setDoors] = useState([])
   const [windows, setWindows] = useState([])
+  
 
   useEffect(() => {  
     fetch('http://localhost:8080/getHouseLights') 
@@ -18,13 +20,19 @@ const SHC = () => {
   },
     []);
 
+   const initialWindowsOnState = [];// hold initial window states
 
   useEffect(() => {  
+    
     fetch('http://localhost:8080/getHouseWindows') 
         .then(response => response.json())
         .then(data => {
-          setWindows(data)
+          setWindows(data),
+        
+          windows.forEach(window => 
+            initialWindowsOnState[window.id] = window.state)
         })
+        updateWindowsOnStates(initialWindowsOnState)
         .then(console.log("bluetooth connect assucessfully"))
         .catch(error => console.error('Error fetching data:', error));
   },
@@ -44,6 +52,8 @@ const SHC = () => {
   
 
   const [rows, setRows] = useState([]);
+
+  
 
   const generateRows = (data) => {
     setRows(data.map((item) => ({
@@ -139,7 +149,9 @@ const handleWindowChange = (row, index) => {
               i === index ? {...row, isOn: data.state} : row
           )
       );
+  
   })
+  updateWindowsOnStates(row.id, row.state) 
   .catch(error => {
       console.error('Error toggling:', error);
   });

@@ -33,9 +33,9 @@ const SimSideBar = ({ openDrawer, handleDrawerToggle, handleDrawerClose, handleR
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', width: 240 }}>
       <CssBaseline />
-      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+      {/* <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -50,8 +50,8 @@ const SimSideBar = ({ openDrawer, handleDrawerToggle, handleDrawerClose, handleR
             Dashboard
           </Typography>
         </Toolbar>
-      </AppBar>
-      <Drawer
+      </AppBar> */}
+      {/* <Drawer
         variant="persistent"
         anchor="left"
         open={openDrawer}
@@ -66,7 +66,7 @@ const SimSideBar = ({ openDrawer, handleDrawerToggle, handleDrawerClose, handleR
           <IconButton onClick={handleDrawerClose}>
             {<ChevronLeftIcon />}
           </IconButton>
-        </Toolbar>
+        </Toolbar> */}
         
         <Box sx={{ p: theme => theme.spacing(2) }}>
           <Typography variant="h6" gutterBottom >
@@ -182,7 +182,7 @@ const SimSideBar = ({ openDrawer, handleDrawerToggle, handleDrawerClose, handleR
   
           </div>
         </Box>
-      </Drawer>
+      {/* </Drawer> */}
       
       {/* Modal for EditForm */}
       <Dialog open={openModal} onClose={handleModalClose}>

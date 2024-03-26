@@ -1,0 +1,32 @@
+.user-selection-container {
+  text-align: center;
+}
+
+.user-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 20px;
+}
+
+.user-profile {
+  cursor: pointer;
+}
+
+.user-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #ccc;
+  margin: 0 auto 10px;
+}
+
+.parent-avatar { background-image: url('parent-avatar.jpg'); }
+.child-avatar { background-image: url('child-avatar.jpg'); }
+.guest-avatar { background-image: url('guest-avatar.jpg'); }
+.stranger-avatar { background-image: url('stranger-avatar.jpg'); }
+
+p {
+  font-size: 20px;
+  color: #fff;
+}
