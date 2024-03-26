@@ -2,7 +2,7 @@ const initialState = {
   windows: [{ id: 1, state: true, isBlocked: true}],
   doors: [{ id: 2, state: true, isAuto: false }],
   lights: [{ id: 3, state: true, isAuto: false }],
-  userName: "Gilbert",
+  userName: "Gian-Carlo",
 };
 
 function rootReducer(state = initialState, action) {
