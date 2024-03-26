@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import com.ljj.easesim.elements.*;
 import com.ljj.easesim.abstractions.*;
 import com.ljj.easesim.controllers.DateController;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class })
 public class EaseSimApplication {
@@ -18,6 +19,9 @@ public class EaseSimApplication {
 		SmartHomeCore shc = SmartHomeCore.getInstance();
 		SmartHomeHeating shh = SmartHomeHeating.getInstance();
 		DateController clock = new DateController(); //Do a POST request to http://localhost:8080/api/time/acceleration and pass "1" to start clock
+		clock.setAccelerationFactor(1);
+		clock.setDesiredTemperature(20);
+		clock.assignHVACZone("Garage");
 
 		// Test data
 		Light sampleLight = (Light) shs.getHouseLayout().getRooms().get(0).getElements().get(0);

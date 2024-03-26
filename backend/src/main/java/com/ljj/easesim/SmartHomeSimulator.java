@@ -15,21 +15,22 @@ import java.util.*;
 import static java.lang.Integer.parseInt;
 
 // Allow upload CSV for temperature info.
-public class SmartHomeSimulator {
+public class SmartHomeSimulator implements TemperatureObservable {
     private static SmartHomeSimulator INSTANCE = null;
     private ArrayList<User> users;
     private User loggedInUser;
     private final HouseLayout houseLayout;
     private File outsideTempsFile;
     private double outsideTemp;
-
-
+    private List<TemperatureObserver> temperatureObservers;
 
     public SmartHomeSimulator() {
         users = new ArrayList<>();
         houseLayout = HouseLayout.getInstance();
+        outsideTemp = 69;
         mapUsersFromJson("db.json");
         outsideTempsFile = new File("OutdoorTemp.csv");
+        temperatureObservers = new ArrayList<>();
     }
 
     public static SmartHomeSimulator getInstance() {
@@ -72,6 +73,30 @@ public class SmartHomeSimulator {
         this.outsideTemp = outsideTemp;
     }
 
+    @Override
+    public void registerObserver(TemperatureObserver observer) {
+        temperatureObservers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(TemperatureObserver observer) {
+        temperatureObservers.remove(observer);
+    }
+
+    public List<TemperatureObserver> getTemperatureObservers() {
+        return temperatureObservers;
+    }
+
+    @Override
+    public void notifyObservers() {
+                                                // Implement this method to get indoor temperature
+        double outdoorTemp = getOutsideTemp(); // Implement this method to get outdoor temperature
+
+        for (TemperatureObserver observer : temperatureObservers) {
+            observer.updateTemperature(outdoorTemp);
+        }
+    }
+
     //METHODS
 
     public void mapUsersFromJson(String fileName) {
@@ -105,8 +130,8 @@ public class SmartHomeSimulator {
                     double temperature = Double.parseDouble(parts[2]);
 
                     // Debugging outputs to check values
-                    System.out.println("csvDate: '" + csvDate + "', date: '" + date + "'");
-                    System.out.println("csvTime: '" + csvTime.substring(0,2) + "', time: '" + time.substring(0,2) + "'"); //substring times to match hours (discard minutes & seconds)
+                    //System.out.println("csvDate: '" + csvDate + "', date: '" + date + "'");
+                    //System.out.println("csvTime: '" + csvTime.substring(0,2) + "', time: '" + time.substring(0,2) + "'"); //substring times to match hours (discard minutes & seconds)
 
                     if (csvDate.equals(date) && csvTime.substring(0,2).equals(time.substring(0,2))) {
                         return temperature;
@@ -151,50 +176,4 @@ public class SmartHomeSimulator {
     public void deleteUser(int id) {
         users.removeIf(user -> user.getId() == id);
     }
-
-
-
-
-
-//    //----------------------------------------------------------------------------------------------------------------
-//    //SHH testing
-//    //To be rethought/refactored -- just for testing purposes
-//
-//    // God API Method
-//
-//    public void testSHHFunctions() {
-//        // Display Separator Line
-//        System.out.println("\n" + "-".repeat(700));
-//        System.out.println("-".repeat(700));
-//        System.out.println("TESTING SHH FUNCTIONS\n");
-//
-//        System.out.println("\nTesting heating zone creation...\n");
-//
-//        shh.createHeatingZone("Living Room");
-//        System.out.println("Living Room heating zone created successfully.");
-//        System.out.println("Living Room heating zone is empty: " + shh.getRoomsInHeatingZone("Living Room").isEmpty());
-//
-//        shh.createHeatingZone("Kitchen");
-//        System.out.println("Kitchen heating zone created successfully.");
-//        System.out.println("Kitchen heating zone is empty: " + shh.getRoomsInHeatingZone("Kitchen").isEmpty());
-//
-//        SmartHomeHeating shh = SmartHomeHeating.getInstance();
-//
-//        // Test adding rooms to heating zones
-//        Room room1 = houseLayout.getRooms().get(0);
-//        Room room2 = houseLayout.getRooms().get(1);
-//
-//        shh.addRoomToHeatingZone("Living Room", room1);
-//        shh.addRoomToHeatingZone("Kitchen", room2);
-//
-//        // Verify that rooms are added to the correct heating zones
-//        System.out.println("\nTesting adding rooms to heating zones...\n");
-//
-//        System.out.println("Room added to Living Room heating zone: " + shh.getRoomsInHeatingZone("Living Room").contains(room1));
-//        System.out.println("Room added to Kitchen heating zone: " + shh.getRoomsInHeatingZone("Kitchen").contains(room2));
-//
-//        System.out.println("Living Room heating zone contents: " + shh.getRoomsInHeatingZone("Living Room"));
-//        System.out.println("Kitchen heating zone contents: " + shh.getRoomsInHeatingZone("Kitchen"));
-//    }
-
 }

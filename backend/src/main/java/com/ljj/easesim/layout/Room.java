@@ -16,6 +16,11 @@ public class Room {
 
     private double desiredTemp;
 
+    public Room(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Room(int id, String name, ArrayList<HouseElement> elements, ArrayList<User> users) {
         this.id = id;
         this.name = name;
