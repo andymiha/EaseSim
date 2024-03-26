@@ -1,22 +1,25 @@
 const initialState = {
-  windows: [{ id: 1, state: true, isBlocked: true}],
-  doors: [{ id: 2, state: true, isAuto: false }],
-  lights: [{ id: 3, state: true, isAuto: false }],
+  windows: [],
+  doors: [],
+  lights: [],
+  rooms: [],
   userName: "Gian-Carlo",
 };
 
 function rootReducer(state = initialState, action) {
   switch (action.type) {
-
+    case 'SET_ROOMS':
+        return { ...state, rooms: action.payload };
     //window actions
     case 'SET_WINDOWS':
         return { ...state, windows: action.payload };
     case 'UPDATE_WINDOW_OPEN_STATE':
-        return state.map(window =>
-            window.id === action.payload.id
-              ? { ...window, isBlocked: action.payload.isBlocked }
-              : window
-          );
+      return {
+        ...state,
+        windows: state.windows.map(window =>
+          window.id === action.payload.id ? { ...window, state: action.payload.state } : window
+        ),
+      };
     case 'UPDATE_WINDOW_BLOCKED_STATE':
         return state.map(window =>
             window.id === action.payload.id
@@ -46,13 +49,13 @@ function rootReducer(state = initialState, action) {
         };
 
     //light actions
-    case 'SET LIGHTS':
+    case 'SET_LIGHTS':
         return { ...state, lights: action.payload };
     case 'UPDATE_LIGHT_ON_STATE':
       return {
         ...state,
-        lights: state.lights.map((light, index) =>
-          index === action.payload.index ? { ...light, state: action.payload.state } : light
+        lights: state.lights.map(light =>
+          light.id === action.payload.id ? { ...light, state: action.payload.state } : light
         ),
       };
     case 'UPDATE_LIGHT_AUTO_STATE':

@@ -1,5 +1,6 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, ToggleButton, ToggleButtonGroup, Box, Stack, Switch, Checkbox } from "@mui/material";
 import { useState, useEffect } from "react";
+import { useDispatch } from 'react-redux';
 
 //fix update state reducer fxns
 
@@ -7,7 +8,7 @@ const SHC = (globalWindows, globalLights, globalDoors) => {
   const [lights, setLights] = useState([])
   const [doors, setDoors] = useState([])
   const [windows, setWindows] = useState([])
-  
+  const dispatch = useDispatch();
 
   useEffect(() => {  
     fetch('http://localhost:8080/getHouseLights') 
@@ -32,7 +33,6 @@ const SHC = (globalWindows, globalLights, globalDoors) => {
           windows.forEach(window => 
             initialWindowsOnState[window.id] = window.state)
         })
-        updateWindowsOnStates(initialWindowsOnState)
         .then(console.log("bluetooth connect assucessfully"))
         .catch(error => console.error('Error fetching data:', error));
   },
@@ -87,7 +87,7 @@ const SHC = (globalWindows, globalLights, globalDoors) => {
         }
     })
     .then(data => {
-        console.log(data);
+        dispatch({ type: 'UPDATE_LIGHT_ON_STATE', payload: { id: row.id, state: data.state} });
         setRows(prevRows => 
             prevRows.map((row, i) =>
                 i === index ? {...row, isOn: data.state} : row
@@ -143,6 +143,7 @@ const handleWindowChange = (row, index) => {
       }
   })
   .then(data => {
+      dispatch({ type: 'UPDATE_WINDOW_OPEN_STATE', payload: { id: row.id, state: data.state} });
       console.log(data);
       setRows(prevRows => 
           prevRows.map((row, i) =>
@@ -151,10 +152,6 @@ const handleWindowChange = (row, index) => {
       );
   
   })
-  updateWindowsOnStates(row.id, row.state) 
-  .catch(error => {
-      console.error('Error toggling:', error);
-  });
 };
 
 const handleLightAutoChange = (row, index) => {
