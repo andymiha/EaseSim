@@ -34,7 +34,7 @@ public class Window extends HouseElement {
     public String toString() {
         return "Window{" +
                 "id=" + id +
-                ", room=" + room.getName() +
+                ", roomName=" + roomName +
                 ", isBlocked=" + isBlocked +
                 ", isOpen=" + isOpen +
                 '}';
