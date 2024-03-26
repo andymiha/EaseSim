@@ -14,12 +14,28 @@ import java.util.*;
 
 public class HouseLayout {
     // ID Counter necessary for incrementing room ids when creating rooms.
+
+    private static HouseLayout instance = null;
     private int idCounter = 0;
     private ArrayList<Room> rooms;
+
+    public static HouseLayout getInstance() {
+        if (instance == null) {
+            instance = new HouseLayout();
+        }
+        return instance;
+    }
+
 
     // Constructor
     public HouseLayout() {
         rooms = new ArrayList<>();
+        initializeRooms();
+
+    }
+
+    //Creates all rooms
+    private void initializeRooms() {
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
@@ -30,6 +46,7 @@ public class HouseLayout {
             List<Map<String, Object>> layoutData = objectMapper.readValue(file, new TypeReference<>() {});
             Map<String, Door> doorMap = new HashMap<>();
 
+            System.out.println("\nDISPLAYING CREATED ROOMS...");
             // Iterate over obj array in the Layout.txt file and create Rooms
             for(Map<String, Object> roomData : layoutData) {
                 ArrayList<HouseElement> elements = new ArrayList<>();
@@ -57,7 +74,7 @@ public class HouseLayout {
                     light = new Light();
                     light.setId(++idCounter);
                     elements.add(light);
-                    light.setRoom(room);
+                    light.setRoomName(room.getName());
                 }
 
                 // Add Windows
@@ -65,7 +82,7 @@ public class HouseLayout {
                     window = new Window();
                     window.setId(++idCounter);
                     elements.add(window);
-                    window.setRoom(room);
+                    window.setRoomName(room.getName());
                 }
 
                 // Add Doors
@@ -76,7 +93,7 @@ public class HouseLayout {
                         door = new Door(); // Create new door
                         door.setId(++idCounter);
                         doorMap.put(roomConnectionName, door); // Track the new door
-                        door.setRoom(room);
+                        door.setRoomName(room.getName());
                     }
                     elements.add(door);
 
@@ -86,26 +103,26 @@ public class HouseLayout {
                 this.rooms.add(room);
 
                 // Display Separator Line
-                System.out.println("\n" + "-".repeat(700));
+                System.out.println("-".repeat(700));
 
                 // Display room content
-                System.out.println("Created " + room.toString() + "\n");
+                System.out.println("Created " + room.toString());
 
                 // Display getRoom test results
-                System.out.println("Testing getRoom on elements of Room " + room.getName() + "\n");
-                for (HouseElement element : room.getElements()) {
-                    Room location = element.getRoom();
-                    if (location != null) {
-                        System.out.println("Room found for " + element.toString() + ": " + room.getName());
-                    } else {
-                        System.out.println("Room not found for " + element.toString());
-                    }
-                }
+//                System.out.println("Testing getRoom on elements of Room " + room.getName() + "\n");
+//                for (HouseElement element : room.getElements()) {
+//                    Room location = element.getRoom();
+//                    if (location != null) {
+//                        System.out.println("Room found for " + element.toString() + ": " + room.getName());
+//                    } else {
+//                        System.out.println("Room not found for " + element.toString());
+//                    }
+//                }
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     // Methods

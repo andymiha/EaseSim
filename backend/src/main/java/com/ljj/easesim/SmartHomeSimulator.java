@@ -2,11 +2,12 @@ package com.ljj.easesim;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.ljj.easesim.abstractions.*;
 import com.ljj.easesim.layout.*;
-import com.ljj.easesim.elements.*;
 import com.ljj.easesim.users.*;
 
+import java.io.FileNotFoundException;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -19,34 +20,16 @@ public class SmartHomeSimulator {
     private ArrayList<User> users;
     private User loggedInUser;
     private final HouseLayout houseLayout;
+    private File outsideTempsFile;
+    private double outsideTemp;
 
-    private final SmartHomeCore shc;
-    private final SmartHomeHeating shh;
+
 
     public SmartHomeSimulator() {
         users = new ArrayList<>();
-        houseLayout = new HouseLayout();
-        shc = SmartHomeCore.getInstance();
-        shh = SmartHomeHeating.getInstance();
-
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        try {
-            File file = new File("db.json");
-            Map<String, Object> dbData = objectMapper.readValue(file, new TypeReference<>() {});
-            Map<String, Map<String, Object>> profiles = (Map<String, Map<String, Object>>) dbData.get("profiles");
-
-            for (Map.Entry<String, Map<String, Object>> entry : profiles.entrySet()) {
-                String userKey = entry.getKey();
-                Map<String, Object> details = entry.getValue();
-                User user = addUser(parseInt(userKey), details.get("userType").toString(), details.get("name").toString());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // Place 'Guest' in room to test permissions
-        //HouseLayout.getInstance().getRoom("Bathroom").addUser(getUser(2));
+        houseLayout = HouseLayout.getInstance();
+        mapUsersFromJson("db.json");
+        outsideTempsFile = new File("OutdoorTemp.csv");
     }
 
     public static SmartHomeSimulator getInstance() {
@@ -54,6 +37,10 @@ public class SmartHomeSimulator {
             INSTANCE = new SmartHomeSimulator(); // Create new instance if null
         }
         return INSTANCE;
+    }
+
+    public ArrayList<User> getUsers() {
+        return new ArrayList<>(users); // Return a copy of the users list
     }
 
     public HouseLayout getHouseLayout() {
@@ -69,9 +56,71 @@ public class SmartHomeSimulator {
         return null; // User not found
     }
 
-    public ArrayList<User> getUsers() {
-        return new ArrayList<>(users); // Return a copy of the users list
+    public File getOutsideTempsFile() {
+        return outsideTempsFile;
     }
+
+    public void setOutsideTempsFile(File outsideTempsFile) {
+        this.outsideTempsFile = outsideTempsFile;
+    }
+
+    public double getOutsideTemp() {
+        return outsideTemp;
+    }
+
+    public void setOutsideTemp(double outsideTemp) {
+        this.outsideTemp = outsideTemp;
+    }
+
+    //METHODS
+
+    private void mapUsersFromJson(String fileName) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            File file = new File(fileName);
+            Map<String, Object> dbData = objectMapper.readValue(file, new TypeReference<>() {});
+            Map<String, Map<String, Object>> profiles = (Map<String, Map<String, Object>>) dbData.get("profiles");
+
+            for (Map.Entry<String, Map<String, Object>> entry : profiles.entrySet()) {
+                String userKey = entry.getKey();
+                Map<String, Object> details = entry.getValue();
+                addUser(parseInt(userKey), details.get("userType").toString(), details.get("name").toString());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public double getTemperatureFromCSV(String date, String time) {
+        try (Scanner scanner = new Scanner(outsideTempsFile)) {
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] parts = line.split(",");
+
+                if (parts.length >= 3) {
+                    String csvDate = parts[0].replaceAll("\\p{C}", "");; // Trim whitespace characters and remove 5G influence
+                    String csvTime = parts[1].replaceAll("\\p{C}", "");; // Trim whitespace characters and remove 5G influence
+
+
+                    double temperature = Double.parseDouble(parts[2]);
+
+                    // Debugging outputs to check values
+                    System.out.println("csvDate: '" + csvDate + "', date: '" + date + "'");
+                    System.out.println("csvTime: '" + csvTime.substring(0,2) + "', time: '" + time.substring(0,2) + "'"); //substring times to match hours (discard minutes & seconds)
+
+                    if (csvDate.equals(date) && csvTime.substring(0,2).equals(time.substring(0,2))) {
+                        return temperature;
+                    }
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        // Return a default temperature value if the specified date and time are not found
+        return -273.15; // Absolute zero as a default value
+    }
+
 
     public User addUser(int id, String userType, String name) {
         // Generating a unique ID for the new user
@@ -104,105 +153,48 @@ public class SmartHomeSimulator {
     }
 
 
-    //----------------------------------------------------------------------------------------------------------------
-    //SHC testing
-    //To be rethought/refactored -- just for testing purposes
-    public void toggleLight(Light light) {
-        shc.toggle(light); // Use SHC method to toggle light
-    }
-
-    public void toggleWindow(Window window) {
-        shc.toggle(window); // Use SHC method to toggle window
-    }
-
-    public void toggleDoor(Door door) {
-        shc.toggle(door); // Use SHC method to toggle door
-    }
-
-    public void toggleIsAutoLight(Light light) {
-        shc.toggleIsAuto(light); // Use SHC method to toggle light's auto state
-    }
-
-    public void toggleIsAutoDoor(Door door, User user) {
-        shc.toggleIsAuto(door, user); // Use SHC method to toggle door's auto state with user permissions
-    }
-
-    public void testSHCFunctions() {
-        // Create sample light, window, and door
-        Light sampleLight = houseLayout.getRooms().get(0).getLights().get(0);
-        Window sampleWindow = houseLayout.getRooms().get(0).getWindows().get(0);
-        Door sampleDoor = houseLayout.getRooms().get(0).getDoors().get(0);
-
-        // Test toggleLight function
-        System.out.println("Testing toggleLight for " + sampleLight.toString());
-        toggleLight(sampleLight);
-        System.out.println("Result: " + sampleLight.toString());
 
 
-        // Test toggleWindow function
-        System.out.println("\nTesting toggleWindow for " + sampleWindow.toString());
-        toggleWindow(sampleWindow);
-        System.out.println("Result: " + sampleWindow.toString());
 
+//    //----------------------------------------------------------------------------------------------------------------
+//    //SHH testing
+//    //To be rethought/refactored -- just for testing purposes
+//
+//    // God API Method
+//
+//    public void testSHHFunctions() {
+//        // Display Separator Line
+//        System.out.println("\n" + "-".repeat(700));
+//        System.out.println("-".repeat(700));
+//        System.out.println("TESTING SHH FUNCTIONS\n");
+//
+//        System.out.println("\nTesting heating zone creation...\n");
+//
+//        shh.createHeatingZone("Living Room");
+//        System.out.println("Living Room heating zone created successfully.");
+//        System.out.println("Living Room heating zone is empty: " + shh.getRoomsInHeatingZone("Living Room").isEmpty());
+//
+//        shh.createHeatingZone("Kitchen");
+//        System.out.println("Kitchen heating zone created successfully.");
+//        System.out.println("Kitchen heating zone is empty: " + shh.getRoomsInHeatingZone("Kitchen").isEmpty());
+//
+//        SmartHomeHeating shh = SmartHomeHeating.getInstance();
+//
+//        // Test adding rooms to heating zones
+//        Room room1 = houseLayout.getRooms().get(0);
+//        Room room2 = houseLayout.getRooms().get(1);
+//
+//        shh.addRoomToHeatingZone("Living Room", room1);
+//        shh.addRoomToHeatingZone("Kitchen", room2);
+//
+//        // Verify that rooms are added to the correct heating zones
+//        System.out.println("\nTesting adding rooms to heating zones...\n");
+//
+//        System.out.println("Room added to Living Room heating zone: " + shh.getRoomsInHeatingZone("Living Room").contains(room1));
+//        System.out.println("Room added to Kitchen heating zone: " + shh.getRoomsInHeatingZone("Kitchen").contains(room2));
+//
+//        System.out.println("Living Room heating zone contents: " + shh.getRoomsInHeatingZone("Living Room"));
+//        System.out.println("Kitchen heating zone contents: " + shh.getRoomsInHeatingZone("Kitchen"));
+//    }
 
-        // Test toggleDoor function
-        System.out.println("\nTesting toggleDoor for " + sampleDoor.toString());
-        toggleDoor(sampleDoor);
-        System.out.println("Result: " + sampleDoor.toString());
-
-
-        // Test toggleIsAutoLight function
-        System.out.println("\nTesting toggleIsAutoLight for " + sampleLight.toString());
-        toggleIsAutoLight(sampleLight);
-        System.out.println("Result: " + sampleLight.toString());
-
-        // Test toggleIsAutoDoor function with a sample user
-        System.out.println("\nTesting toggleLIsAutoDoor for " + sampleDoor.toString());
-        User sampleUser = new Guest(1, "John Doe");
-        toggleIsAutoDoor(sampleDoor, sampleUser);
-        System.out.println("Result: " + sampleDoor.toString());
-
-    }
-
-    //----------------------------------------------------------------------------------------------------------------
-    //SHH testing
-    //To be rethought/refactored -- just for testing purposes
-
-    // God API Method
-
-    public void testHeatingZoneCreation() {
-        // Display Separator Line
-        System.out.println("\n" + "-".repeat(700));
-        System.out.println("-".repeat(700));
-
-        System.out.println("\nTesting heating zone creation...\n");
-
-        shh.createHeatingZone("Living Room");
-        System.out.println("Living Room heating zone created successfully.");
-        System.out.println("Living Room heating zone is empty: " + shh.getRoomsInHeatingZone("Living Room").isEmpty());
-
-        shh.createHeatingZone("Kitchen");
-        System.out.println("Kitchen heating zone created successfully.");
-        System.out.println("Kitchen heating zone is empty: " + shh.getRoomsInHeatingZone("Kitchen").isEmpty());
-    }
-
-    public void testAddingRoomsToHeatingZone() {
-        SmartHomeHeating shh = SmartHomeHeating.getInstance();
-
-        // Test adding rooms to heating zones
-        Room room1 = houseLayout.getRooms().get(0);
-        Room room2 = houseLayout.getRooms().get(1);
-
-        shh.addRoomToHeatingZone("Living Room", room1);
-        shh.addRoomToHeatingZone("Kitchen", room2);
-
-        // Verify that rooms are added to the correct heating zones
-        System.out.println("\nTesting adding rooms to heating zones...\n");
-
-        System.out.println("Room added to Living Room heating zone: " + shh.getRoomsInHeatingZone("Living Room").contains(room1));
-        System.out.println("Room added to Kitchen heating zone: " + shh.getRoomsInHeatingZone("Kitchen").contains(room2));
-
-        System.out.println("Living Room heating zone contents: " + shh.getRoomsInHeatingZone("Living Room"));
-        System.out.println("Kitchen heating zone contents: " + shh.getRoomsInHeatingZone("Kitchen"));
-    }
 }
