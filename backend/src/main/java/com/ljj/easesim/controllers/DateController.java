@@ -27,6 +27,7 @@ public class DateController {
     private LocalDate currentDate;
     private int accelerationFactor;
     private LocalTime currentTime;
+    private boolean isClockStart;
     private ScheduledExecutorService executorService;
 
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -38,43 +39,37 @@ public class DateController {
         this.accelerationFactor = 1;
         this.currentDate = LocalDate.of(2022, 3, 1); // Start date on March 1st, 2022
         this.currentTime = LocalTime.of(0, 0, 0); // Start time at midnight
+        this.isClockStart = true;
     }
 
     public void startClock() {
         executorService = Executors.newSingleThreadScheduledExecutor();
-        boolean isClockStart = true;
 
         executorService.scheduleAtFixedRate(() -> {
             LocalTime previousTime = currentTime; // Make a copy of the current time
 
-            currentTime = currentTime.plusSeconds(accelerationFactor);// Increment time by acceleration factor
+            currentTime = currentTime.plusSeconds(accelerationFactor); // Increment time by acceleration factor
             trackChangeTemp(accelerationFactor);
 
             boolean isHourChanged = previousTime.getHour() != currentTime.getHour();
 
-            if (isHourChanged){
-                isClockStart = false;
-
-            }
-
             if (isHourChanged || isClockStart) {
                 System.out.println("\tHour changed: " + previousTime.getHour() + " -> " + currentTime.getHour());
-                //BUG HERE - probably inside of getTemp...
                 double temp = shs.getTemperatureFromCSV(getCurrentDate(), getCurrentTime());
                 shs.setOutsideTemp(temp);
                 System.out.println("New Temperature DataController: " + temp);
                 System.out.println("New Temperature SHS: " + shs.getOutsideTemp());
             }
 
-
-            //change incrementation condition -- increment if previous hour > next hour
             if (previousTime.getHour() > currentTime.getHour()) {
                 currentDate = currentDate.plusDays(1); // Increment date by 1 day
             }
+
             System.out.println("New Temperature DataController: " + shs.getTemperatureFromCSV(getCurrentDate(), getCurrentTime()));
             System.out.println("New Temperature SHS: " + shs.getOutsideTemp());
 
             printCurrentDateTimeNewLine(); // Print current date and time in new lines
+            isClockStart = false; // Set isClockStart to false after the first iteration
         }, 0, 1, TimeUnit.SECONDS); // Start immediately and repeat every second
     }
 
