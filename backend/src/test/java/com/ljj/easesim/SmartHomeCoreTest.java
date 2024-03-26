@@ -34,7 +34,12 @@ class SmartHomeCoreTest {
         doReturn(mockRoom).when(smartHomeCore).findElementRoom(any(Window.class));
 
         // Call the toggle method with the window object
+
         Window toggledWindow = smartHomeCore.toggle(window);
+
+        if (toggledWindow == null){
+            System.out.println("Window is null");
+        }
 
         // Verify that findElementRoom was called with the correct window object
         verify(smartHomeCore).findElementRoom(window);
