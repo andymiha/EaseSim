@@ -45,14 +45,6 @@ public class SmartHomeHeating implements TemperatureObserver{
         // Update heating based on temperature changes
         if (isActive) {
             hvac.setOutsideTemperature(outdoorTemperature);
-
-            // Implement heating logic based on indoor and outdoor temperatures
-            // Example:
-//            if (outdoorTemperature < 10) {
-//                // Turn on heating
-//            } else {
-//                // Turn off heating
-//            }
         }
     }
 

@@ -1,10 +1,11 @@
 package com.ljj.easesim.controllers;
 
-import com.ljj.easesim.SmartHomeHeating;
+
 import org.springframework.web.bind.annotation.*;
 
 import com.ljj.easesim.SmartHomeSimulator;
 import com.ljj.easesim.services.HVAC;
+import com.ljj.easesim.SmartHomeHeating;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -41,6 +42,7 @@ public class DateController {
 
     public void startClock() {
         executorService = Executors.newSingleThreadScheduledExecutor();
+        boolean isClockStart = true;
 
         executorService.scheduleAtFixedRate(() -> {
             LocalTime previousTime = currentTime; // Make a copy of the current time
@@ -48,7 +50,14 @@ public class DateController {
             currentTime = currentTime.plusSeconds(accelerationFactor);// Increment time by acceleration factor
             trackChangeTemp(accelerationFactor);
 
-            if (previousTime.getHour() != currentTime.getHour()) {
+            boolean isHourChanged = previousTime.getHour() != currentTime.getHour();
+
+            if (isHourChanged){
+                isClockStart = false;
+
+            }
+
+            if (isHourChanged || isClockStart) {
                 System.out.println("\tHour changed: " + previousTime.getHour() + " -> " + currentTime.getHour());
                 //BUG HERE - probably inside of getTemp...
                 double temp = shs.getTemperatureFromCSV(getCurrentDate(), getCurrentTime());
@@ -57,10 +66,13 @@ public class DateController {
                 System.out.println("New Temperature SHS: " + shs.getOutsideTemp());
             }
 
+
             //change incrementation condition -- increment if previous hour > next hour
             if (previousTime.getHour() > currentTime.getHour()) {
                 currentDate = currentDate.plusDays(1); // Increment date by 1 day
             }
+            System.out.println("New Temperature DataController: " + shs.getTemperatureFromCSV(getCurrentDate(), getCurrentTime()));
+            System.out.println("New Temperature SHS: " + shs.getOutsideTemp());
 
             printCurrentDateTimeNewLine(); // Print current date and time in new lines
         }, 0, 1, TimeUnit.SECONDS); // Start immediately and repeat every second

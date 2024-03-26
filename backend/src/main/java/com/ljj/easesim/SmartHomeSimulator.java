@@ -22,14 +22,12 @@ public class SmartHomeSimulator implements TemperatureObservable {
     private final HouseLayout houseLayout;
     private File outsideTempsFile;
     private double outsideTemp;
-
     private List<TemperatureObserver> temperatureObservers;
-
-
 
     public SmartHomeSimulator() {
         users = new ArrayList<>();
         houseLayout = HouseLayout.getInstance();
+        outsideTemp = 69;
         mapUsersFromJson("db.json");
         outsideTempsFile = new File("OutdoorTemp.csv");
         temperatureObservers = new ArrayList<>();
@@ -83,6 +81,10 @@ public class SmartHomeSimulator implements TemperatureObservable {
     @Override
     public void removeObserver(TemperatureObserver observer) {
         temperatureObservers.remove(observer);
+    }
+
+    public List<TemperatureObserver> getTemperatureObservers() {
+        return temperatureObservers;
     }
 
     @Override
