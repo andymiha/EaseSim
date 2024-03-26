@@ -1,16 +1,111 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import SimSideBar from '../components/sidebar/SimSideBar';
-import { Grid, Paper, Tab, Tabs, Typography } from '@mui/material';
+import { Grid, Paper, Tab, Tabs, Drawer, Typography } from '@mui/material';
 import HouseLayout from '../components/houselayout/HouseLayout'; 
-import SHS from '../components/shs/shs'; 
+import SHS from '../components/shs/shs';
 import SHC from '../components/shc/shc'; 
 import SHP from '../components/shp/shp';
 import SHH from '../components/shh/shh';
+import { useDispatch } from 'react-redux';
+import WindowOpenIcon from '../assets/Window-Open.svg';
+import LightIcon from '../assets/Light.svg';
+import DoorIcon from '../assets/Door.svg';
 
 const Dashboard = () => {
-  const [openDrawer, setOpenDrawer] = useState(false);
+  const [openDrawer, setOpenDrawer] = useState(true);
   const [selectedTab, setSelectedTab] = useState(0);
   const [selectedRoom, setSelectedRoom] = useState(''); // State to store selected room ID
+  const dispatch = useDispatch();
+
+  //dummy data
+  const lights = [
+    { id: 1, name: 'Living Room Light', state: true, isAuto: false},
+    { id: 2, name: 'Bedroom Light', state: true, isAuto: false},
+    { id: 3, name: 'Kitchen Light', state: false, isAuto: false },
+  ];
+  const windows = [
+    { id: 1, name: 'Living Room window', state: true },
+    { id: 2, name: 'Bedroom window', state: false},
+    { id: 3, name: 'Kitchen window', state: true},
+  ];
+  const doors = [
+    { id: 1, name: 'Living Room door', state: false, isAuto: false },
+    { id: 2, name: 'Bedroom door', state: false, isAuto: false},
+    { id: 3, name: 'Kitchen door', state: true, isAuto: false },
+  ];
+
+  useEffect(() => {
+    fetch('http://localhost:8080/getHouseElements') 
+        .then(response => response.json())
+        .then(data => {
+          console.log(data.doors)
+          dispatch({ type: 'SET_LIGHTS', payload: data.lights });
+          dispatch({ type: 'SET_WINDOWS', payload: data.windows });
+          dispatch({ type: 'SET_DOORS', payload: data.doors });
+        })
+        .then(console.log("Grabbed elements sucessfully"))
+        .catch(error => console.error('Error fetching data:', error));
+
+      fetch('http://localhost:8080/getData') 
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          dispatch({ type: 'SET_ROOMS', payload: data.rooms });
+        })
+        .then(console.log("Grabbed rooms sucessfully"))
+        .catch(error => console.error('Error fetching data:', error));
+  }, []);
+
+  //set dispatches for initial page render 
+  useEffect(() => {
+    dispatch({ type: 'SET_WINDOWS', payload: windows });
+    dispatch({ type: 'SET_DOORS', payload: doors });
+    dispatch({ type: 'SET_LIGHTS', payload: lights });
+  }, []);
+
+  //set dispatches for any changes in doors, windows, lights
+  // useEffect(() => {
+  //   dispatch({ type: 'UPDATE_WINDOWS_OPEN_STATE', payload: windows });
+  //   dispatch({ type: 'UPDATE_WINDOWS_BLOCKED_STATE', payload: windows });
+  //   dispatch({ type: 'UPDATE_DOORS_OPEN_STATE', payload: doors });
+  //   dispatch({ type: 'UPDATE_DOORS_AUTO_STATE', payload: doors });
+  //   dispatch({ type: 'UPDATE_LIGHTS_OPEN_STATE', payload: lights });
+  //   dispatch({ type: 'UPDATE_LIGHTS_AUTO_STATE', payload: lights });
+
+  // }, [lights, doors, windows, dispatch]);
+
+
+  //create constant element states
+  const userName = useSelector(state => state.userName);
+  const globalWindows = useSelector(state => state.windows);
+  const globalDoors = useSelector(state => state.doors);
+  const globalLights = useSelector(state => state.lights);
+  const globalRooms = useSelector(state => state.rooms);
+
+  const doorConnections = globalRooms.reduce((acc, room) => {
+    room.doors.forEach(door => {
+      // Find the entry for the door
+      let existingEntry = acc.find(entry => entry.doorId === door.id);
+  
+      if (existingEntry) {
+        // Add the room to the connections if it's not already listed and there are less than 2 connections
+        if (!existingEntry.connections.includes(room.name) && existingEntry.connections.length < 2) {
+          existingEntry.connections.push(room.name);
+        }
+      } else {
+        // Create a new entry for the door
+        acc.push({ doorId: door.id, connections: [room.name] });
+      }
+    });
+    return acc;
+  }, []).map(entry => ({
+    doorId: entry.doorId,
+    // Concatenate the room names
+    connections: entry.connections.length === 1 ? entry.connections[0] + ", Outside" : entry.connections.join(', ')
+  }));
+  
+  console.log(doorConnections);  
 
   const handleDrawerToggle = () => {
     setOpenDrawer(!openDrawer);
@@ -36,116 +131,137 @@ const Dashboard = () => {
   };
 
   return (
-    <Grid container >
-      <Grid item xs={openDrawer ? 2 : false} sm={2}>
-        {/* Empty Grid item for adjusting layout */}
-      </Grid>
+    <div className="my-6 flex">
+      <div className="border-solid border-r-2 border-r-[#ededed] mr-6">
+        <SimSideBar
+          openDrawer={openDrawer}
+          handleDrawerToggle={handleDrawerToggle}
+          handleDrawerClose={handleDrawerClose}
+          handleRoomChange={handleRoomChange} // Pass the setSelectedRoom function down as a prop
+        />
+      </div>
 
+      <div className="grid grid-cols-2 gap-4 w-full mr-6">
+        <div className="text-4xl font-bold col-span-2 w-full border-b-solid border-b-2 py-6">
+          Welcome, {userName}
+        </div>
 
+        <div className="col-span-2">
+          <div className="text-4xl font-bold my-4">
+            Rooms
+          </div>
+          <div className="flex overflow-x-auto">
+          {globalRooms.map((item, index) => {
+            // Check if the room is FrontYard or BackYard and exclude it
+              if (item.name === "FrontYard" || item.name === "BackYard") {
+                return null; // Skip this iteration and don't render anything
+              }
+            return (
+            <div className="w-auto border-2 border-[#ededed] rounded-2xl p-4 mr-4">
+              <div className="text-2xl font-bold whitespace-nowrap mb-4">
+                {item.name}
+              </div>
+              <div className="flex">
+                {globalLights.filter(lightObj => lightObj.roomName === item.name).map((light, lightIndex) => (
+                  <div className="flex mr-4" key={lightIndex}>
+                    <div className="bg-gray-200/50 rounded-full h-[84px] w-[84px] p-2">
+                      <div className={`${light.state ? "bg-yellow-100" : "bg-gray-100"} rounded-full text-center text-black h-full`}>
+                        <img src={LightIcon} alt="Light" className="inline-block w-10 h-full" />
+                      </div>
+                    </div>
 
-      <SimSideBar
-        openDrawer={openDrawer}
-        handleDrawerToggle={handleDrawerToggle}
-        handleDrawerClose={handleDrawerClose}
-        handleRoomChange={handleRoomChange} // Pass the setSelectedRoom function down as a prop
-      />
-        
-      <Grid item xs={12} sm={openDrawer ? 5 : 6}>
+                    <div className="items-center mt-4 ml-4 font-bold whitespace-nowrap">
+                      Light {/* Assuming you have a name property in your light objects */}
 
-        <Paper
-          component="div"
-          elevation={3}
-          sx={{
-            position: 'absolute',
-            maxWidth:'59%',
-            height: '70%',
-            top: '10%',
-            left: openDrawer ? '240px' : '0',
-            right: openDrawer ? '50%' : '0',
-            bottom: 0,
-            overflow: 'auto',
-            padding: '16px',
-            marginLeft: '1%',
-            transition: 'left 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, right 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms',
-            
-          }}
-        >
-          <Tabs
-            value={selectedTab}
-            onChange={handleTabChange}
-            indicatorColor="primary"
-            textColor="primary"
-            sx={{
-              width: '100%',
-              borderBottom: '1px solid #ccc',
-              marginBottom: '16px',
-            }}
-          >
-            <Tab label="SHS" />
-            <Tab label="SHC" />
-            <Tab label="SHP" />
-            <Tab label="SHH" />
-          </Tabs>
+                      <div className="whitespace-nowrap opacity-50">
+                        {light.state ? "On" : "Off"}
+                      </div>
+                    </div>
+                  </div>
+                ))}
 
-          {tabComponents[selectedTab]}
+                {globalWindows.filter(windowObj => windowObj.roomName === item.name).map((window, windowIndex) => (
+                  <div className="flex mr-4" key={windowIndex}>
+                    <div className="bg-gray-200/50 rounded-full h-[84px] w-[84px] p-2">
+                      <div className={`${window.state ? "bg-green-100" : "bg-gray-100"} rounded-full text-center text-black h-full`}>
+                        <img src={WindowOpenIcon} alt="Window" className="inline-block w-10 h-full" />
+                      </div>
+                    </div>
 
-        </Paper>
-      </Grid>
+                    <div className="items-center mt-4 ml-4 font-bold whitespace-nowrap">
+                      Window {/* Assuming you have a name property in your light objects */}
 
-      <Grid item xs={12} sm={openDrawer ? 5 : 6}>
+                      <div className="whitespace-nowrap opacity-50">
+                        {window.state ? "On" : "Off"}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )})}
+          </div>
+        </div>
 
-{/* Box 2*/}
-        <Paper
-            elevation={3}
-          component="div"
-          sx={{
-            position: 'absolute',
-            height: '70%',
-            top: '10%',
-            left: openDrawer ? '50%' : '60%',
-            right: 0,
-            bottom: 0,
-            overflow: 'auto',
-            padding: '16px',
-            marginLeft: '1%',
-            marginRight: '1%',
-            transition: 'left 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, right 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms',
-            
-          }}
-        >
-          {/* Add skeleton when not on */}
+        <div className="col-span-2">
+          <div className="text-4xl font-bold my-4">
+            Doors
+          </div>
+
+          <div className="flex overflow-x-auto ml-4">
+            <div className="flex mr-4">
+              <div class="bg-gray-200/50 rounded-full h-[84px] w-[84px] p-2">
+                <div className="bg-green-100 rounded-full text-center text-black h-full">
+                  <img src={DoorIcon} alt="Light" className="inline-block w-10 h-full" />
+                </div>
+              </div>
+
+              <div className="items-center mt-4 ml-4 font-bold whitespace-nowrap">
+                Bedroom 1, Kitchen
+
+                <div className="whitespace-nowrap opacity-50">
+                  Open
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="col-span-2 m-auto w-full">
+          <div className="text-4xl font-bold mt-4 mb-[-48px] z-[9]">
+            House Layout
+          </div>
           <HouseLayout selectedRoom={selectedRoom} />
-    
-        </Paper>
-      </Grid>
+        </div>
 
-      <Grid item lg={10} md={12} sm={openDrawer ? 5 : 6} sx={{ position: 'absolute', width: '100%', height:'20%', bottom:'0', left: openDrawer ? '240px' : '0' }}>
-  <Paper  
-    elevation={3}
-    component="div"
-    sx={{
-      overflow: 'auto',
-      padding: '16px',
-      Height:'100%',
-      maxWidth:'90%',
-      height: '100%', 
-      margin:'1%',
-      transition: 'left 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, right 225ms cubic-bezier(0.4, 0, 0.6, 1) 0ms',
-    }}
-  >
-    {/* Add content for the bottom Paper here */}
-    <Typography paragraph>
-      Your content for the bottom Paper.
-    </Typography>
-  </Paper>
-</Grid>
+        <div className="col-span-2 border-solid border-2 border-[#ededed] rounded-2xl p-6">
+          <Tabs
+              value={selectedTab}
+              onChange={handleTabChange}
+              indicatorColor="primary"
+              textColor="primary"
+              className="z-[999]"
+              sx={{
+                width: '100%',
+                borderBottom: '1px solid #ccc',
+                marginBottom: '16px',
+              }}
+            >
+              <Tab label="SHS" />
+              <Tab label="SHC" />
+              <Tab label="SHP" />
+              <Tab label="SHH" />
+            </Tabs>
 
+            {tabComponents[selectedTab]}
+        </div>
 
-      
-    </Grid>
-
-
-
+        <div className="col-span-2 border-solid border-2 border-[#ededed] rounded-2xl p-6">
+          Logs
+          {JSON.stringify(globalLights)}
+        </div>
+      </div>
+    </div>
   );
 };
 
