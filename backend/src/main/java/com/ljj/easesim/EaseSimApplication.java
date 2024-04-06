@@ -18,9 +18,14 @@ public class EaseSimApplication {
 		SmartHomeSimulator shs = SmartHomeSimulator.getInstance();
 		SmartHomeCore shc = SmartHomeCore.getInstance();
 		SmartHomeHeating shh = SmartHomeHeating.getInstance();
+		SmartHomeSecurity shp = SmartHomeSecurity.getInstance();
 		DateController clock = new DateController(); //Do a POST request to http://localhost:8080/api/time/acceleration and pass "1" to start clock
-		clock.setAccelerationFactor(1);
-		clock.setDesiredTemperature(20);
+		//clock.setAccelerationFactor(1);
+		//clock.setDesiredTemperature(20);
+		shs.getHouseLayout().getRoom("Bedroom1").getDoors().get(0).toggle();
+		shs.getHouseLayout().getRoom("Bedroom1").getDoors().get(0).toggleBlocked();
+		System.out.println(shs.getHouseLayout().getRoom("Bedroom1").getDoors().get(0).getState());
+		shp.setAwayMode(true);
 		clock.assignHVACZone("Garage");
 
 		// Test data
