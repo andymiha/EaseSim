@@ -8,10 +8,11 @@ import com.ljj.easesim.elements.*;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class SmartHomeSecurity {
+public class SmartHomeSecurity implements TemperatureObserver {
     private final HouseLayout house = SmartHomeSimulator.getInstance().getHouseLayout();
     private static final SmartHomeSecurity INSTANCE = new SmartHomeSecurity();;
     private static SmartHomeCore shc;
+    private double indoorTemp;
     private boolean isAway;
 
     public SmartHomeSecurity() {
@@ -66,5 +67,10 @@ public class SmartHomeSecurity {
         }
 
         return true;
+    }
+
+    @Override
+    public void updateTemperature(double indoorTemp) {
+        this.indoorTemp = indoorTemp;
     }
 }

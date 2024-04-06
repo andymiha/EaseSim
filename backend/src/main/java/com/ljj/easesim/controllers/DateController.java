@@ -59,6 +59,7 @@ public class DateController {
                 shs.setOutsideTemp(temp);
                 System.out.println("New Temperature DataController: " + temp);
                 System.out.println("New Temperature SHS: " + shs.getOutsideTemp());
+                System.out.println("New Temperature Garage Zone: " + shh.getHeatingZones().get("Garage").getCurrentZoneTemp());
             }
 
             if (previousTime.getHour() > currentTime.getHour()) {
@@ -67,6 +68,7 @@ public class DateController {
 
             System.out.println("New Temperature DataController: " + shs.getTemperatureFromCSV(getCurrentDate(), getCurrentTime()));
             System.out.println("New Temperature SHS: " + shs.getOutsideTemp());
+            System.out.println("New Temperature Garage Zone: " + shh.getHeatingZones().get("Garage").getCurrentZoneTemp());
 
             printCurrentDateTimeNewLine(); // Print current date and time in new lines
             isClockStart = false; // Set isClockStart to false after the first iteration
@@ -84,8 +86,11 @@ public class DateController {
         if (hvac.isHvacRunning()) {
             if (hvac.getCurrentTemperature() < hvac.getDesiredTemperature()) {
                 hvac.setCurrentTemperature(hvac.getCurrentTemperature() + 0.1*accelerationFactor);
+
+                shh.calculateAverageZoneTemperature();
             } else if (hvac.getCurrentTemperature() > hvac.getDesiredTemperature()) {
                 hvac.setCurrentTemperature(hvac.getCurrentTemperature() - 0.1*accelerationFactor);
+                shh.calculateAverageZoneTemperature();
             }
         } else { // HVAC not running  -- temp changes according to outside
             double currentTemperature = hvac.getCurrentTemperature();
