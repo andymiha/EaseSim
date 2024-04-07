@@ -15,7 +15,6 @@ public class SmartHomeHeating implements TemperatureObserver, TemperatureObserva
     private static final SmartHomeHeating INSTANCE = new SmartHomeHeating();
     private boolean isActive;
     private Map<String, HeatingZone> heatingZones;
-    private double averageIndoorTemp;
     private HVAC hvac;
     private TemperatureObserver temperatureObserver;
 
@@ -25,7 +24,6 @@ public class SmartHomeHeating implements TemperatureObserver, TemperatureObserva
     private SmartHomeHeating() {
         isActive = false;
         heatingZones = new HashMap<>();
-        averageIndoorTemp = calculateAverageZoneTemperature();
         generateHeatingZones();
         SmartHomeSimulator.getInstance().registerObserver(this);
         this.hvac = HVAC.getInstance();
@@ -44,7 +42,7 @@ public class SmartHomeHeating implements TemperatureObserver, TemperatureObserva
 
 
     @Override
-    public void updateTemperature(double outdoorTemperature) {
+    public void updateTemperature(String entity, double outdoorTemperature) {
         // Update heating based on temperature changes
         if (isActive) {
             hvac.setOutsideTemperature(outdoorTemperature);
@@ -63,7 +61,9 @@ public class SmartHomeHeating implements TemperatureObserver, TemperatureObserva
 
     @Override
     public void notifyObservers() {
-        temperatureObserver.updateTemperature(averageIndoorTemp);
+        for (HeatingZone zone: heatingZones.values()){
+            temperatureObserver.updateTemperature(zone.getZoneName(), zone.getCurrentZoneTemp());
+        }
     }
 
     public Map<String, HeatingZone> getHeatingZones() {
@@ -120,28 +120,10 @@ public class SmartHomeHeating implements TemperatureObserver, TemperatureObserva
         //show a message if heating zone fails !
     }
 
-    public double calculateAverageZoneTemperature() {
-        if (heatingZones.isEmpty()) {
-            return 0.0; // Return 0 if no zones are present
-        }
-
-        double totalTemperature = 0.0;
-        int zoneCount = 0;
-
-        for (HeatingZone zone : heatingZones.values()) {
-            totalTemperature += zone.getCurrentZoneTemp();
-            zoneCount++;
-        }
-
-        System.out.println("\nindoorTemp: " + (totalTemperature / zoneCount));
-
-        return totalTemperature / zoneCount;
-    }
-
-
     public void generateHeatingZones() {
         createHeatingZone("Garage");
         addRoomToHeatingZone("Garage", HouseLayout.getInstance().getRoom("Garage"));
+        //heatingZones.get("Garage").setCurrentZoneTemp(15);
 
         createHeatingZone("Zone1");
         addRoomToHeatingZone("Zone1", HouseLayout.getInstance().getRoom("Bedroom1"));

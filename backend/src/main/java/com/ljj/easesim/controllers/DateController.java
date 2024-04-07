@@ -1,6 +1,7 @@
 package com.ljj.easesim.controllers;
 
 
+import com.ljj.easesim.SmartHomeSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import com.ljj.easesim.SmartHomeSimulator;
@@ -22,6 +23,8 @@ public class DateController {
 
     private SmartHomeHeating shh;
 
+    private SmartHomeSecurity shp;
+
     private HVAC hvac;
 
     private LocalDate currentDate;
@@ -35,6 +38,7 @@ public class DateController {
     public DateController() {
         this.shs = SmartHomeSimulator.getInstance();
         this.shh = SmartHomeHeating.getInstance();
+        this.shp = SmartHomeSecurity.getInstance();
         this.hvac = HVAC.getInstance();
         this.accelerationFactor = 1;
         this.currentDate = LocalDate.of(2022, 3, 1); // Start date on March 1st, 2022
@@ -71,6 +75,8 @@ public class DateController {
             System.out.println("New Temperature Garage Zone: " + shh.getHeatingZones().get("Garage").getCurrentZoneTemp());
 
             printCurrentDateTimeNewLine(); // Print current date and time in new lines
+            //shp.printIndoorTemps();
+            System.out.println("\n" + "-".repeat(700));
             isClockStart = false; // Set isClockStart to false after the first iteration
         }, 0, 1, TimeUnit.SECONDS); // Start immediately and repeat every second
     }
@@ -86,11 +92,10 @@ public class DateController {
         if (hvac.isHvacRunning()) {
             if (hvac.getCurrentTemperature() < hvac.getDesiredTemperature()) {
                 hvac.setCurrentTemperature(hvac.getCurrentTemperature() + 0.1*accelerationFactor);
-
-                shh.calculateAverageZoneTemperature();
+                shh.notifyObservers();
             } else if (hvac.getCurrentTemperature() > hvac.getDesiredTemperature()) {
                 hvac.setCurrentTemperature(hvac.getCurrentTemperature() - 0.1*accelerationFactor);
-                shh.calculateAverageZoneTemperature();
+                shh.notifyObservers();
             }
         } else { // HVAC not running  -- temp changes according to outside
             double currentTemperature = hvac.getCurrentTemperature();

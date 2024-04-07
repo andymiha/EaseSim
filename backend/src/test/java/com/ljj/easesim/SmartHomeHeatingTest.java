@@ -32,7 +32,7 @@ class SmartHomeHeatingTest {
     void testUpdateTemperature() {
         smartHomeHeating.toggleActive();
         double outdoorTemperature = 15;
-        smartHomeHeating.updateTemperature(outdoorTemperature);
+        smartHomeHeating.updateTemperature("", outdoorTemperature);
         assertEquals(15,hvac.getOutsideTemperature());
     }
 

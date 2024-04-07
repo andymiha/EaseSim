@@ -15,18 +15,26 @@ public class EaseSimApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(EaseSimApplication.class, args);
 
+		//Instantiation of Modules & Clock
 		SmartHomeSimulator shs = SmartHomeSimulator.getInstance();
 		SmartHomeCore shc = SmartHomeCore.getInstance();
 		SmartHomeHeating shh = SmartHomeHeating.getInstance();
 		SmartHomeSecurity shp = SmartHomeSecurity.getInstance();
 		DateController clock = new DateController(); //Do a POST request to http://localhost:8080/api/time/acceleration and pass "1" to start clock
+
+		//Observer registrations
+		shs.registerObserver(shh);
+		shh.registerObserver(shp);
+		shh.notifyObservers();
+
+		//Operations
 		//clock.setAccelerationFactor(1);
 		//clock.setDesiredTemperature(20);
 		shs.getHouseLayout().getRoom("Bedroom1").getDoors().get(0).toggle();
 		shs.getHouseLayout().getRoom("Bedroom1").getDoors().get(0).toggleBlocked();
 		System.out.println(shs.getHouseLayout().getRoom("Bedroom1").getDoors().get(0).getState());
-		shp.setAwayMode(true);
 		clock.assignHVACZone("Garage");
+
 
 		// Test data
 		Light sampleLight = (Light) shs.getHouseLayout().getRooms().get(0).getElements().get(0);
@@ -62,6 +70,15 @@ public class EaseSimApplication {
 		System.out.println("DISPLAY HEATING ZONES CONTENTS...\n");
 		shh.printHeatingZones();
 
+		//TEST SHP functionalities
+		System.out.println("\n" + "-".repeat(700));
+		System.out.println("-".repeat(700));
+		System.out.println("TESTING SHP FUNCTIONS ...\n");
+		System.out.println("DISPLAY SET AWAY MODE RESULT CONTENTS...\n");
+		shp.setAwayMode(true);
+		System.out.println("-".repeat(700));
+		System.out.println("DISPLAY INDOOR TEMPS CONTENTS...\n");
+		shp.printIndoorTemps();
 
 
 

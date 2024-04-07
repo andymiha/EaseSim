@@ -11,9 +11,7 @@ public class Room {
     private String name;
     private ArrayList<HouseElement> elements;
     private ArrayList<User> users;
-
     private double currentTemp;
-
     private double desiredTemp;
 
     public Room(int id, String name) {

@@ -6,23 +6,23 @@ import com.ljj.easesim.users.*;
 import com.ljj.easesim.elements.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class SmartHomeSecurity implements TemperatureObserver {
     private final HouseLayout house = SmartHomeSimulator.getInstance().getHouseLayout();
     private static final SmartHomeSecurity INSTANCE = new SmartHomeSecurity();;
     private static SmartHomeCore shc;
-    private double indoorTemp;
+    private Map<String, Double> indoorTemps;
     private boolean isAway;
 
     public SmartHomeSecurity() {
-
         shc = SmartHomeCore.getInstance();
+        this.indoorTemps = new HashMap<>();
         this.isAway = false;
     }
 
     public static SmartHomeSecurity getInstance() {
-
         return INSTANCE;
     }
 
@@ -70,7 +70,15 @@ public class SmartHomeSecurity implements TemperatureObserver {
     }
 
     @Override
-    public void updateTemperature(double indoorTemp) {
-        this.indoorTemp = indoorTemp;
+    public void updateTemperature(String zoneName, double zoneTemp) {
+        indoorTemps.put(zoneName, zoneTemp); // Update the indoor temperature for the specified zone
+    }
+
+    public void printIndoorTemps() {
+        for (Map.Entry<String, Double> entry : indoorTemps.entrySet()) {
+            String zoneName = entry.getKey();
+            double temp = entry.getValue();
+            System.out.println(zoneName + ": " + temp);
+        }
     }
 }

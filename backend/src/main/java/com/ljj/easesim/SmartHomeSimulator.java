@@ -93,7 +93,7 @@ public class SmartHomeSimulator implements TemperatureObservable {
         double outdoorTemp = getOutsideTemp(); // Implement this method to get outdoor temperature
 
         for (TemperatureObserver observer : temperatureObservers) {
-            observer.updateTemperature(outdoorTemp);
+            observer.updateTemperature("", outdoorTemp);
         }
     }
 
