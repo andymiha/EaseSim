@@ -6,8 +6,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SmartHomeSecurityTest {
 
+    void setUp(){
+        smartHomeSecurity = SmartHomeSecurity.getInstance();
+        houseLayoutMock = Mockito.mock(HouseLayout.class);
+        smartHomeSecurity.setHouseLayout(houseLayoutMock);
+    }
+
     @Test
-    void getInstance() { 
+    void getInstance() {
     }
 
     @Test
