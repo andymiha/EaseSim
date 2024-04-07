@@ -42,6 +42,7 @@ public class EaseSimApplication {
 		Window sampleWindow = (Window) shs.getHouseLayout().getRooms().get(0).getElements().get(1);
 		Door sampleDoor = (Door) shs.getHouseLayout().getRooms().get(0).getElements().get(2);
 		User sampleUser = shs.getUser(1);
+		shs.getHouseLayout().getRoom("Bedroom1").addUser(sampleUser);
 
 		// Testing SHS functionalities
 		System.out.println("\n" + "-".repeat(700));
@@ -49,6 +50,10 @@ public class EaseSimApplication {
 		System.out.println("TESTING SHS FUNCTIONS ...\n");
 		System.out.println("DISPLAY GETTEMPFROMCSV...\n");
 		System.out.println("Temp is: " + shs.getTemperatureFromCSV(clock.getCurrentDate(), clock.getCurrentTime()));
+		System.out.println("-".repeat(700));
+		System.out.println("TESTING DISPLAY USER IN ROOM ...\n");
+		System.out.println(shs.getHouseLayout().getRoom("Bedroom1").toString());
+
 
 
 		// Testing SHC functionalities
@@ -80,9 +85,9 @@ public class EaseSimApplication {
 		System.out.println("-".repeat(700));
 		System.out.println("DISPLAY INDOOR TEMPS CONTENTS...\n");
 		shp.printIndoorTemps();
-
-
-
+		System.out.println("-".repeat(700));
+		System.out.println("DISPLAY IF USER IN ROOM...\n");
+		System.out.println(shp.isHouseEmpty());
 
 	}
 

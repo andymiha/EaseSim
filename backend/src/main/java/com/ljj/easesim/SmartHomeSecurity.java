@@ -15,6 +15,7 @@ public class SmartHomeSecurity implements TemperatureObserver, AwayModeObservabl
     private static SmartHomeCore shc;
     private Map<String, Double> indoorTemps;
     private Map<String, Long> lastTemperatureUpdate;
+    private int policeTimer;
     private boolean isAway;
     private AwayModeObserver awayObserver;
 
@@ -33,6 +34,14 @@ public class SmartHomeSecurity implements TemperatureObserver, AwayModeObservabl
         return isAway;
     }
 
+    public int getPoliceTimer() {
+        return policeTimer;
+    }
+
+    public void setPoliceTimer(int policeTimer) {
+        this.policeTimer = policeTimer;
+    }
+
     @Override
     public void registerAwayModeObserver(AwayModeObserver observer) {
         this.awayObserver = observer;
@@ -43,7 +52,11 @@ public class SmartHomeSecurity implements TemperatureObserver, AwayModeObservabl
         this.awayObserver = null;
     }
 
-    public AwayModeObserver getAwayObserver(){ return awayObserver; }
+
+    public AwayModeObserver getAwayObserver() {
+        return awayObserver;
+    }
+
     @Override
     public void notifyAwayModeObservers() {
         awayObserver.updateAwayMode(isAway);
@@ -107,6 +120,15 @@ public class SmartHomeSecurity implements TemperatureObserver, AwayModeObservabl
         }
     }
 
+    public boolean isHouseEmpty() {
+        for (Room room : house.getRooms()) {
+            if (!room.getUsers().isEmpty()) {
+                sendNotificationToOwners("Motion detected: calling police in " + policeTimer + " minutes");
+                return false; // If any room has users, return false
+            }
+        }
+        return true; // If no rooms have users, return true
+    }
 
     //Module logging methods
     public void logEvent(String message) {

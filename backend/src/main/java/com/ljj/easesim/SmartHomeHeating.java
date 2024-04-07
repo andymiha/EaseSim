@@ -38,6 +38,10 @@ public class SmartHomeHeating implements TemperatureObserver, TemperatureObserva
         return isSHPAway;
     }
 
+    public TemperatureObserver getTemperatureObserver() {
+        return temperatureObserver;
+    }
+
     public void toggleActive() {
         isActive = !isActive;
     }
@@ -89,7 +93,7 @@ public class SmartHomeHeating implements TemperatureObserver, TemperatureObserva
     }
 
     public boolean deleteHeatingZone(String zoneName) {
-        if (!heatingZones.containsKey(zoneName)) {
+        if (heatingZones.containsKey(zoneName)) {
             heatingZones.remove(zoneName);
             return true;
         }
@@ -159,7 +163,5 @@ public class SmartHomeHeating implements TemperatureObserver, TemperatureObserva
             System.out.println();
         }
     }
-
-
 
 }
