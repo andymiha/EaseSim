@@ -18,7 +18,7 @@ public class SmartHomeCore {
     public static SmartHomeCore getInstance() {
         return INSTANCE;
     }
-
+    public HouseLayout getHouse(){ return house; }
 
     public Room findElementRoom(HouseElement element) {
         System.out.println("TOGGLE " + element.toString());
@@ -77,8 +77,8 @@ public class SmartHomeCore {
     public Door toggle(Door door) {
         Room elementRoom = findElementRoom(door);
         // Toggle the element, return state
-        elementRoom.setCommand(new ToggleDoorCommand(door));
-        elementRoom.executeCommand();
+            elementRoom.setCommand(new ToggleDoorCommand(door));
+            elementRoom.executeCommand();
         return door;
     }
 
