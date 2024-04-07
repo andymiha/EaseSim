@@ -35,6 +35,7 @@ public class Room {
         return this.name;
     }
 
+
     public double getCurrentTemp() {
         return currentTemp;
     }

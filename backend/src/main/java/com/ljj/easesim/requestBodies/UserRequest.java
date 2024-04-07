@@ -16,4 +16,11 @@ public class UserRequest {
         return userType;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
 }
