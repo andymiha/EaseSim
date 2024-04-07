@@ -42,7 +42,7 @@ public class EaseSimApplication {
 		Window sampleWindow = (Window) shs.getHouseLayout().getRooms().get(0).getElements().get(1);
 		Door sampleDoor = (Door) shs.getHouseLayout().getRooms().get(0).getElements().get(2);
 		User sampleUser = shs.getUser(1);
-		shs.getHouseLayout().getRoom("Bedroom1").addUser(sampleUser);
+		//shs.getHouseLayout().getRoom("Bedroom1").addUser(sampleUser);
 
 		// Testing SHS functionalities
 		System.out.println("\n" + "-".repeat(700));

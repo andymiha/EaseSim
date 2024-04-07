@@ -13,12 +13,23 @@ import java.util.Map;
 @Service
 public class EditContextService {
 
+    private static final SmartHomeSimulator shs = SmartHomeSimulator.getInstance();
+
     //GET process
-    public Map<String, List<Room>> processGetData() {
-        Map<String, List<Room>> data = new HashMap<>();
-        data.put("rooms", SmartHomeSimulator.getInstance().getHouseLayout().getRooms());
-        return data;
+    public List<Room> processGetData() {
+        try {
+            System.out.println("Fetching rooms from house layout...");
+            List<Room> rooms = shs.getHouseLayout().getRooms();
+            System.out.println("Rooms fetched successfully.");
+            return rooms;
+        } catch (Exception e) {
+            // Log the exception and handle it appropriately
+            System.err.println("Error while retrieving room data: " + e.getMessage());
+            // You can throw a specific exception or handle it in other ways based on your application's logic
+            throw new RuntimeException("Failed to retrieve room data. Please try again later.");
+        }
     }
+
 
 
     //POST process

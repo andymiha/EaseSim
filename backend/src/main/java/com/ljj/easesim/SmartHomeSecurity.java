@@ -10,9 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SmartHomeSecurity implements TemperatureObserver, AwayModeObservable {
-    private final HouseLayout house = SmartHomeSimulator.getInstance().getHouseLayout();
-    private static final SmartHomeSecurity INSTANCE = new SmartHomeSecurity();;
-    private static SmartHomeCore shc;
+    private static final SmartHomeSecurity INSTANCE = new SmartHomeSecurity();
+    private HouseLayout house = SmartHomeSimulator.getInstance().getHouseLayout();
+    private SmartHomeCore shc = SmartHomeCore.getInstance();;
     private Map<String, Double> indoorTemps;
     private Map<String, Long> lastTemperatureUpdate;
     private int policeTimer;
@@ -20,7 +20,6 @@ public class SmartHomeSecurity implements TemperatureObserver, AwayModeObservabl
     private AwayModeObserver awayObserver;
 
     public SmartHomeSecurity() {
-        shc = SmartHomeCore.getInstance();
         this.indoorTemps = new HashMap<>();
         this.lastTemperatureUpdate = new HashMap<>();
         this.isAway = false;

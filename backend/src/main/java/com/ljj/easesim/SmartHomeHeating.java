@@ -11,8 +11,10 @@ import java.util.List;
 import java.util.Map;
 
 public class SmartHomeHeating implements TemperatureObserver, TemperatureObservable, AwayModeObserver{
-    private final HouseLayout house = SmartHomeSimulator.getInstance().getHouseLayout();
     private static final SmartHomeHeating INSTANCE = new SmartHomeHeating();
+    private HouseLayout house = SmartHomeSimulator.getInstance().getHouseLayout();
+    private SmartHomeSimulator shs = SmartHomeSimulator.getInstance();
+
     private boolean isActive;
     private boolean isSHPAway;
     private Map<String, HeatingZone> heatingZones;
@@ -26,7 +28,7 @@ public class SmartHomeHeating implements TemperatureObserver, TemperatureObserva
         isActive = false;
         heatingZones = new HashMap<>();
         generateHeatingZones();
-        SmartHomeSimulator.getInstance().registerObserver(this);
+        shs.registerObserver(this);
         this.hvac = HVAC.getInstance();
     }
 
