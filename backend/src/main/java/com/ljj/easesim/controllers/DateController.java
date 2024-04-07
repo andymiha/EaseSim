@@ -129,6 +129,10 @@ public class DateController {
             shp.logEvent("Temperature increased by 15 degrees Celsius in 1 minute. Away mode turned off.");
             shp.sendNotificationToOwners("Temperature alert: 15 degrees Celsius increase in 1 minute.");
         }
+
+        if(shp.isAway()){
+            shp.isHouseEmpty();
+        }
     }
 
     public static double roundToDecimal(double value, int decimalPlaces) {
