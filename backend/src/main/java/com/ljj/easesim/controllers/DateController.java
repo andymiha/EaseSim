@@ -58,23 +58,29 @@ public class DateController {
             boolean isHourChanged = previousTime.getHour() != currentTime.getHour();
 
             if (isHourChanged || isClockStart) {
-                System.out.println("\tHour changed: " + previousTime.getHour() + " -> " + currentTime.getHour());
+                System.out.println("Hour changed: " + previousTime.getHour() + " -> " + currentTime.getHour());
                 double temp = shs.getTemperatureFromCSV(getCurrentDate(), getCurrentTime());
                 shs.setOutsideTemp(temp);
-                System.out.println("New Temperature DataController: " + temp);
-                System.out.println("New Temperature SHS: " + shs.getOutsideTemp());
-                System.out.println("New Temperature Garage Zone: " + shh.getHeatingZones().get("Garage").getCurrentZoneTemp());
             }
 
             if (previousTime.getHour() > currentTime.getHour()) {
                 currentDate = currentDate.plusDays(1); // Increment date by 1 day
             }
 
-            System.out.println("New Temperature DataController: " + shs.getTemperatureFromCSV(getCurrentDate(), getCurrentTime()));
-            System.out.println("New Temperature SHS: " + shs.getOutsideTemp());
-            System.out.println("New Temperature Garage Zone: " + shh.getHeatingZones().get("Garage").getCurrentZoneTemp());
+            System.out.println(String.format(
+                            "%-10s%s || New Temperature DataController\n" +
+                            "%-10s%s || New Temperature SHS\n" +
+                            "%-10s%s || New Temperature Garage Zone\n" +
+                            "%-10s%s || Current Date\n" +
+                            "%-10s%s || Current Time",
+                    shs.getTemperatureFromCSV(getCurrentDate(), getCurrentTime()), " ",
+                    shs.getOutsideTemp(), " ",
+                    shh.getHeatingZones().get("Garage").getCurrentZoneTemp(), " ",
+                    currentDate, " ",
+                    currentTime.format(TIME_FORMATTER), " "));
 
-            printCurrentDateTimeNewLine(); // Print current date and time in new lines
+
+            // Print current date and time in new lines
             //shp.printIndoorTemps();
             System.out.println("\n" + "-".repeat(700));
             isClockStart = false; // Set isClockStart to false after the first iteration
@@ -91,10 +97,10 @@ public class DateController {
     public void trackChangeTemp(int accelerationFactor) {
         if (hvac.isHvacRunning()) {
             if (hvac.getCurrentTemperature() < hvac.getDesiredTemperature()) {
-                hvac.setCurrentTemperature(hvac.getCurrentTemperature() + 0.1*accelerationFactor);
+                hvac.setCurrentTemperature(roundToDecimal(hvac.getCurrentTemperature() + 0.1 * accelerationFactor, 1));
                 shh.notifyObservers();
             } else if (hvac.getCurrentTemperature() > hvac.getDesiredTemperature()) {
-                hvac.setCurrentTemperature(hvac.getCurrentTemperature() - 0.1*accelerationFactor);
+                hvac.setCurrentTemperature(roundToDecimal(hvac.getCurrentTemperature() - 0.1 * accelerationFactor, 1));
                 shh.notifyObservers();
             }
         } else { // HVAC not running  -- temp changes according to outside
@@ -102,29 +108,22 @@ public class DateController {
             double outsideTemperature = hvac.getOutsideTemperature();
 
             if (currentTemperature < outsideTemperature) {
-                hvac.setCurrentTemperature(currentTemperature + 0.05*accelerationFactor);
+                hvac.setCurrentTemperature(roundToDecimal(currentTemperature + 0.05 * accelerationFactor, 1));
             } else if (currentTemperature > outsideTemperature) {
-                hvac.setCurrentTemperature(currentTemperature - 0.05*accelerationFactor);
+                hvac.setCurrentTemperature(roundToDecimal(currentTemperature - 0.05 * accelerationFactor, 1));
             }
         }
         System.out.println("\nCurrent Temperature: " + hvac.getCurrentTemperature());
         hvac.controlHVAC(); // Check if HVAC needs to start or stop after each time step
     }
 
-    public void printCurrentDateTimeNewLine() {
-        Thread updaterThread = new Thread(() -> {
-            while (true) {
-                try {
-                    Thread.sleep(1000); // Sleep for 1 second
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.printf("\rCurrent Date: %s | Current Time: %s",
-                        currentDate, currentTime.format(TIME_FORMATTER));
-            }
-        });
-        updaterThread.setDaemon(true); // Set the thread as a daemon thread to stop when the main thread stops
-        updaterThread.start();
+    public static double roundToDecimal(double value, int decimalPlaces) {
+        if (decimalPlaces < 0) throw new IllegalArgumentException();
+
+        long factor = (long) Math.pow(10, decimalPlaces);
+        value = value * factor;
+        long temp = Math.round(value);
+        return (double) temp / factor;
     }
 
     @GetMapping("/current/date")
