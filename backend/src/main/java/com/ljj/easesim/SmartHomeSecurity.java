@@ -9,13 +9,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SmartHomeSecurity implements TemperatureObserver {
+public class SmartHomeSecurity implements TemperatureObserver, AwayModeObservable {
     private final HouseLayout house = SmartHomeSimulator.getInstance().getHouseLayout();
     private static final SmartHomeSecurity INSTANCE = new SmartHomeSecurity();;
     private static SmartHomeCore shc;
     private Map<String, Double> indoorTemps;
     private Map<String, Long> lastTemperatureUpdate;
     private boolean isAway;
+    private AwayModeObserver awayObserver;
 
     public SmartHomeSecurity() {
         shc = SmartHomeCore.getInstance();
@@ -28,6 +29,21 @@ public class SmartHomeSecurity implements TemperatureObserver {
         return INSTANCE;
     }
 
+    @Override
+    public void registerAwayModeObserver(AwayModeObserver observer) {
+        this.awayObserver = observer;
+    }
+
+    @Override
+    public void removeAwayModeObserver(AwayModeObserver observer) {
+        this.awayObserver = null;
+    }
+
+    @Override
+    public void notifyAwayModeObservers() {
+        awayObserver.updateAwayMode(isAway);
+    }
+
     public void setAwayMode(boolean isAway) {
         this.isAway = isAway;
         logEvent("away mode is: " + isAway);
@@ -35,6 +51,7 @@ public class SmartHomeSecurity implements TemperatureObserver {
             lockdown();
         }
     }
+
 
     public boolean lockdown(){
         Map<HouseElement, String> doors = house.getHouseDoors();
@@ -112,4 +129,5 @@ public class SmartHomeSecurity implements TemperatureObserver {
             System.out.println(zoneName + ": " + temp);
         }
     }
+
 }

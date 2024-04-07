@@ -26,6 +26,7 @@ public class EaseSimApplication {
 		shs.registerObserver(shh);
 		shh.registerObserver(shp);
 		shh.notifyObservers();
+		shp.registerAwayModeObserver(shh);
 
 		//Operations
 		//clock.setAccelerationFactor(1);
