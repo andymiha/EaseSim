@@ -14,11 +14,13 @@ public class SmartHomeSecurity implements TemperatureObserver {
     private static final SmartHomeSecurity INSTANCE = new SmartHomeSecurity();;
     private static SmartHomeCore shc;
     private Map<String, Double> indoorTemps;
+    private Map<String, Long> lastTemperatureUpdate;
     private boolean isAway;
 
     public SmartHomeSecurity() {
         shc = SmartHomeCore.getInstance();
         this.indoorTemps = new HashMap<>();
+        this.lastTemperatureUpdate = new HashMap<>();
         this.isAway = false;
     }
 
@@ -76,12 +78,23 @@ public class SmartHomeSecurity implements TemperatureObserver {
     public void updateTemperature(String zoneName, double zoneTemp) {
         indoorTemps.put(zoneName, zoneTemp); // Update the indoor temperature for the specified zone
 
+//        Double previousTemp = indoorTemps.get(zoneName);
+//        if (previousTemp != null && zoneTemp - previousTemp >= 15.0) { // Check if temperature increased by 15 degrees
+//            long elapsedTime = System.currentTimeMillis() - lastTemperatureUpdate.get(zoneName);
+//            if (elapsedTime <= 60000) { // Check if the increase happened within 1 minute (in milliseconds)
+//                setAwayMode(false);
+//                logEvent("Temperature increased by 15 degrees Celsius in 1 minute. Away mode turned off.");
+//                sendNotificationToOwners("Temperature alert: 15 degrees Celsius increase in 1 minute in " + zoneName);
+//            }
+//        }
+
         if (zoneTemp >= 135.0) {
             setAwayMode(false);
             logEvent("Temperature reached 135 degrees Celsius. Away mode turned off.");
             sendNotificationToOwners("Temperature alert: 135 degrees Celsius reached in " + zoneName);
         }
     }
+
 
     //Module logging methods
     private void logEvent(String message) {
