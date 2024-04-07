@@ -68,11 +68,13 @@ public class DateController {
             }
 
             System.out.println(String.format(
+                            "%-10s%s || Current Temperature from HVAC\n" +
                             "%-10s%s || New Temperature DataController\n" +
                             "%-10s%s || New Temperature SHS\n" +
                             "%-10s%s || New Temperature Garage Zone\n" +
                             "%-10s%s || Current Date\n" +
                             "%-10s%s || Current Time",
+                    hvac.getCurrentTemperature(), " ",
                     shs.getTemperatureFromCSV(getCurrentDate(), getCurrentTime()), " ",
                     shs.getOutsideTemp(), " ",
                     shh.getHeatingZones().get("Garage").getCurrentZoneTemp(), " ",
@@ -95,6 +97,8 @@ public class DateController {
     //called in DateController
     //pass acceleration rate and do 0.1 * rate to speed up/slow down
     public void trackChangeTemp(int accelerationFactor) {
+        double previousTemperature = hvac.getCurrentTemperature();
+
         if (hvac.isHvacRunning()) {
             if (hvac.getCurrentTemperature() < hvac.getDesiredTemperature()) {
                 hvac.setCurrentTemperature(roundToDecimal(hvac.getCurrentTemperature() + 0.1 * accelerationFactor, 1));
@@ -113,8 +117,18 @@ public class DateController {
                 hvac.setCurrentTemperature(roundToDecimal(currentTemperature - 0.05 * accelerationFactor, 1));
             }
         }
-        System.out.println("\nCurrent Temperature: " + hvac.getCurrentTemperature());
         hvac.controlHVAC(); // Check if HVAC needs to start or stop after each time step
+
+        double newTemperature = hvac.getCurrentTemperature();
+        double temperatureChange = Math.abs(newTemperature - previousTemperature);
+
+        if (temperatureChange >= 15 && shp.isAway()) {
+            // Emit an event or perform some action when the temperature changes by 15C in 1 minute
+            //shh.emitTemperatureChangeAlert(newTemperature, previousTemperature);
+            shp.setAwayMode(false);
+            shp.logEvent("Temperature increased by 15 degrees Celsius in 1 minute. Away mode turned off.");
+            shp.sendNotificationToOwners("Temperature alert: 15 degrees Celsius increase in 1 minute.");
+        }
     }
 
     public static double roundToDecimal(double value, int decimalPlaces) {
