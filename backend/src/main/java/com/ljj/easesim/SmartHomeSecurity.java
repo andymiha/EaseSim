@@ -28,7 +28,10 @@ public class SmartHomeSecurity implements TemperatureObserver {
 
     public void setAwayMode(boolean isAway) {
         this.isAway = isAway;
-        lockdown();
+        logEvent("away mode is: " + isAway);
+        if(isAway) {
+            lockdown();
+        }
     }
 
     public boolean lockdown(){
@@ -72,6 +75,21 @@ public class SmartHomeSecurity implements TemperatureObserver {
     @Override
     public void updateTemperature(String zoneName, double zoneTemp) {
         indoorTemps.put(zoneName, zoneTemp); // Update the indoor temperature for the specified zone
+
+        if (zoneTemp >= 135.0) {
+            setAwayMode(false);
+            logEvent("Temperature reached 135 degrees Celsius. Away mode turned off.");
+            sendNotificationToOwners("Temperature alert: 135 degrees Celsius reached in " + zoneName);
+        }
+    }
+
+    //Module logging methods
+    private void logEvent(String message) {
+        System.out.println("Event logged: " + message);
+    }
+
+    private void sendNotificationToOwners(String message) {
+        System.out.println("Notification sent to owners: " + message);
     }
 
     public void printIndoorTemps() {
