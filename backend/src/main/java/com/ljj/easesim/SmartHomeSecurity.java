@@ -46,6 +46,7 @@ public class SmartHomeSecurity implements TemperatureObserver, AwayModeObservabl
 
     public void setAwayMode(boolean isAway) {
         this.isAway = isAway;
+        notifyAwayModeObservers();
         logEvent("away mode is: " + isAway);
         if(isAway) {
             lockdown();
