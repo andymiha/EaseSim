@@ -52,7 +52,6 @@ public class SmartHomeSecurity implements TemperatureObserver, AwayModeObservabl
         this.awayObserver = null;
     }
 
-
     public AwayModeObserver getAwayObserver() {
         return awayObserver;
     }

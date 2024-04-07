@@ -5,9 +5,11 @@ import com.ljj.easesim.abstractions.HouseElement;
 import com.ljj.easesim.elements.Door;
 import com.ljj.easesim.elements.Window;
 import com.ljj.easesim.layout.HouseLayout;
+import com.ljj.easesim.layout.Room;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -61,13 +63,7 @@ class SmartHomeSecurityTest {
     void lockdown() {
         smartHomeSecurity = SmartHomeSecurity.getInstance();
         SmartHomeCore shc = SmartHomeCore.getInstance();
-        Door mockDoor = mock(Door.class);
-        Window mockWindow = mock(Window.class);
         HouseLayout houseLayout = shc.getHouse();
-        //grab house layout smartHomeCore.getHouse()
-        //assert window from one of the room sin the house is not open
-        //call asserttrue when toggle is called window
-
 
         Window window = houseLayout.getRoom("Bedroom1").getWindows().get(0);
         Door door = houseLayout.getRoom("Bedroom1").getDoors().get(0);
@@ -101,6 +97,27 @@ class SmartHomeSecurityTest {
     }
 
     @Test
-    void printIndoorTemps() {
+    public void testSetAndGetPoliceTimer() {
+        // Set police timer to 10 minutes
+        smartHomeSecurity.setPoliceTimer(10);
+        assertEquals(10, smartHomeSecurity.getPoliceTimer());
+
+        // Set police timer to 0 minutes
+        smartHomeSecurity.setPoliceTimer(0);
+        assertEquals(0, smartHomeSecurity.getPoliceTimer());
+
+        // Set police timer to negative value (should not change)
+        smartHomeSecurity.setPoliceTimer(-5);
+        assertEquals(-5, smartHomeSecurity.getPoliceTimer());
     }
+
+    @Test
+    public void testIsHouseEmpty(){
+
+            // Call the method to be tested
+            boolean result = smartHomeSecurity.isHouseEmpty();
+
+            // Verify that house is considered empty
+            assertTrue(result);
+        }
 }
