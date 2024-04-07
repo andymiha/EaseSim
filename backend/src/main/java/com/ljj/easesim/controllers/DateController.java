@@ -112,9 +112,9 @@ public class DateController {
             double outsideTemperature = hvac.getOutsideTemperature();
 
             if (currentTemperature < outsideTemperature) {
-                hvac.setCurrentTemperature(roundToDecimal(currentTemperature + 0.05 * accelerationFactor, 1));
+                hvac.setCurrentTemperature(roundToDecimal(currentTemperature + 0.05 * accelerationFactor, 2));
             } else if (currentTemperature > outsideTemperature) {
-                hvac.setCurrentTemperature(roundToDecimal(currentTemperature - 0.05 * accelerationFactor, 1));
+                hvac.setCurrentTemperature(roundToDecimal(currentTemperature - 0.05 * accelerationFactor, 2));
             }
         }
         hvac.controlHVAC(); // Check if HVAC needs to start or stop after each time step

@@ -34,6 +34,10 @@ public class SmartHomeHeating implements TemperatureObserver, TemperatureObserva
         return isActive;
     }
 
+    public boolean isSHPAway() {
+        return isSHPAway;
+    }
+
     public void toggleActive() {
         isActive = !isActive;
     }

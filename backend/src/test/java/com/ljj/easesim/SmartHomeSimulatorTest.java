@@ -19,62 +19,61 @@ import java.util.Map;
 
 
 public class SmartHomeSimulatorTest {
+    private SmartHomeSimulator smartHomeSimulator;
+    private HouseLayout mockedHouseLayout;
+    private User mockedUser;
 
-        private SmartHomeSimulator smartHomeSimulator;
-        private HouseLayout mockedHouseLayout;
-        private User mockedUser;
+    private ObjectMapper mockObjectMapper;
 
-        private ObjectMapper mockObjectMapper;
+    @BeforeEach
+    void setUp() {
+        smartHomeSimulator = SmartHomeSimulator.getInstance();
+        SmartHomeSimulator mockedSmartHomeSimulator = mock(SmartHomeSimulator.class);
+        mockedHouseLayout = mock(HouseLayout.class);
+        mockedUser = mock(User.class);
+        mockObjectMapper = mock(ObjectMapper.class);
+    }
 
-        @BeforeEach
-        void setUp() {
-            smartHomeSimulator = SmartHomeSimulator.getInstance();
-            SmartHomeSimulator mockedSmartHomeSimulator = mock(SmartHomeSimulator.class);
-            mockedHouseLayout = mock(HouseLayout.class);
-            mockedUser = mock(User.class);
-            mockObjectMapper = mock(ObjectMapper.class);
-        }
+    @Test
+    void testGetInstance() {
+        assertNotNull(smartHomeSimulator); // Check that instance is not null
+    }
 
-        @Test
-        void testGetInstance() {
-            assertNotNull(smartHomeSimulator); // Check that instance is not null
-        }
+    @Test
+    void testGetUsers() {
+        ArrayList<User> users = smartHomeSimulator.getUsers();
+        assertNotNull(users); // Check that users list is not null
+    }
 
-        @Test
-        void testGetUsers() {
-            ArrayList<User> users = smartHomeSimulator.getUsers();
-            assertNotNull(users); // Check that users list is not null
-        }
+    @Test
+    void testGetHouseLayout() {
+        HouseLayout houseLayout = smartHomeSimulator.getHouseLayout();
+        assertNotNull(houseLayout); // Check that house layout is not null
+    }
 
-        @Test
-        void testGetHouseLayout() {
-            HouseLayout houseLayout = smartHomeSimulator.getHouseLayout();
-            assertNotNull(houseLayout); // Check that house layout is not null
-        }
+    @Test
+    void testGetUser() {
+        when(mockedUser.getId()).thenReturn(0);
+        smartHomeSimulator.addUser(0, "Parent", "John Doe");
 
-        @Test
-        void testGetUser() {
-            when(mockedUser.getId()).thenReturn(0);
-            smartHomeSimulator.addUser(0, "Parent", "John Doe");
+        User user = smartHomeSimulator.getUser(0);
+        assertEquals("John Doe", user.getName()); // Check that user with ID 1 is retrieved
+    }
 
-            User user = smartHomeSimulator.getUser(0);
-            assertEquals("John Doe", user.getName()); // Check that user with ID 1 is retrieved
-        }
+    @Test
+    void testAddUser() {
+        User newUser = smartHomeSimulator.addUser(2, "Child", "Alice");
+        assertNotNull(newUser); // Check that new user is added successfully
+        assertEquals(2, newUser.getId()); // Check that new user has the correct ID
+    }
 
-        @Test
-        void testAddUser() {
-            User newUser = smartHomeSimulator.addUser(2, "Child", "Alice");
-            assertNotNull(newUser); // Check that new user is added successfully
-            assertEquals(2, newUser.getId()); // Check that new user has the correct ID
-        }
-
-        @Test
-        void testDeleteUser() {
-            smartHomeSimulator.addUser(3, "Guest", "Jane Smith");
-            smartHomeSimulator.deleteUser(3);
-            User deletedUser = smartHomeSimulator.getUser(3);
-            assertEquals(null, deletedUser); // Check that user with ID 3 is deleted
-        }
+    @Test
+    void testDeleteUser() {
+        smartHomeSimulator.addUser(3, "Guest", "Jane Smith");
+        smartHomeSimulator.deleteUser(3);
+        User deletedUser = smartHomeSimulator.getUser(3);
+        assertEquals(null, deletedUser); // Check that user with ID 3 is deleted
+    }
 
     @Test
     void testMapUsersFromJsonFileNotFound() throws IOException {

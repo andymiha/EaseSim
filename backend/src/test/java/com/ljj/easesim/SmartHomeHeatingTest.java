@@ -37,6 +37,12 @@ class SmartHomeHeatingTest {
     }
 
     @Test
+    void testUpdateAwayMode(){
+        smartHomeHeating.updateAwayMode(true);
+        assertTrue(smartHomeHeating.isSHPAway());
+    }
+
+    @Test
     void testCreateHeatingZone() {
         assertTrue(smartHomeHeating.createHeatingZone("Zone3"));
     }

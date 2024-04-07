@@ -1,23 +1,25 @@
 package com.ljj.easesim;
 
+import com.ljj.easesim.layout.HouseLayout;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class SmartHomeSecurityTest {
 
+    private SmartHomeSecurity smartHomeSecurity;
+    private HouseLayout houseLayout;
+
+    @BeforeEach
     void setUp(){
         smartHomeSecurity = SmartHomeSecurity.getInstance();
-        houseLayoutMock = Mockito.mock(HouseLayout.class);
-        smartHomeSecurity.setHouseLayout(houseLayoutMock);
+
     }
 
     @Test
-    void getInstance() {
-    }
-
-    @Test
-    void isAway() {
+    public void testIsAwayInitiallyFalse() {
+        assertFalse(smartHomeSecurity.isAway());
     }
 
     @Test
