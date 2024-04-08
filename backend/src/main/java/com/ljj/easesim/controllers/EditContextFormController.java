@@ -26,11 +26,8 @@ public class EditContextFormController {
 
     //returns data to the frontend edit form component
     @GetMapping("/getData")
-    public List<Room> getData() {
-        System.out.println("Fetching data...");
-        List<Room> rooms = editContextService.processGetData();
-        System.out.println("Data fetched successfully.");
-        return rooms;
+    public Map<String, List<Room>> getData() {
+        return editContextService.processGetData();
     }
 
     //handles data from the frontend form submission
