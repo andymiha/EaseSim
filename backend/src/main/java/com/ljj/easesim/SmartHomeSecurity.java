@@ -2,8 +2,8 @@ package com.ljj.easesim;
 
 import com.ljj.easesim.abstractions.*;
 import com.ljj.easesim.layout.*;
-import com.ljj.easesim.users.*;
 import com.ljj.easesim.elements.*;
+import com.ljj.easesim.states.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,13 +16,18 @@ public class SmartHomeSecurity implements TemperatureObserver, AwayModeObservabl
     private Map<String, Double> indoorTemps;
     private Map<String, Long> lastTemperatureUpdate;
     private int policeTimer;
-    private boolean isAway;
+    //private boolean isAway;
+    private State AwayOn;
+    private State AwayOff;
+    private State currentState;
     private AwayModeObserver awayObserver;
 
     public SmartHomeSecurity() {
         this.indoorTemps = new HashMap<>();
         this.lastTemperatureUpdate = new HashMap<>();
-        this.isAway = false;
+        this.AwayOn = new AwayOn(this);
+        this.AwayOff = new AwayOff(this);
+        this.currentState = AwayOff;
     }
 
     public static SmartHomeSecurity getInstance() {
@@ -30,7 +35,19 @@ public class SmartHomeSecurity implements TemperatureObserver, AwayModeObservabl
     }
 
     public boolean isAway() {
-        return isAway;
+        return currentState.isAway();
+    }
+
+    public State getAwayOn() {
+        return AwayOn;
+    }
+
+    public State getAwayOff() {
+        return AwayOff;
+    }
+
+    public State getCurrentState() {
+        return currentState;
     }
 
     public int getPoliceTimer() {
@@ -40,6 +57,10 @@ public class SmartHomeSecurity implements TemperatureObserver, AwayModeObservabl
     public void setPoliceTimer(int policeTimer) {
         this.policeTimer = policeTimer;
         logEvent("Police Timer is now this many minutes: " + policeTimer);
+    }
+
+    public void changeState(State state){
+        this.currentState = state;
     }
 
     @Override
@@ -58,16 +79,11 @@ public class SmartHomeSecurity implements TemperatureObserver, AwayModeObservabl
 
     @Override
     public void notifyAwayModeObservers() {
-        awayObserver.updateAwayMode(isAway);
+        awayObserver.updateAwayMode(currentState.isAway());
     }
 
     public void setAwayMode(boolean isAway) {
-        this.isAway = isAway;
-        notifyAwayModeObservers();
-        logEvent("away mode is: " + isAway);
-        if(isAway) {
-            lockdown();
-        }
+        currentState.setAwayMode(isAway);
     }
 
     public boolean lockdown(){
