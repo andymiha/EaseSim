@@ -39,6 +39,7 @@ public class SmartHomeSecurity implements TemperatureObserver, AwayModeObservabl
 
     public void setPoliceTimer(int policeTimer) {
         this.policeTimer = policeTimer;
+        logEvent("Police Timer is now this many minutes: " + policeTimer);
     }
 
     @Override
