@@ -1,6 +1,7 @@
 package com.ljj.easesim.controllers;
 
 
+import com.ljj.easesim.SmartHomeSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import com.ljj.easesim.SmartHomeSimulator;
@@ -22,6 +23,8 @@ public class DateController {
 
     private SmartHomeHeating shh;
 
+    private SmartHomeSecurity shp;
+
     private HVAC hvac;
 
     private LocalDate currentDate;
@@ -35,6 +38,7 @@ public class DateController {
     public DateController() {
         this.shs = SmartHomeSimulator.getInstance();
         this.shh = SmartHomeHeating.getInstance();
+        this.shp = SmartHomeSecurity.getInstance();
         this.hvac = HVAC.getInstance();
         this.accelerationFactor = 1;
         this.currentDate = LocalDate.of(2022, 3, 1); // Start date on March 1st, 2022
@@ -54,21 +58,33 @@ public class DateController {
             boolean isHourChanged = previousTime.getHour() != currentTime.getHour();
 
             if (isHourChanged || isClockStart) {
-                System.out.println("\tHour changed: " + previousTime.getHour() + " -> " + currentTime.getHour());
+                System.out.println("Hour changed: " + previousTime.getHour() + " -> " + currentTime.getHour());
                 double temp = shs.getTemperatureFromCSV(getCurrentDate(), getCurrentTime());
                 shs.setOutsideTemp(temp);
-                System.out.println("New Temperature DataController: " + temp);
-                System.out.println("New Temperature SHS: " + shs.getOutsideTemp());
             }
 
             if (previousTime.getHour() > currentTime.getHour()) {
                 currentDate = currentDate.plusDays(1); // Increment date by 1 day
             }
 
-            System.out.println("New Temperature DataController: " + shs.getTemperatureFromCSV(getCurrentDate(), getCurrentTime()));
-            System.out.println("New Temperature SHS: " + shs.getOutsideTemp());
+            System.out.println(String.format(
+                            "%-10s%s || Current Temperature from HVAC\n" +
+                            "%-10s%s || New Temperature DataController\n" +
+                            "%-10s%s || New Temperature SHS\n" +
+                            "%-10s%s || New Temperature Garage Zone\n" +
+                            "%-10s%s || Current Date\n" +
+                            "%-10s%s || Current Time",
+                    hvac.getCurrentTemperature(), " ",
+                    shs.getTemperatureFromCSV(getCurrentDate(), getCurrentTime()), " ",
+                    shs.getOutsideTemp(), " ",
+                    shh.getHeatingZones().get("Garage").getCurrentZoneTemp(), " ",
+                    currentDate, " ",
+                    currentTime.format(TIME_FORMATTER), " "));
 
-            printCurrentDateTimeNewLine(); // Print current date and time in new lines
+
+            // Print current date and time in new lines
+            //shp.printIndoorTemps();
+            System.out.println("\n" + "-".repeat(700));
             isClockStart = false; // Set isClockStart to false after the first iteration
         }, 0, 1, TimeUnit.SECONDS); // Start immediately and repeat every second
     }
@@ -81,40 +97,51 @@ public class DateController {
     //called in DateController
     //pass acceleration rate and do 0.1 * rate to speed up/slow down
     public void trackChangeTemp(int accelerationFactor) {
+        double previousTemperature = hvac.getCurrentTemperature();
+
         if (hvac.isHvacRunning()) {
             if (hvac.getCurrentTemperature() < hvac.getDesiredTemperature()) {
-                hvac.setCurrentTemperature(hvac.getCurrentTemperature() + 0.1*accelerationFactor);
+                hvac.setCurrentTemperature(roundToDecimal(hvac.getCurrentTemperature() + 0.1 * accelerationFactor, 1));
+                shh.notifyObservers();
             } else if (hvac.getCurrentTemperature() > hvac.getDesiredTemperature()) {
-                hvac.setCurrentTemperature(hvac.getCurrentTemperature() - 0.1*accelerationFactor);
+                hvac.setCurrentTemperature(roundToDecimal(hvac.getCurrentTemperature() - 0.1 * accelerationFactor, 1));
+                shh.notifyObservers();
             }
         } else { // HVAC not running  -- temp changes according to outside
             double currentTemperature = hvac.getCurrentTemperature();
             double outsideTemperature = hvac.getOutsideTemperature();
 
             if (currentTemperature < outsideTemperature) {
-                hvac.setCurrentTemperature(currentTemperature + 0.05*accelerationFactor);
+                hvac.setCurrentTemperature(roundToDecimal(currentTemperature + 0.05 * accelerationFactor, 2));
             } else if (currentTemperature > outsideTemperature) {
-                hvac.setCurrentTemperature(currentTemperature - 0.05*accelerationFactor);
+                hvac.setCurrentTemperature(roundToDecimal(currentTemperature - 0.05 * accelerationFactor, 2));
             }
         }
-        System.out.println("\nCurrent Temperature: " + hvac.getCurrentTemperature());
         hvac.controlHVAC(); // Check if HVAC needs to start or stop after each time step
+
+        double newTemperature = hvac.getCurrentTemperature();
+        double temperatureChange = Math.abs(newTemperature - previousTemperature);
+
+        if (temperatureChange >= 15 && shp.isAway()) {
+            // Emit an event or perform some action when the temperature changes by 15C in 1 minute
+            //shh.emitTemperatureChangeAlert(newTemperature, previousTemperature);
+            shp.setAwayMode(false);
+            shp.logEvent("Temperature increased by 15 degrees Celsius in 1 minute. Away mode turned off.");
+            shp.sendNotificationToOwners("Temperature alert: 15 degrees Celsius increase in 1 minute.");
+        }
+
+        if(shp.isAway()){
+            shp.isHouseEmpty();
+        }
     }
 
-    public void printCurrentDateTimeNewLine() {
-        Thread updaterThread = new Thread(() -> {
-            while (true) {
-                try {
-                    Thread.sleep(1000); // Sleep for 1 second
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.printf("\rCurrent Date: %s | Current Time: %s",
-                        currentDate, currentTime.format(TIME_FORMATTER));
-            }
-        });
-        updaterThread.setDaemon(true); // Set the thread as a daemon thread to stop when the main thread stops
-        updaterThread.start();
+    public static double roundToDecimal(double value, int decimalPlaces) {
+        if (decimalPlaces < 0) throw new IllegalArgumentException();
+
+        long factor = (long) Math.pow(10, decimalPlaces);
+        value = value * factor;
+        long temp = Math.round(value);
+        return (double) temp / factor;
     }
 
     @GetMapping("/current/date")

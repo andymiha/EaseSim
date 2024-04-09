@@ -26,7 +26,6 @@ public class HouseLayout {
         return instance;
     }
 
-
     // Constructor
     public HouseLayout() {
         rooms = new ArrayList<>();

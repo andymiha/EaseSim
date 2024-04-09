@@ -15,19 +15,34 @@ public class EaseSimApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(EaseSimApplication.class, args);
 
+		//Instantiation of Modules & Clock
 		SmartHomeSimulator shs = SmartHomeSimulator.getInstance();
 		SmartHomeCore shc = SmartHomeCore.getInstance();
 		SmartHomeHeating shh = SmartHomeHeating.getInstance();
+		SmartHomeSecurity shp = SmartHomeSecurity.getInstance();
 		DateController clock = new DateController(); //Do a POST request to http://localhost:8080/api/time/acceleration and pass "1" to start clock
-		clock.setAccelerationFactor(1);
-		clock.setDesiredTemperature(20);
+
+		//Observer registrations
+		shs.registerObserver(shh);
+		shh.registerObserver(shp);
+		shh.notifyObservers();
+		shp.registerAwayModeObserver(shh);
+
+		//Operations
+		//clock.setAccelerationFactor(1);
+		//clock.setDesiredTemperature(20);
+		shs.getHouseLayout().getRoom("Bedroom1").getDoors().get(0).toggle();
+		shs.getHouseLayout().getRoom("Bedroom1").getDoors().get(0).toggleBlocked();
+		System.out.println(shs.getHouseLayout().getRoom("Bedroom1").getDoors().get(0).getState());
 		clock.assignHVACZone("Garage");
+
 
 		// Test data
 		Light sampleLight = (Light) shs.getHouseLayout().getRooms().get(0).getElements().get(0);
 		Window sampleWindow = (Window) shs.getHouseLayout().getRooms().get(0).getElements().get(1);
 		Door sampleDoor = (Door) shs.getHouseLayout().getRooms().get(0).getElements().get(2);
 		User sampleUser = shs.getUser(1);
+		//shs.getHouseLayout().getRoom("Bedroom1").addUser(sampleUser);
 
 		// Testing SHS functionalities
 		System.out.println("\n" + "-".repeat(700));
@@ -35,6 +50,10 @@ public class EaseSimApplication {
 		System.out.println("TESTING SHS FUNCTIONS ...\n");
 		System.out.println("DISPLAY GETTEMPFROMCSV...\n");
 		System.out.println("Temp is: " + shs.getTemperatureFromCSV(clock.getCurrentDate(), clock.getCurrentTime()));
+		System.out.println("-".repeat(700));
+		System.out.println("TESTING DISPLAY USER IN ROOM ...\n");
+		System.out.println(shs.getHouseLayout().getRoom("Bedroom1").toString());
+
 
 
 		// Testing SHC functionalities
@@ -57,9 +76,18 @@ public class EaseSimApplication {
 		System.out.println("DISPLAY HEATING ZONES CONTENTS...\n");
 		shh.printHeatingZones();
 
-
-
-
+		//TEST SHP functionalities
+		System.out.println("\n" + "-".repeat(700));
+		System.out.println("-".repeat(700));
+		System.out.println("TESTING SHP FUNCTIONS ...\n");
+		System.out.println("DISPLAY SET AWAY MODE RESULT CONTENTS...\n");
+		shp.setAwayMode(true);
+		System.out.println("-".repeat(700));
+		System.out.println("DISPLAY INDOOR TEMPS CONTENTS...\n");
+		shp.printIndoorTemps();
+		System.out.println("-".repeat(700));
+		System.out.println("DISPLAY IF USER IN ROOM...\n");
+		System.out.println(shp.isHouseEmpty());
 
 	}
 

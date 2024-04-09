@@ -10,12 +10,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SmartHomeHeating implements TemperatureObserver{
-    private final HouseLayout house = SmartHomeSimulator.getInstance().getHouseLayout();
+public class SmartHomeHeating implements TemperatureObserver, TemperatureObservable, AwayModeObserver{
     private static final SmartHomeHeating INSTANCE = new SmartHomeHeating();
+    private HouseLayout house = SmartHomeSimulator.getInstance().getHouseLayout();
+    private SmartHomeSimulator shs = SmartHomeSimulator.getInstance();
+
     private boolean isActive;
+    private boolean isSHPAway;
     private Map<String, HeatingZone> heatingZones;
     private HVAC hvac;
+    private TemperatureObserver temperatureObserver;
 
 
     // Log all actions (save in log file) and display in console. (Observer)
@@ -24,12 +28,20 @@ public class SmartHomeHeating implements TemperatureObserver{
         isActive = false;
         heatingZones = new HashMap<>();
         generateHeatingZones();
-        SmartHomeSimulator.getInstance().registerObserver(this);
+        shs.registerObserver(this);
         this.hvac = HVAC.getInstance();
     }
 
     public boolean isActive() {
         return isActive;
+    }
+
+    public boolean isSHPAway() {
+        return isSHPAway;
+    }
+
+    public TemperatureObserver getTemperatureObserver() {
+        return temperatureObserver;
     }
 
     public void toggleActive() {
@@ -41,11 +53,33 @@ public class SmartHomeHeating implements TemperatureObserver{
 
 
     @Override
-    public void updateTemperature(double outdoorTemperature) {
+    public void updateTemperature(String entity, double outdoorTemperature) {
         // Update heating based on temperature changes
         if (isActive) {
             hvac.setOutsideTemperature(outdoorTemperature);
         }
+    }
+
+    @Override
+    public void registerObserver(TemperatureObserver observer) {
+        this.temperatureObserver = observer;
+    }
+
+    @Override
+    public void removeObserver(TemperatureObserver observer) {
+        this.temperatureObserver = null;
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (HeatingZone zone: heatingZones.values()){
+            temperatureObserver.updateTemperature(zone.getZoneName(), zone.getCurrentZoneTemp());
+        }
+    }
+
+    @Override
+    public void updateAwayMode(boolean isAway) {
+        this.isSHPAway = isAway;
     }
 
     public Map<String, HeatingZone> getHeatingZones() {
@@ -61,7 +95,7 @@ public class SmartHomeHeating implements TemperatureObserver{
     }
 
     public boolean deleteHeatingZone(String zoneName) {
-        if (!heatingZones.containsKey(zoneName)) {
+        if (heatingZones.containsKey(zoneName)) {
             heatingZones.remove(zoneName);
             return true;
         }
@@ -102,14 +136,15 @@ public class SmartHomeHeating implements TemperatureObserver{
         //show a message if heating zone fails !
     }
 
-
     public void generateHeatingZones() {
         createHeatingZone("Garage");
         addRoomToHeatingZone("Garage", HouseLayout.getInstance().getRoom("Garage"));
+        //heatingZones.get("Garage").setCurrentZoneTemp(15);
 
         createHeatingZone("Zone1");
         addRoomToHeatingZone("Zone1", HouseLayout.getInstance().getRoom("Bedroom1"));
         addRoomToHeatingZone("Zone1", HouseLayout.getInstance().getRoom("Bedroom2"));
+
 
         createHeatingZone("Zone2");
         addRoomToHeatingZone("Zone2", HouseLayout.getInstance().getRoom("Bathroom"));
@@ -130,7 +165,5 @@ public class SmartHomeHeating implements TemperatureObserver{
             System.out.println();
         }
     }
-
-
 
 }

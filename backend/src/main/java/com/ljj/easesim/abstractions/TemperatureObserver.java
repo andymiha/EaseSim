@@ -1,6 +1,6 @@
 package com.ljj.easesim.abstractions;
 
 public interface TemperatureObserver {
-    void updateTemperature(double outdoorTemperature);
+    void updateTemperature(String entity, double outdoorTemperature);
 }
 

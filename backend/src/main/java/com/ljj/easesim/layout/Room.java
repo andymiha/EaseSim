@@ -2,18 +2,18 @@ package com.ljj.easesim.layout;
 
 import com.ljj.easesim.elements.*;
 import com.ljj.easesim.abstractions.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.ArrayList;
 
 public class Room {
     private final int id;
+    @JsonIgnore
     private Command command;
     private String name;
     private ArrayList<HouseElement> elements;
     private ArrayList<User> users;
-
     private double currentTemp;
-
     private double desiredTemp;
 
     public Room(int id, String name) {
@@ -37,6 +37,7 @@ public class Room {
         return this.name;
     }
 
+
     public double getCurrentTemp() {
         return currentTemp;
     }
@@ -57,8 +58,8 @@ public class Room {
         return this.users;
     }
 
-    public void addUser(User user) {
-        users.add(user);
+    public boolean addUser(User user) {
+        return users.add(user);
     }
 
     public void removeUser(User user) {

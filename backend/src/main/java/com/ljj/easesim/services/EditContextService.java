@@ -1,20 +1,35 @@
 package com.ljj.easesim.services;
 
+import com.ljj.easesim.SmartHomeSimulator;
+import com.ljj.easesim.elements.Window;
+import com.ljj.easesim.layout.Room;
+import com.ljj.easesim.requestBodies.EditContextFormData;
 import org.springframework.stereotype.Service;
 
-import com.ljj.easesim.SmartHomeSimulator;
-import com.ljj.easesim.requestBodies.EditContextFormData;
-
-import com.ljj.easesim.layout.Room;
-import com.ljj.easesim.elements.Window;
-
-
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class EditContextService {
 
+    private static final SmartHomeSimulator shs = SmartHomeSimulator.getInstance();
+
     //GET process
+//    public List<Room> processGetData() {
+//        try {
+//            System.out.println("Fetching rooms from house layout...");
+//            List<Room> rooms = shs.getHouseLayout().getRooms();
+//            System.out.println("Rooms fetched successfully.");
+//            return rooms;
+//        } catch (Exception e) {
+//            // Log the exception and handle it appropriately
+//            System.err.println("Error while retrieving room data: " + e.getMessage());
+//            // You can throw a specific exception or handle it in other ways based on your application's logic
+//            throw new RuntimeException("Failed to retrieve room data. Please try again later.");
+//        }
+//    }
+
     public Map<String, List<Room>> processGetData() {
         Map<String, List<Room>> data = new HashMap<>();
         data.put("rooms", SmartHomeSimulator.getInstance().getHouseLayout().getRooms());
@@ -22,8 +37,9 @@ public class EditContextService {
     }
 
 
+
     //POST process
-    public void processFormData(EditContextFormData editContextFormData) {
+    public boolean processFormData(EditContextFormData editContextFormData) {
         System.out.println("Received form data:");
         System.out.println("Selected Room: " + editContextFormData.getSelectedRoom());
 
@@ -54,17 +70,18 @@ public class EditContextService {
         } else {
             System.out.println("Corresponding Room object not found for selected room.");
         }
+        return true;
     }
 
     //Helper methods for POST
-    private int extractWindowNumber(String selectedWindow) {
+    public int extractWindowNumber(String selectedWindow) {
         // Use regular expression to extract the integer part
         String windowNumberStr = selectedWindow.replaceAll("\\D+", "");
         // Parse the window number string to an integer
         return Integer.parseInt(windowNumberStr);
     }
 
-    private void toggleWindowBlockState(Room selectedRoom, int windowNumber) {
+    public boolean toggleWindowBlockState(Room selectedRoom, int windowNumber) {
         // Retrieve the list of windows in the selected room
         for (Window window : selectedRoom.getWindows()) {
             if (window.getId() == windowNumber) {
@@ -74,5 +91,6 @@ public class EditContextService {
                 break;
             }
         }
+        return true;
     }
 }

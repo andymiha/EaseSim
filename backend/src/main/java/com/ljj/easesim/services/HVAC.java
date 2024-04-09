@@ -7,6 +7,7 @@ public class HVAC {
     private double currentTemperature;
     private double desiredTemperature;
     private boolean hvacRunning;
+    private HeatingZone currentZone;
 
     private static final HVAC INSTANCE = new HVAC();
 
@@ -44,6 +45,11 @@ public class HVAC {
 
     public void setCurrentTemperature(double currentTemperature) {
         this.currentTemperature = currentTemperature;
+        updateZoneTemp();
+    }
+
+    public void updateZoneTemp(){
+        this.currentZone.setCurrentZoneTemp(currentTemperature);
     }
 
     public void setDesiredTemperature(double desiredTemperature) {
@@ -52,6 +58,7 @@ public class HVAC {
     }
 
     public void setZone(HeatingZone heatingZone){
+        this.currentZone = heatingZone;
         this.currentTemperature = heatingZone.getCurrentZoneTemp();
         this.desiredTemperature = heatingZone.getDesiredZoneTemp();
         controlHVAC();

@@ -10,12 +10,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.ljj.easesim.SmartHomeSimulator;
 import com.ljj.easesim.services.HVAC;
 import com.ljj.easesim.SmartHomeHeating;
+import com.ljj.easesim.SmartHomeSecurity;
 import org.springframework.util.Assert;
 
 class DateControllerTest {
     private DateController dateController;
     private SmartHomeSimulator smartHomeSimulator;
     private SmartHomeHeating smartHomeHeating;
+    private SmartHomeSecurity smartHomeSecurity;
     private HVAC hvac;
 
     @BeforeEach
@@ -23,7 +25,11 @@ class DateControllerTest {
         dateController = new DateController();
         smartHomeSimulator = SmartHomeSimulator.getInstance();
         smartHomeHeating = SmartHomeHeating.getInstance();
+        smartHomeSecurity = SmartHomeSecurity.getInstance();
+        smartHomeSimulator.registerObserver(smartHomeHeating);
+        smartHomeHeating.registerObserver(smartHomeSecurity);
         hvac = HVAC.getInstance();
+        dateController.assignHVACZone("Garage");
 
     }
 

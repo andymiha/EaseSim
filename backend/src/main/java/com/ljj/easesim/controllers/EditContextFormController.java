@@ -30,17 +30,6 @@ public class EditContextFormController {
         return editContextService.processGetData();
     }
 
-//    public ResponseEntity<Map<String, List<Room>>> getData() {
-//        Map<String, List<Room>> data = editContextService.processGetData();
-//        if (data != null && !data.isEmpty()) {
-//            return ResponseEntity.ok(data);
-//        } else {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
-
-
-
     //handles data from the frontend form submission
     @PostMapping("/submitForm")
     public String submitForm(@RequestBody EditContextFormData editContextFormData) {

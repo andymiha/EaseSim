@@ -93,13 +93,13 @@ public class SmartHomeSimulator implements TemperatureObservable {
         double outdoorTemp = getOutsideTemp(); // Implement this method to get outdoor temperature
 
         for (TemperatureObserver observer : temperatureObservers) {
-            observer.updateTemperature(outdoorTemp);
+            observer.updateTemperature("", outdoorTemp);
         }
     }
 
     //METHODS
 
-    private void mapUsersFromJson(String fileName) {
+    public void mapUsersFromJson(String fileName) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             File file = new File(fileName);
