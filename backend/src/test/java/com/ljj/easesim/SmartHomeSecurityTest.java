@@ -83,17 +83,14 @@ class SmartHomeSecurityTest {
 
     @Test
     public void testUpdateTemperature() {
-        AwayModeObserver mockObserver = mock(AwayModeObserver.class);
-        smartHomeSecurity.registerAwayModeObserver(mockObserver);
-        // Mock data
-        String zoneName = "TestZone";
-        double zoneTemp = 150.0;
         smartHomeSecurity.setAwayMode(true);
-        // Call the method to be tested
+        String zoneName = "Living Room";
+        double zoneTemp = 135.0;
+
         smartHomeSecurity.updateTemperature(zoneName, zoneTemp);
 
-        // Verify that the observer's updateAwayMode method was called
-        verify(mockObserver, times(1)).updateAwayMode(true);
+        assertFalse(smartHomeSecurity.isAway());
+
     }
 
     @Test
