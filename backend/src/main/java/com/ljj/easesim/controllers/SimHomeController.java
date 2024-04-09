@@ -26,6 +26,12 @@ import static java.lang.Integer.parseInt;
 @RestController
 public class SimHomeController {
 
+    @GetMapping("/getTemperature")
+    public double getTemperature() {
+        SmartHomeSimulator shs = SmartHomeSimulator.getInstance();
+        return shs.getOutsideTemp();
+    }
+
     @GetMapping("/getUsers")
     public String getUsers() {
         SmartHomeSimulator shs = SmartHomeSimulator.getInstance();
@@ -240,7 +246,7 @@ public class SimHomeController {
             }
         }
 
-        foundLight = shc.toggle(foundLight, foundUser);
+        foundLight = shc.toggle(foundLight);
 
         // Prepare the response
         Map<String, Object> response = new HashMap<>();

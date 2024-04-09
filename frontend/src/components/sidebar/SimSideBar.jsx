@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AppBar, Box, CssBaseline, Drawer, IconButton, Toolbar, Typography, Button, FormControl, NativeSelect, Slider, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -13,11 +13,10 @@ const typographyStyle = {
     marginBottom: theme => theme.spacing(1),
 };
 
-const temperature = 25; 
-
 const SimSideBar = ({ openDrawer, handleDrawerToggle, handleDrawerClose, handleRoomChange }) => {
   const [showForm, setShowForm] = useState(false);
   const [openModal, setOpenModal] = useState(false); // State to control modal visibility
+  const [temperature, setTemperature] = useState(0);
 
   const handleSelectRoom = (event) => {
     const selectedRoomId = event.target.value;
@@ -31,6 +30,25 @@ const SimSideBar = ({ openDrawer, handleDrawerToggle, handleDrawerClose, handleR
   const handleModalClose = () => {
     setOpenModal(false); // Close the modal
   };
+
+  const fetchTemperature = () => {
+    fetch('http://localhost:8080/getTemperature') 
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        setTemperature(data);
+      })
+      .catch(error => console.error('Error fetching data:', error));
+  };
+
+  useEffect(() => {
+    fetchTemperature(); // Fetch immediately on component mount
+    const interval = setInterval(() => {
+      fetchTemperature(); // Fetch every 2 seconds
+    }, 2000);
+
+    return () => clearInterval(interval); // Cleanup function to clear the interval
+  }, []);
 
   return (
     <Box sx={{ display: 'flex', width: 240 }}>
