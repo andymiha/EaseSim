@@ -3,11 +3,28 @@ const initialState = {
   doors: [],
   lights: [],
   rooms: [],
+  sensors: {
+    bedroom1: false,
+    bedroom2: false,
+    kitchen: false,
+    bathroom: false,
+    livingRoom: false,
+    garage: false
+  },
   userName: "Gian-Carlo",
 };
 
 function rootReducer(state = initialState, action) {
   switch (action.type) {
+    case 'UPDATE_SENSOR':
+      const { sensorName, isChecked } = action.payload;
+      return {
+        ...state,
+        sensors: {
+          ...state.sensors,
+          [sensorName]: isChecked,
+        },
+      };
     case 'SET_ROOMS':
         return { ...state, rooms: action.payload };
     //window actions

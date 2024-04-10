@@ -1,11 +1,19 @@
 import  { useState, useEffect } from 'react';
-import { Button, TableContainer, Table, TableBody, TableCell, TableHead, TableRow, Paper, FormControlLabel, Switch } from '@mui/material';
+import { Button, TableContainer, Table, TableBody, TableCell, Checkbox, TableHead, TableRow, Paper, FormControlLabel, Switch } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
 
 const SHP = () => {
   const [awayMode, setAwayMode] = useState(false);
   const [policeTimer, setPoliceTimer] = useState(0);
   const [newPoliceTimer, setNewPoliceTimer] = useState(0); // New state for input value
+  const dispatch = useDispatch();
+  const sensors = useSelector(state => state.sensors);
 
+  const handleCheckboxChange = (event) => {
+    const { name, checked } = event.target;
+    dispatch({ type: 'UPDATE_SENSOR', payload: { sensorName: name, isChecked: checked }});
+  };
+  
   useEffect(() => {
     // Fetch away mode status
     fetch('http://localhost:8080/api/shp/get-away-mode')
@@ -104,6 +112,22 @@ const SHP = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <h2>Sensors</h2>
+      {Object.keys(sensors).map((key) => (
+        <FormControlLabel
+          key={key}
+          control={
+            <Checkbox
+              checked={sensors[key]}
+              onChange={handleCheckboxChange}
+              name={key}
+              color="primary"
+            />
+          }
+          label={key.replace(/([A-Z])/g, ' $1').trim()}
+        />
+      ))}
     </div>
   );
 };

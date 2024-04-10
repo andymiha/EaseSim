@@ -5,12 +5,14 @@ import Stack from "@mui/material/Stack"
 import {useState, useEffect} from 'react';
 import { useSelector, useDispatch} from 'react-redux';
 import PersonIcon from '../../assets/Person.svg';
+import SensorsIcon from '../../assets/Sensors.svg';
 import DoorIcon from '../../assets/Door.svg';
 
 const HouseLayout = ({ selectedRoom }) => {
 
   const [activeOverlays, setActiveOverlays] = useState([]);
   const windows = useSelector((state) => state.windows);
+  const sensors = useSelector((state) => state.sensors);
 
 // Define stick figure positions for each room
 const stickFigurePositions = {
@@ -74,6 +76,17 @@ const stickFigurePositions = {
               </div>
             </div> : <div></div>
             }
+
+            {
+              sensors.bedroom1 ? 
+            <div
+              class="bg-gray-200/50 rounded-full h-[84px] w-[84px] p-2 m-auto"
+            >
+              <div className="rounded-full text-center text-black h-full">
+                <img src={SensorsIcon} alt="Person" className="inline-block w-12 h-full" />
+              </div>
+            </div> : <div></div>
+            }
           </div>
 
           {/* Kitchen */}
@@ -87,6 +100,17 @@ const stickFigurePositions = {
             >
               <div className="bg-blue-100 rounded-full text-center text-black h-full">
                 <img src={PersonIcon} alt="Person" className="inline-block w-12 h-full" />
+              </div>
+            </div> : <div></div>
+            }
+
+            {
+              sensors.kitchen ? 
+            <div
+              class="bg-gray-200/50 rounded-full h-[84px] w-[84px] p-2 m-auto"
+            >
+              <div className="rounded-full text-center text-black h-full">
+                <img src={SensorsIcon} alt="Person" className="inline-block w-12 h-full" />
               </div>
             </div> : <div></div>
             }
@@ -105,6 +129,17 @@ const stickFigurePositions = {
               </div>
             </div> : <div></div>
             }
+
+            {
+              sensors.bathroom ? 
+            <div
+              class="bg-gray-200/50 rounded-full h-[84px] w-[84px] p-2 m-auto"
+            >
+              <div className="rounded-full text-center text-black h-full">
+                <img src={SensorsIcon} alt="Person" className="inline-block w-12 h-full" />
+              </div>
+            </div> : <div></div>
+            }
           </div>
 
           <div className="w-[154px] h-[174px] ml-[48px] mt-[-16px] p-4 border-2 border-black cursor-pointer hover:bg-gray-200/60">
@@ -117,6 +152,17 @@ const stickFigurePositions = {
             >
               <div className="bg-blue-100 rounded-full text-center text-black h-full">
                 <img src={PersonIcon} alt="Person" className="inline-block w-12 h-full" />
+              </div>
+            </div> : <div></div>
+            }
+
+            {
+              sensors.bedroom2 ? 
+            <div
+              class="bg-gray-200/50 rounded-full h-[84px] w-[84px] p-2 m-auto"
+            >
+              <div className="rounded-full text-center text-black h-full">
+                <img src={SensorsIcon} alt="Person" className="inline-block w-12 h-full" />
               </div>
             </div> : <div></div>
             }
@@ -135,6 +181,17 @@ const stickFigurePositions = {
               </div>
             </div> : <div></div>
             }
+
+            {
+              sensors.livingRoom ? 
+            <div
+              class="bg-gray-200/50 rounded-full h-[84px] w-[84px] p-2 m-auto"
+            >
+              <div className="rounded-full text-center text-black h-full">
+                <img src={SensorsIcon} alt="Person" className="inline-block w-12 h-full" />
+              </div>
+            </div> : <div></div>
+            }
           </div>
 
           <div className="w-[212px] h-[212px] p-4 border-2 mt-[-54px] border-black cursor-pointer hover:bg-gray-200/60">
@@ -147,6 +204,17 @@ const stickFigurePositions = {
             >
               <div className="bg-blue-100 rounded-full text-center text-black h-full">
                 <img src={PersonIcon} alt="Person" className="inline-block w-12 h-full" />
+              </div>
+            </div> : <div></div>
+            }
+
+            {
+              sensors.garage ? 
+            <div
+              class="bg-gray-200/50 rounded-full h-[84px] w-[84px] p-2 m-auto"
+            >
+              <div className="rounded-full text-center text-black h-full">
+                <img src={SensorsIcon} alt="Person" className="inline-block w-12 h-full" />
               </div>
             </div> : <div></div>
             }
