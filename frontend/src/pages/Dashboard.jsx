@@ -82,6 +82,7 @@ const Dashboard = () => {
   const globalDoors = useSelector(state => state.doors);
   const globalLights = useSelector(state => state.lights);
   const globalRooms = useSelector(state => state.rooms);
+  const storedLogs = useSelector(state => state.logs);
 
   const doorConnections = globalRooms.reduce((acc, room) => {
     room.doors.forEach(door => {
@@ -257,8 +258,9 @@ const Dashboard = () => {
         </div>
 
         <div className="col-span-2 border-solid border-2 border-[#ededed] rounded-2xl p-6">
-          Logs
-          {JSON.stringify(globalLights)}
+          {storedLogs.map((log, index) => (
+            <div key={index}>{log}</div>
+          ))}
         </div>
       </div>
     </div>

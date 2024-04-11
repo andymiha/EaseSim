@@ -3,6 +3,7 @@ const initialState = {
   doors: [],
   lights: [],
   rooms: [],
+  logs: [],
   sensors: {
     bedroom1: false,
     bedroom2: false,
@@ -16,6 +17,12 @@ const initialState = {
 
 function rootReducer(state = initialState, action) {
   switch (action.type) {
+    case 'ADD_LOG':
+      const newLog = action.payload;
+      return {
+        ...state,
+        logs: [...state.logs, newLog],
+      };
     case 'UPDATE_SENSOR':
       const { sensorName, isChecked } = action.payload;
       return {

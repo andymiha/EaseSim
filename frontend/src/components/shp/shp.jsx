@@ -43,7 +43,10 @@ const SHP = () => {
       body: JSON.stringify(isAway),
     })
       .then(response => response.text())
-      .then(data => console.log(data))
+      .then(data => {
+        console.log(data)
+        dispatch({ type: 'ADD_LOG', payload: data });
+      })
       .catch(error => console.error('Error setting away mode:', error));
   };
 
@@ -56,7 +59,10 @@ const SHP = () => {
       body: JSON.stringify(newPoliceTimer),
     })
       .then(response => response.text())
-      .then(data => console.log(data))
+      .then(data => {
+        console.log(data)
+        dispatch({ type: 'ADD_LOG', payload: data });
+      })
       .catch(error => console.error('Error setting police timer:', error));
   };
 
